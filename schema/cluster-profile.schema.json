@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HPC Client GUI cluster profile payload (Plugin API v1)",
+  "type": "object",
+  "required": ["schema_version", "profile_id", "name", "scheduler"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "profile_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "maxLength": 64
+    },
+    "name": {"type": "string", "minLength": 1, "maxLength": 80},
+    "description": {"type": "string"},
+    "scheduler": {
+      "enum": ["slurm"]
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "home_dir": {"type": "string", "minLength": 1},
+        "scratch_dir": {"type": "string", "minLength": 1}
+      }
+    },
+    "commands": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "squeue_command": {"type": "string", "minLength": 1},
+        "sbatch_command": {"type": "string", "minLength": 1},
+        "scancel_command": {"type": "string", "minLength": 1},
+        "sacct_command": {"type": "string", "minLength": 1},
+        "scontrol_command": {"type": "string", "minLength": 1},
+        "status_command": {"type": "string", "minLength": 1},
+        "active_job_ids_command": {"type": "string", "minLength": 1},
+        "job_state_command": {"type": "string", "minLength": 1}
+      }
+    },
+    "documentation": {"type": "string"}
+  }
+}

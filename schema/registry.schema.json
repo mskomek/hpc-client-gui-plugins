@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HPC Client GUI plugin registry",
+  "type": "object",
+  "required": ["schema_version", "plugin_api", "repository", "plugins"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "plugin_api": {"const": 1},
+    "repository": {
+      "type": "object",
+      "required": ["owner", "name", "raw_base"],
+      "additionalProperties": false,
+      "properties": {
+        "owner": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "raw_base": {
+          "type": "string",
+          "pattern": "^https://"
+        }
+      }
+    },
+    "plugins": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/pluginEntry"}
+    }
+  },
+  "definitions": {
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "sha256Hex": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "not": {"oneOf": [
+        {"pattern": "^/"},
+        {"pattern": "(^|/)\\.\\.(/|$)"},
+        {"pattern": "\\\\"},
+        {"pattern": "[A-Za-z]:"},
+        {"pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://"}
+      ]}
+    },
+    "versionRange": {
+      "type": "string",
+      "pattern": "^(>=|<=|==|~=)?(0|[1-9][0-9]*)(\\.(0|[1-9][0-9]*)){0,2}$"
+    },
+    "pluginType": {
+      "enum": [
+        "cluster-profile",
+        "lint-rules",
+        "job-template",
+        "application-tools"
+      ]
+    },
+    "capability": {
+      "enum": [
+        "cluster-profile",
+        "lint-rules",
+        "job-template",
+        "application-tools"
+      ]
+    },
+    "pluginEntry": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "version",
+        "plugin_api",
+        "type",
+        "description",
+        "publisher",
+        "requires_app",
+        "manifest_path",
+        "manifest_sha256",
+        "official"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:\\.[a-z0-9]+)+$",
+          "maxLength": 128
+        },
+        "name": {"type": "string", "minLength": 1, "maxLength": 80},
+        "version": {"$ref": "#/definitions/semver"},
+        "plugin_api": {"const": 1},
+        "type": {"$ref": "#/definitions/pluginType"},
+        "description": {"type": "string", "minLength": 1},
+        "publisher": {"type": "string", "minLength": 1},
+        "requires_app": {"$ref": "#/definitions/versionRange"},
+        "manifest_path": {"$ref": "#/definitions/relativePath"},
+        "manifest_sha256": {"$ref": "#/definitions/sha256Hex"},
+        "official": {"type": "boolean"},
+        "keywords": {
+          "type": "array",
+          "items": {"type": "string"},
+          "maxItems": 16
+        },
+        "homepage": {"type": "string", "pattern": "^https://"},
+        "repository": {"type": "string", "pattern": "^https://"},
+        "license": {"type": "string"}
+      }
+    }
+  }
+}
