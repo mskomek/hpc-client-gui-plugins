@@ -28,9 +28,14 @@ Manifest file paths are relative to this directory. Allowed extensions are
   destructive commands. Never invent site facts you cannot verify.
 - Lint rules: follow `schema/lint-index.schema.json` +
   `schema/lint-rule.schema.json`. Rules are declarative match kinds handled
-  by the application's lint engine.
+  by the application's lint engine. Vendor-specific rules (for example
+  Fluent) must cite official documentation in `docs/sources.md`; never copy
+  command manuals into the repository.
 - Templates: follow `schema/template-index.schema.json` +
-  `schema/template.schema.json`.
+  `schema/template.schema.json`. Template content uses the limited
+  `{{variable}}` placeholder syntax with typed variables
+  (`string`, `integer`, `boolean`, `choice`, `path`). Do not hardcode
+  unverified site-specific resource defaults; prefer required variables.
 
 ## 4. Register the plugin
 
