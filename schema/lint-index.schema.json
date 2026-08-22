@@ -14,6 +14,11 @@
     },
     "name": {"type": "string", "minLength": 1},
     "description": {"type": "string"},
+    "file_patterns": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "description": "Glob patterns (lowercase fnmatch) selecting files this linter applies to, e.g. '*.jou'."
+    },
     "rule_files": {
       "type": "array",
       "minItems": 1,

@@ -25,6 +25,25 @@
         "cluster-profile"
       ],
       "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.fluent",
+      "name": "Fluent Journal Lint",
+      "version": "0.1.0",
+      "plugin_api": 1,
+      "type": "lint-rules",
+      "description": "Conservative static lint rules for ANSYS Fluent journal files.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.4.0",
+      "manifest_path": "plugins/fluent/0.1.0/manifest.json",
+      "manifest_sha256": "e14e1b54cda76d8597a9166ce38fe8b2662b65f7ed049de5b594766d383e33c3",
+      "official": true,
+      "keywords": [
+        "fluent",
+        "journal",
+        "lint"
+      ],
+      "license": "MIT"
     }
   ]
 }

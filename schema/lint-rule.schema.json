@@ -26,9 +26,27 @@
         "regex-line",
         "regex-block",
         "required-keyword",
-        "forbidden-keyword"
+        "forbidden-keyword",
+        "ordered-patterns",
+        "count"
       ],
-      "description": "Declarative match kinds only; the app owns the matching engine."
+      "description": "Declarative match kinds only; the app owns the matching engine. Kebab-case aliases map to engine primitives (required-keyword=contains, forbidden-keyword=not_contains, regex-line=line_regex, regex-block=regex, ordered-patterns=ordered_patterns)."
+    },
+    "whenCondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "target_version": {
+          "type": "string",
+          "pattern": "^\\d+(\\.\\d+){0,2}(\\.\\*)?$",
+          "description": "Only apply this rule when the user/application target version matches."
+        },
+        "remote_platform": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Case-insensitive substring match against the remote execution platform (e.g. 'linux'). Rules are skipped when the context is unknown."
+        }
+      }
     },
     "rule": {
       "type": "object",
@@ -37,47 +55,41 @@
       "properties": {
         "id": {
           "type": "string",
-          "pattern": "^[a-z][a-z0-9_.-]*$",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
           "maxLength": 64
         },
         "severity": {"$ref": "#/definitions/severity"},
         "message": {"type": "string", "minLength": 1},
+        "category": {"type": "string", "maxLength": 64},
         "explanation": {"type": "string"},
-        "fix_hint": {"type": "string"},
+        "suggested_fix": {"type": "string"},
+        "documentation_url": {"type": "string", "pattern": "^https://"},
+        "when": {"$ref": "#/definitions/whenCondition"},
         "match": {
           "type": "object",
           "required": ["kind"],
+          "additionalProperties": false,
           "properties": {
-            "kind": {"$ref": "#/definitions/matchKind"}
-          },
-          "allOf": [
-            {
-              "if": {
-                "properties": {
-                  "kind": {
-                    "enum": [
-                      "regex-line",
-                      "regex-block",
-                      "required-keyword",
-                      "forbidden-keyword"
-                    ]
-                  }
-                }
-              },
-              "then": {
-                "required": ["value"],
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 4096,
-                    "not": {"pattern": "\\(\\?<.*>\\)\\{\\d+,\\d+\\}"},
-                    "description": "Pattern or keyword text. Catastrophic nested-quantifier patterns are rejected."
-                  }
-                }
-              }
-            }
-          ]
+            "kind": {"$ref": "#/definitions/matchKind"},
+            "value": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096,
+              "description": "Pattern or keyword text. Catastrophic nested-quantifier regexes are rejected by the app validator."
+            },
+            "patterns": {
+              "type": "array",
+              "minItems": 2,
+              "items": {"type": "string", "minLength": 1, "maxLength": 512},
+              "description": "ordered-patterns only: expected textual sequence."
+            },
+            "require_all": {
+              "type": "boolean",
+              "description": "ordered-patterns only: when true (default), a diagnostic fires even if some patterns are absent; when false, all patterns must be present but out of order."
+            },
+            "min": {"type": "integer", "minimum": 0},
+            "max": {"type": "integer", "minimum": 0}
+          }
         }
       }
     }
