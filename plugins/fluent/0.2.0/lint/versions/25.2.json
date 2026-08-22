@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "tool": "fluent-journal",
+  "rules": [
+    {
+      "id": "FLUENT002",
+      "severity": "warning",
+      "category": "compatibility",
+      "message": "Declared journal TUI version differs from the selected target (25.2). Review whether the difference is intentional.",
+      "explanation": "The journal declares a different TUI version than the selected target. Compatibility differences can be intentional; the linter only asks you to review.",
+      "documentation_url": "https://fluent.docs.pyansys.com/version/dev/user_guide/legacy/tui.html",
+      "when": {"target_version": "25.2"},
+      "match": {
+        "kind": "regex-line",
+        "value": "(?i)/file/set-tui-version\\s+\"?(?!25\\.2\\b)\\d+\\.\\d+"
+      }
+    },
+    {
+      "id": "FLUENT003",
+      "severity": "info",
+      "category": "style",
+      "message": "/file/set-tui-version appears after substantive TUI commands.",
+      "explanation": "The TUI version declaration is normally placed at the top of a journal so it applies to all recorded commands.",
+      "when": {"target_version": "25.2"},
+      "match": {
+        "kind": "ordered-patterns",
+        "patterns": ["/file/set-tui-version", "/solve"],
+        "require_all": false
+      }
+    },
+    {
+      "id": "FLUENT010",
+      "severity": "warning",
+      "category": "portability",
+      "message": "Windows-style absolute path in a journal intended for Linux/HPC execution.",
+      "explanation": "This journal is expected to run on a remote Linux platform, but it references a Windows drive path that will not resolve there.",
+      "when": {"remote_platform": "linux"},
+      "match": {
+        "kind": "regex-line",
+        "value": "[A-Za-z]:[\\\\/]"
+      }
+    }
+  ]
+}

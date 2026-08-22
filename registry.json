@@ -44,6 +44,26 @@
         "lint"
       ],
       "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.fluent",
+      "name": "Fluent Journal Lint",
+      "version": "0.2.0",
+      "plugin_api": 1,
+      "type": "lint-rules",
+      "description": "Conservative static lint rules and a generic Fluent Slurm job template.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.4.0",
+      "manifest_path": "plugins/fluent/0.2.0/manifest.json",
+      "manifest_sha256": "45bc407dd291d258eeff9b5f7e2daf5bb4233c16e66ae2aebb31ecdd24dc385a",
+      "official": true,
+      "keywords": [
+        "fluent",
+        "journal",
+        "lint",
+        "template"
+      ],
+      "license": "MIT"
     }
   ]
 }

@@ -33,7 +33,7 @@ except ImportError:  # pragma: no cover
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_DIR = REPO_ROOT / "schema"
 
-ALLOWED_PAYLOAD_EXTENSIONS = {".json", ".md", ".txt"}
+ALLOWED_PAYLOAD_EXTENSIONS = {".json", ".md", ".txt", ".tpl"}
 
 SCHEMA_FOR_ROLE = {
     "cluster-profile": "cluster-profile.schema.json",

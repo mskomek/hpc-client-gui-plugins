@@ -18,23 +18,46 @@
   ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": {"const": 1},
-    "plugin_api": {"const": 1},
+    "schema_version": {
+      "const": 1
+    },
+    "plugin_api": {
+      "const": 1
+    },
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9]*(?:\\.[a-z0-9]+)+$",
       "maxLength": 128
     },
-    "name": {"type": "string", "minLength": 1, "maxLength": 80},
-    "version": {"$ref": "#/definitions/semver"},
-    "publisher": {"type": "string", "minLength": 1},
-    "license": {"type": "string", "minLength": 1},
-    "description": {"type": "string", "minLength": 1},
-    "requires_app": {"$ref": "#/definitions/versionRange"},
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "version": {
+      "$ref": "#/definitions/semver"
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1
+    },
+    "license": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requires_app": {
+      "$ref": "#/definitions/versionRange"
+    },
     "capabilities": {
       "type": "array",
       "minItems": 1,
-      "items": {"$ref": "#/definitions/capability"}
+      "items": {
+        "$ref": "#/definitions/capability"
+      }
     },
     "entrypoints": {
       "type": "object",
@@ -42,16 +65,35 @@
       "properties": {
         "cluster_profiles": {
           "type": "array",
-          "items": {"type": "string", "minLength": 1}
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
-        "lint_index": {"type": "string", "minLength": 1},
-        "template_index": {"type": "string", "minLength": 1}
+        "lint_index": {
+          "type": "string",
+          "minLength": 1
+        },
+        "template_index": {
+          "type": "string",
+          "minLength": 1
+        },
+        "job_templates": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Template index files delivering job templates."
+        }
       }
     },
     "files": {
       "type": "array",
       "minItems": 1,
-      "items": {"$ref": "#/definitions/fileEntry"}
+      "items": {
+        "$ref": "#/definitions/fileEntry"
+      }
     }
   },
   "definitions": {
@@ -67,13 +109,25 @@
       "type": "string",
       "minLength": 1,
       "maxLength": 256,
-      "not": {"oneOf": [
-        {"pattern": "^/"},
-        {"pattern": "(^|/)\\.\\.(/|$)"},
-        {"pattern": "\\\\"},
-        {"pattern": "[A-Za-z]:"},
-        {"pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://"}
-      ]}
+      "not": {
+        "oneOf": [
+          {
+            "pattern": "^/"
+          },
+          {
+            "pattern": "(^|/)\\.\\.(/|$)"
+          },
+          {
+            "pattern": "\\\\"
+          },
+          {
+            "pattern": "[A-Za-z]:"
+          },
+          {
+            "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://"
+          }
+        ]
+      }
     },
     "fileRole": {
       "enum": [
@@ -99,13 +153,27 @@
     },
     "fileEntry": {
       "type": "object",
-      "required": ["path", "sha256", "size", "role"],
+      "required": [
+        "path",
+        "sha256",
+        "size",
+        "role"
+      ],
       "additionalProperties": false,
       "properties": {
-        "path": {"$ref": "#/definitions/relativePath"},
-        "sha256": {"$ref": "#/definitions/sha256Hex"},
-        "size": {"type": "integer", "minimum": 0},
-        "role": {"$ref": "#/definitions/fileRole"}
+        "path": {
+          "$ref": "#/definitions/relativePath"
+        },
+        "sha256": {
+          "$ref": "#/definitions/sha256Hex"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "role": {
+          "$ref": "#/definitions/fileRole"
+        }
       }
     }
   }

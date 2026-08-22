@@ -11,31 +11,79 @@
     "templates": {
       "type": "array",
       "minItems": 1,
-      "items": {
-        "type": "object",
-        "required": ["id", "title", "content_path", "sha256"],
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[a-z][a-z0-9_.-]*$",
-            "maxLength": 64
-          },
-          "title": {"type": "string", "minLength": 1},
-          "category": {
-            "enum": ["job-submission", "application", "documentation"]
-          },
-          "scheduler": {"enum": ["slurm"]},
-          "content_path": {"type": "string", "minLength": 1},
-          "sha256": {"$ref": "#/definitions/sha256Hex"}
-        }
-      }
+      "items": {"$ref": "#/definitions/templateEntry"}
     }
   },
   "definitions": {
     "sha256Hex": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "not": {"oneOf": [
+        {"pattern": "^/"},
+        {"pattern": "(^|/)\\.\\.(/|$)"},
+        {"pattern": "\\\\"},
+        {"pattern": "[A-Za-z]:"},
+        {"pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://"}
+      ]}
+    },
+    "variableType": {
+      "enum": ["string", "integer", "boolean", "choice", "path"]
+    },
+    "variable": {
+      "type": "object",
+      "required": ["name", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "maxLength": 64
+        },
+        "type": {"$ref": "#/definitions/variableType"},
+        "required": {"type": "boolean"},
+        "default": {},
+        "minimum": {"type": "integer"},
+        "maximum": {"type": "integer"},
+        "choices": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string"}
+        },
+        "description": {"type": "string"}
+      }
+    },
+    "templateEntry": {
+      "type": "object",
+      "required": ["id", "name", "scheduler", "content_path"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_.-]*$",
+          "maxLength": 64
+        },
+        "name": {"type": "string", "minLength": 1},
+        "description": {"type": "string"},
+        "scheduler": {"enum": ["slurm"]},
+        "application": {"type": "string", "maxLength": 64},
+        "file_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "not": {"pattern": "(^|[/\\\\])\\.\\.?$"}
+        },
+        "content_path": {"$ref": "#/definitions/relativePath"},
+        "sha256": {"$ref": "#/definitions/sha256Hex"},
+        "variables": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/variable"}
+        }
+      }
     }
   }
 }

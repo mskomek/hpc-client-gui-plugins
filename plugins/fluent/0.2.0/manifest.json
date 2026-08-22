@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "plugin_api": 1,
+  "id": "org.hpcclient.fluent",
+  "name": "Fluent Journal Lint",
+  "version": "0.2.0",
+  "publisher": "HPC Client GUI",
+  "license": "MIT",
+  "description": "Conservative static lint rules for ANSYS Fluent journal files.",
+  "requires_app": ">=1.4.0",
+  "capabilities": [
+    "lint-rules",
+    "job-template"
+  ],
+  "entrypoints": {
+    "lint_index": "lint-index.json",
+    "job_templates": [
+      "templates/index.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "7c08b924fde8888c7c5dde0c5f12b3912caa521bf2599d0247f3bb331261ee9a",
+      "size": 2375,
+      "role": "documentation"
+    },
+    {
+      "path": "docs/sources.md",
+      "sha256": "a104297b078ec487d0c561683bf601e9e50b86b66ea2a2279da0a840cf83a636",
+      "size": 1064,
+      "role": "documentation"
+    },
+    {
+      "path": "lint-index.json",
+      "sha256": "a890f7e6e80b26e374cf500f17f776685596b4510962b8c73ea9ff571002f9a0",
+      "size": 532,
+      "role": "lint-index"
+    },
+    {
+      "path": "lint/common.json",
+      "sha256": "658286a690fcfa0935bf997b3b6438373f9de3c73df9487b675e41199b90021b",
+      "size": 1069,
+      "role": "lint-rules"
+    },
+    {
+      "path": "lint/versions/25.2.json",
+      "sha256": "1b868f8cdbffa5940d25bddfa638173abbd2312424ba8eb1451391e5c410de38",
+      "size": 1739,
+      "role": "lint-rules"
+    },
+    {
+      "path": "templates/index.json",
+      "sha256": "919809fb03a55e1d3e4c0873d2fa1111ce2cac523efeccae0f194d79e39cd747",
+      "size": 1835,
+      "role": "template-index"
+    },
+    {
+      "path": "templates/fluent_job.slurm.tpl",
+      "sha256": "7b607b4a59c8184cf26da9f803d90cf5da2f0833c9fb019efcd4d79979552bec",
+      "size": 606,
+      "role": "template-content"
+    }
+  ]
+}
