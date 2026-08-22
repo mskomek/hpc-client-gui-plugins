@@ -6,5 +6,25 @@
     "name": "hpc-client-gui-plugins",
     "raw_base": "https://raw.githubusercontent.com/mskomek/hpc-client-gui-plugins/main/"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "id": "org.hpcclient.truba",
+      "name": "TRUBA",
+      "version": "1.0.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "TRUBA system profile for HPC Client GUI.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.4.0",
+      "manifest_path": "plugins/truba/1.0.0/manifest.json",
+      "manifest_sha256": "ea4259891f40aa6e815c9002e3244381326f975cd51a2ac1536851adf821a818",
+      "official": true,
+      "keywords": [
+        "truba",
+        "slurm",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    }
+  ]
 }
