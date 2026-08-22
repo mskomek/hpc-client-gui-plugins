@@ -1,0 +1,4 @@
+# Plugin payload integrity depends on exact bytes (SHA-256 hashes are
+# recorded over the committed LF content). Disable all EOL conversion so
+# working-tree bytes always match what raw.githubusercontent.com serves.
+* -text
