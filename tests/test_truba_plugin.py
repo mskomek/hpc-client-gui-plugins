@@ -6,7 +6,6 @@ data by asserting exact values from the current hpc-client-gui defaults.
 
 from __future__ import annotations
 
-import hashlib
 import json
 import sys
 from pathlib import Path

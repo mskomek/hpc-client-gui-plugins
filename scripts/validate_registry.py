@@ -4,12 +4,22 @@
 Checks, in order:
 1. registry.json loads and validates against schema/registry.schema.json;
 2. plugin IDs and (id, version) pairs are unique;
-3. each referenced manifest exists locally and its SHA-256 matches;
+3. each referenced manifest exists locally inside its immutable
+   ``plugins/<id>/<version>/`` directory and its SHA-256 matches the
+   registry entry;
 4. each manifest validates against schema/manifest.schema.json;
-5. manifest id/version match the registry entry;
+5. registry/manifest identity and compatibility data agree: id, version,
+   name, publisher, plugin_api, requires_app, and declared capabilities
+   (``capabilities`` is authoritative for multi-capability plugins; the
+   single legacy ``type`` field is kept for display compatibility);
 6. every declared file exists with the declared size and SHA-256;
 7. payloads are declarative data (no executable-looking files);
-8. capability-specific entrypoint payloads validate against their schemas.
+8. capability entrypoints are consistent with declared capabilities and
+   their payloads validate against their role schemas.
+
+The security model stays declarative-only: no Python plugin modules, no
+executable hooks, no binaries, no installation-time command execution,
+exact-file downloads only, strict response-size and total-size limits.
 
 Exit status is non-zero on any error.
 """
@@ -20,7 +30,7 @@ import hashlib
 import json
 import re
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 try:
     from jsonschema import Draft7Validator
@@ -43,17 +53,20 @@ SCHEMA_FOR_ROLE = {
     "template-content": "template.schema.json",
 }
 
-CAPABILITY_ENTRYPOINT_KEY = {
-    "cluster-profile": "cluster_profiles",
-    "lint-rules": "lint_index",
-    "job-template": "template_index",
-    "application-tools": "template_index",
+# Capability -> entrypoint keys that may satisfy it. ``job_templates`` and
+# ``template_index`` are equivalent index entrypoints for template packs.
+CAPABILITY_ENTRYPOINT_KEYS = {
+    "cluster-profile": ("cluster_profiles",),
+    "lint-rules": ("lint_index",),
+    "job-template": ("template_index", "job_templates"),
+    "application-tools": ("template_index", "job_templates"),
 }
 
 ENTRYPOINT_ROLES = {
     "cluster_profiles": ("cluster-profile",),
     "lint_index": ("lint-index",),
     "template_index": ("template-index",),
+    "job_templates": ("template-index",),
 }
 
 
@@ -144,34 +157,52 @@ def validate_entrypoint_files(manifest: dict, manifest_dir: Path, label: str, er
     entrypoints = manifest.get("entrypoints", {})
     declared_files = {entry["path"]: entry for entry in manifest.get("files", [])}
 
+    # Every entrypoint key must be justified by a matching capability.
+    allowed_keys = {
+        key
+        for capability in capabilities
+        for key in CAPABILITY_ENTRYPOINT_KEYS.get(capability, ())
+    }
+    for key in entrypoints:
+        if key not in allowed_keys:
+            errors.append(
+                f"{label}: entrypoint '{key}' has no matching declared capability"
+            )
+
     for capability in sorted(capabilities):
-        key = CAPABILITY_ENTRYPOINT_KEY.get(capability)
-        if key is None:
+        acceptable_keys = CAPABILITY_ENTRYPOINT_KEYS.get(capability)
+        if acceptable_keys is None:
             continue
-        expected_roles = ENTRYPOINT_ROLES[key]
-        raw_entries = entrypoints.get(key)
-        if raw_entries is None:
+        present_keys = [key for key in acceptable_keys if entrypoints.get(key)]
+        if not present_keys:
+            errors.append(
+                f"{label}: capability '{capability}' is declared but none of the "
+                f"entrypoints {list(acceptable_keys)} provide it"
+            )
             continue
-        if isinstance(raw_entries, str):
-            raw_entries = [raw_entries]
-        for entry_rel in raw_entries:
-            entry_label = f"{label}: entrypoint '{key}' -> '{entry_rel}'"
-            errors_before = len(errors)
-            check_relative_path(entry_rel, entry_label, errors)
-            if len(errors) > errors_before:
-                continue
-            file_entry = declared_files.get(entry_rel)
-            if file_entry is None:
-                errors.append(f"{entry_label}: not declared in manifest.files")
-                continue
-            if file_entry.get("role") not in expected_roles:
-                errors.append(
-                    f"{entry_label}: role '{file_entry.get('role')}' does not match expected {expected_roles}"
-                )
-                continue
-            payload_path = manifest_dir / entry_rel
-            if payload_path.is_file():
-                validate_payload_role(file_entry["role"], payload_path, entry_label, errors)
+        for key in present_keys:
+            raw_entries = entrypoints.get(key)
+            if isinstance(raw_entries, str):
+                raw_entries = [raw_entries]
+            for entry_rel in raw_entries or []:
+                entry_label = f"{label}: entrypoint '{key}' -> '{entry_rel}'"
+                errors_before = len(errors)
+                check_relative_path(entry_rel, entry_label, errors)
+                if len(errors) > errors_before:
+                    continue
+                file_entry = declared_files.get(entry_rel)
+                if file_entry is None:
+                    errors.append(f"{entry_label}: not declared in manifest.files")
+                    continue
+                if file_entry.get("role") not in ENTRYPOINT_ROLES[key]:
+                    errors.append(
+                        f"{entry_label}: role '{file_entry.get('role')}' does not "
+                        f"match expected {ENTRYPOINT_ROLES[key]}"
+                    )
+                    continue
+                payload_path = manifest_dir / entry_rel
+                if payload_path.is_file():
+                    validate_payload_role(file_entry["role"], payload_path, entry_label, errors)
 
 
 def collect_executable_payload_errors(files: list[dict], label: str, errors: list[str]) -> None:
@@ -201,6 +232,16 @@ def validate_plugin_entry(entry: dict, seen_ids: dict, errors: list[str], warnin
     manifest_rel = entry["manifest_path"]
     errors_before = len(errors)
     check_relative_path(manifest_rel, f"{label}: manifest_path", errors)
+    if len(errors) == errors_before:
+        # Published versions are immutable directories: a registry entry
+        # must point into a per-version directory named exactly after the
+        # declared version, so entries can never cross version directories.
+        parent_name = PurePosixPath(manifest_rel).parent.name
+        if parent_name != version:
+            errors.append(
+                f"{label}: manifest_path '{manifest_rel}' does not point into "
+                f"its own version directory ('{parent_name}' != '{version}')"
+            )
     if len(errors) > errors_before:
         return
 
@@ -228,6 +269,34 @@ def validate_plugin_entry(entry: dict, seen_ids: dict, errors: list[str], warnin
         errors.append(f"{label}: manifest id mismatch (manifest says '{manifest.get('id')}')")
     if manifest.get("version") != version:
         errors.append(f"{label}: manifest version mismatch (manifest says '{manifest.get('version')}')")
+    if manifest.get("name") != entry["name"]:
+        errors.append(
+            f"{label}: manifest name mismatch (manifest says '{manifest.get('name')}')"
+        )
+    if manifest.get("publisher") != entry["publisher"]:
+        errors.append(
+            f"{label}: manifest publisher mismatch (manifest says '{manifest.get('publisher')}')"
+        )
+    if manifest.get("plugin_api") != entry["plugin_api"]:
+        errors.append(
+            f"{label}: manifest plugin_api mismatch (manifest says '{manifest.get('plugin_api')}')"
+        )
+    if manifest.get("requires_app") != entry["requires_app"]:
+        errors.append(
+            f"{label}: manifest requires_app mismatch "
+            f"(manifest says '{manifest.get('requires_app')}')"
+        )
+    registry_capabilities = entry.get("capabilities")
+    if isinstance(registry_capabilities, list):
+        # ``capabilities`` is authoritative for multi-capability plugins;
+        # the single legacy ``type`` field is display-only compatibility.
+        if sorted(str(item) for item in registry_capabilities) != sorted(
+            str(item) for item in manifest.get("capabilities", [])
+        ):
+            errors.append(
+                f"{label}: registry capabilities {registry_capabilities} do not "
+                f"match manifest capabilities {manifest.get('capabilities')}"
+            )
 
     manifest_dir = manifest_path.parent
     seen_paths = set()

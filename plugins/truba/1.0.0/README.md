@@ -34,3 +34,10 @@ This declarative plugin provides the TRUBA system template used by
 
 Install from inside HPC Client GUI via the Plugin Manager. No server-side
 installation on the cluster is needed.
+
+## Sources
+
+Command templates follow standard Slurm usage; lssrv and the /arf paths
+follow official TRUBA documentation: <https://www.truba.gov.tr/>. Verify
+partition names and module availability for your account before submitting
+jobs.

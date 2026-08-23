@@ -17,5 +17,11 @@
     "status_command": "lssrv",
     "active_job_ids_command": "squeue -h -u {user} -o \"%A\"",
     "job_state_command": "sacct -n -X -j {job_id_q} -o State -P"
+  },
+  "metadata": {
+    "maintainer": "HPC Client GUI contributors",
+    "documentation_url": "https://www.truba.gov.tr/",
+    "support_url": "https://github.com/mskomek/hpc-client-gui/issues",
+    "last_verified": "2026-08-01"
   }
 }
