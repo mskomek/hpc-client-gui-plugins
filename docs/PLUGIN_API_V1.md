@@ -12,7 +12,7 @@ repository and indexed by the top-level `registry.json`.
 - JSON template indexes and textual template content
 - Markdown/text documentation
 
-Allowed payload file extensions: `.json`, `.md`, `.txt`.
+Allowed payload file extensions: `.json`, `.md`, `.txt`, `.tpl`.
 
 ## What v1 must never contain
 
@@ -36,6 +36,12 @@ Roles are limited to: `cluster-profile`, `lint-index`, `lint-rules`,
   These two version concepts change independently.
 - Capabilities vocabulary: `cluster-profile`, `lint-rules`, `job-template`,
   `application-tools`.
+- Registry entries may declare a `capabilities` array. For plugins that
+  combine capabilities (for example lint rules plus a job template), the
+  array is authoritative; the single legacy `type` field remains for display
+  compatibility and must not contradict the manifest. CI verifies that the
+  registry entry and `manifest.json` agree on id, version, name, publisher,
+  plugin API version, `requires_app`, capabilities, paths, and hashes.
 
 ## Compatibility
 
@@ -60,4 +66,15 @@ user-initiated workflows. For v1:
 
 Once a version directory has been merged to `main`, treat it as immutable.
 Fix problems by publishing a new version directory and registry entry; never
-mutate published hashes in place.
+mutate published hashes in place. The application mirrors this on the client:
+an already-installed version is reused only when its verified contents match
+the incoming manifest byte-for-byte; conflicting or corrupt same-version
+content produces an integrity error and the previously active version stays
+active. Updates activate only after full verification, keep the previous
+version directory for rollback, and write the active-version pointer through
+atomic file replacement.
+
+Note that these guarantees are best-effort filesystem semantics (same-volume
+rename, verified reuse), not transactional journaling: a hard power loss
+mid-install can still leave staging files behind; they are cleaned up on the
+next install attempt and never affect the active version.
