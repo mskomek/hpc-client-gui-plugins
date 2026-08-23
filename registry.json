@@ -17,8 +17,11 @@
       "publisher": "HPC Client GUI",
       "requires_app": ">=1.4.0",
       "manifest_path": "plugins/truba/1.0.0/manifest.json",
-      "manifest_sha256": "ea4259891f40aa6e815c9002e3244381326f975cd51a2ac1536851adf821a818",
+      "manifest_sha256": "f5f2cb9f3990a07209038658c03d908e91ec050bfcda479b40f8574a071b7390",
       "official": true,
+      "capabilities": [
+        "cluster-profile"
+      ],
       "keywords": [
         "truba",
         "slurm",
@@ -28,7 +31,7 @@
     },
     {
       "id": "org.hpcclient.fluent",
-      "name": "Fluent Journal Lint",
+      "name": "ANSYS Fluent Tools",
       "version": "0.1.0",
       "plugin_api": 1,
       "type": "lint-rules",
@@ -36,8 +39,11 @@
       "publisher": "HPC Client GUI",
       "requires_app": ">=1.4.0",
       "manifest_path": "plugins/fluent/0.1.0/manifest.json",
-      "manifest_sha256": "e14e1b54cda76d8597a9166ce38fe8b2662b65f7ed049de5b594766d383e33c3",
+      "manifest_sha256": "fe7368a4eadc516c0b79a91c06411776cd4c2bce5d6f9915f5a399bd9469f513",
       "official": true,
+      "capabilities": [
+        "lint-rules"
+      ],
       "keywords": [
         "fluent",
         "journal",
@@ -47,16 +53,20 @@
     },
     {
       "id": "org.hpcclient.fluent",
-      "name": "Fluent Journal Lint",
+      "name": "ANSYS Fluent Tools",
       "version": "0.2.0",
       "plugin_api": 1,
       "type": "lint-rules",
-      "description": "Conservative static lint rules and a generic Fluent Slurm job template.",
+      "description": "Journal lint rules and a generic Fluent Slurm job template for ANSYS Fluent.",
       "publisher": "HPC Client GUI",
       "requires_app": ">=1.4.0",
       "manifest_path": "plugins/fluent/0.2.0/manifest.json",
-      "manifest_sha256": "45bc407dd291d258eeff9b5f7e2daf5bb4233c16e66ae2aebb31ecdd24dc385a",
+      "manifest_sha256": "6a08e87635c1e30a7837b5e18e2341aca93f73b95d1ef7e19113512ebd1f58d1",
       "official": true,
+      "capabilities": [
+        "lint-rules",
+        "job-template"
+      ],
       "keywords": [
         "fluent",
         "journal",

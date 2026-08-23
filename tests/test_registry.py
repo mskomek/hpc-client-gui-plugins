@@ -64,12 +64,13 @@ def template_index_payload(body: bytes) -> tuple[bytes, dict]:
     index = {
         "schema_version": 1,
         "templates": [
-            {
-                "id": "sbatch-basic",
-                "title": "Basic sbatch script",
-                "content_path": "template.json",
-                "sha256": content_entry["sha256"],
-            }
+                {
+                    "id": "sbatch-basic",
+                    "name": "Basic sbatch script",
+                    "scheduler": "slurm",
+                    "content_path": "template.json",
+                    "sha256": content_entry["sha256"],
+                }
         ],
     }
     return json.dumps(index, indent=2).encode(), content_entry
@@ -428,3 +429,139 @@ def test_executable_looking_extension_rejected(tmp_path):
     data = json.dumps(manifest, indent=2).encode()
     manifest_path.write_bytes(data)
     expect_failure(tmp_path, [entry], "executable-looking extension")
+
+
+# ---------------------------------------------------------------------------
+# Registry/manifest identity and compatibility agreement
+# ---------------------------------------------------------------------------
+
+
+def _rewrite_manifest(tmp_path, entry, mutate) -> None:
+    manifest_path = tmp_path / entry["manifest_path"]
+    manifest = json.loads(manifest_path.read_text())
+    mutate(manifest)
+    manifest_path.write_bytes(json.dumps(manifest, indent=2).encode())
+
+
+def test_manifest_name_mismatch_rejected(tmp_path):
+    entry = add_plugin(tmp_path)
+    _rewrite_manifest(
+        tmp_path, entry, lambda m: m.update({"name": "Different Name"})
+    )
+    expect_failure(tmp_path, [entry], "manifest name mismatch")
+
+
+def test_manifest_publisher_mismatch_rejected(tmp_path):
+    entry = add_plugin(tmp_path)
+    _rewrite_manifest(
+        tmp_path, entry, lambda m: m.update({"publisher": "Someone Else"})
+    )
+    expect_failure(tmp_path, [entry], "manifest publisher mismatch")
+
+
+def test_manifest_plugin_api_mismatch_rejected(tmp_path):
+    entry = add_plugin(tmp_path)
+    _rewrite_manifest(tmp_path, entry, lambda m: m.update({"plugin_api": 2}))
+    expect_failure(tmp_path, [entry], "manifest plugin_api mismatch")
+
+
+def test_manifest_requires_app_mismatch_rejected(tmp_path):
+    entry = add_plugin(tmp_path)
+    _rewrite_manifest(tmp_path, entry, lambda m: m.update({"requires_app": ">=99.0.0"}))
+    expect_failure(tmp_path, [entry], "manifest requires_app mismatch")
+
+
+def test_registry_capabilities_mismatch_rejected(tmp_path):
+    entry = add_plugin(
+        tmp_path,
+        registry_entry_overrides={"capabilities": ["lint-rules", "job-template"]},
+    )
+    expect_failure(
+        tmp_path,
+        [entry],
+        "do not match manifest capabilities ['cluster-profile']",
+    )
+
+
+def test_matching_registry_capabilities_accepted(tmp_path):
+    entry = add_plugin(
+        tmp_path,
+        capabilities=["cluster-profile"],
+        registry_entry_overrides={"capabilities": ["cluster-profile"]},
+    )
+    build_registry(tmp_path, [entry])
+    errors, _ = run_validator(tmp_path)
+    assert errors == []
+
+
+def test_manifest_path_outside_version_directory_rejected(tmp_path):
+    entry = add_plugin(tmp_path, version="1.0.0")
+    entry["manifest_path"] = "plugins/test/2.0.0/manifest.json"
+    expect_failure(
+        tmp_path,
+        [entry],
+        "does not point into its own version directory",
+    )
+
+
+# ---------------------------------------------------------------------------
+# Capability/entrypoint consistency
+# ---------------------------------------------------------------------------
+
+
+def test_capability_without_entrypoint_rejected(tmp_path):
+    entry = add_plugin(tmp_path, capabilities=["lint-rules"])
+    _rewrite_manifest(
+        tmp_path, entry, lambda m: m.update({"entrypoints": {}})
+    )
+    expect_failure(
+        tmp_path,
+        [entry],
+        "capability 'lint-rules' is declared but none of the entrypoints",
+    )
+
+
+def test_entrypoint_key_without_capability_rejected(tmp_path):
+    entry = add_plugin(tmp_path, capabilities=["cluster-profile"])
+    _rewrite_manifest(
+        tmp_path,
+        entry,
+        lambda m: m.update({"entrypoints": {"cluster_profiles": ["cluster-profile.json"], "lint_index": "missing.json"}}),
+    )
+    # Keep the registry hash in sync so the identity checks are what fail.
+    manifest_path = tmp_path / entry["manifest_path"]
+    entry["manifest_sha256"] = sha256_bytes(manifest_path.read_bytes())
+    expect_failure(
+        tmp_path,
+        [entry],
+        "entrypoint 'lint_index' has no matching declared capability",
+    )
+
+
+def test_job_templates_entrypoint_key_accepted(tmp_path):
+    entry = add_plugin(tmp_path, capabilities=["job-template"])
+    # Rewrite the template index entrypoint to the equivalent alias key.
+    manifest_path = tmp_path / entry["manifest_path"]
+    manifest = json.loads(manifest_path.read_text())
+    manifest["entrypoints"] = {
+        "job_templates": [manifest["entrypoints"]["template_index"]]
+    }
+    data = json.dumps(manifest, indent=2).encode()
+    manifest_path.write_bytes(data)
+    entry["manifest_sha256"] = sha256_bytes(data)
+
+    build_registry(tmp_path, [entry])
+    errors, _ = run_validator(tmp_path)
+    assert errors == []
+
+
+def test_job_template_capability_with_wrong_index_role_rejected(tmp_path):
+    entry = add_plugin(tmp_path, capabilities=["job-template"])
+    _rewrite_manifest(
+        tmp_path,
+        entry,
+        lambda m: m.update(
+            {"files": [{**f, "role": "documentation"} for f in m["files"]]}
+        ),
+    )
+    expect_failure(tmp_path, [entry], "does not match expected")

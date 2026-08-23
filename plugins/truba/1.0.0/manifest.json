@@ -8,21 +8,25 @@
   "license": "MIT",
   "description": "TRUBA cluster profile.",
   "requires_app": ">=1.4.0",
-  "capabilities": ["cluster-profile"],
+  "capabilities": [
+    "cluster-profile"
+  ],
   "entrypoints": {
-    "cluster_profiles": ["cluster-profile.json"]
+    "cluster_profiles": [
+      "cluster-profile.json"
+    ]
   },
   "files": [
     {
       "path": "cluster-profile.json",
-      "sha256": "93b3ebab1ff5edf38ecd8f3ced7f2d1eb6fcef7e9e3fd18330463357d5cdbbcb",
-      "size": 779,
+      "sha256": "5e0c55a4415f4573c350dd9b9cc3eaf8b7c4123829fd89b2c4b3ee57924cc957",
+      "size": 1008,
       "role": "cluster-profile"
     },
     {
       "path": "README.md",
-      "sha256": "a6545190c7f3364cc7002ab89cbbc6a68e51242ddaf753ae4c881b57bdc34a30",
-      "size": 1465,
+      "sha256": "ddbcc0bc27b452c385740e186dc5654fe68deb9e8e9709527e05551d9d4cfc13",
+      "size": 1705,
       "role": "documentation"
     }
   ]
