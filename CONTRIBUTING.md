@@ -3,6 +3,30 @@
 Thanks for considering a contribution to the official HPC Client GUI plugin
 registry.
 
+## Request a plugin
+
+**You do not need to write any code to request a plugin.**
+
+- Open your request through the dedicated issue form:
+  [Plugin request](https://github.com/mskomek/hpc-client-gui-plugins/issues/new?template=plugin-request.yml)
+- Provide official, public documentation for the cluster or application
+  whenever possible — that is what maintainers validate content against.
+- Requests for new cluster profiles, Slurm/solver job templates (for example
+  ANSYS Fluent or OpenFOAM), and journal/job-script lint rules are all welcome.
+- A request does not guarantee inclusion; maintainers may split a broad request
+  into separate cluster-profile, job-template, and lint-rule work.
+- All contributed plugin content must remain **declarative**: no executable
+  code, no scripts intended for automatic execution, no binary payloads, no
+  credentials, and no licensed/proprietary files.
+- Cluster-specific data in examples must be sanitized.
+- Found an error in existing plugin content? Use the
+  [plugin content bug report](https://github.com/mskomek/hpc-client-gui-plugins/issues/new?template=plugin-content-bug.yml)
+  form instead. Application runtime bugs go to
+  [HPC Client GUI issues](https://github.com/mskomek/hpc-client-gui/issues/new/choose).
+
+Users install plugins from inside the application:
+**HPC Client GUI → Plugins → Discover → Install**.
+
 ## Ground rules
 
 1. Plugins are **declarative data only**. Never add Python modules, DLLs,
