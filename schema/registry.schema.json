@@ -97,6 +97,12 @@
         "manifest_path": {"$ref": "#/definitions/relativePath"},
         "manifest_sha256": {"$ref": "#/definitions/sha256Hex"},
         "official": {"type": "boolean"},
+        "capabilities": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/capability"},
+          "minItems": 1,
+          "maxItems": 8
+        },
         "keywords": {
           "type": "array",
           "items": {"type": "string"},

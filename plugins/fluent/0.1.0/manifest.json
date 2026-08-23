@@ -2,7 +2,7 @@
   "schema_version": 1,
   "plugin_api": 1,
   "id": "org.hpcclient.fluent",
-  "name": "Fluent Journal Lint",
+  "name": "ANSYS Fluent Tools",
   "version": "0.1.0",
   "publisher": "HPC Client GUI",
   "license": "MIT",

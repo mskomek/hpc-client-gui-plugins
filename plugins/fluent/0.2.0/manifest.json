@@ -2,11 +2,11 @@
   "schema_version": 1,
   "plugin_api": 1,
   "id": "org.hpcclient.fluent",
-  "name": "Fluent Journal Lint",
+  "name": "ANSYS Fluent Tools",
   "version": "0.2.0",
   "publisher": "HPC Client GUI",
   "license": "MIT",
-  "description": "Conservative static lint rules for ANSYS Fluent journal files.",
+  "description": "Journal lint rules and a generic Fluent Slurm job template for ANSYS Fluent.",
   "requires_app": ">=1.4.0",
   "capabilities": [
     "lint-rules",
