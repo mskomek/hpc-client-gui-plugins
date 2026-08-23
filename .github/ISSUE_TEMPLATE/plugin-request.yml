@@ -1,0 +1,140 @@
+name: Plugin request
+description: Request a new cluster profile, job template, solver template, or lint rule pack for HPC Client GUI
+title: "Plugin request: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping grow the official plugin registry!
+
+        **You do not need to write any code** to request a plugin — fill in as
+        much of this form as you can. Maintainers turn requests into declarative
+        plugin content (cluster profiles, Slurm/job templates, lint rules).
+
+        ## ⚠️ Before you continue — never include secrets
+
+        Do **not** submit:
+
+        - passwords or one-time codes
+        - private SSH keys
+        - access tokens or API keys
+        - private VPN addresses or gateways
+        - confidential/internal hostnames not published by your institution
+        - personal data (your own or others')
+        - proprietary or licensed scripts/files
+
+        Use only information your HPC center publishes openly.
+
+  - type: input
+    id: plugin_name
+    attributes:
+      label: Requested plugin / institution name
+      description: What should the plugin be called?
+      placeholder: Example University HPC
+    validations:
+      required: true
+
+  - type: input
+    id: hpc_center
+    attributes:
+      label: HPC center / cluster name
+      placeholder: e.g. TRUBA, a national cluster, a university cluster
+    validations:
+      required: true
+
+  - type: input
+    id: documentation_url
+    attributes:
+      label: Official website or documentation URL
+      description: Public documentation describing the system. This greatly speeds things up.
+      placeholder: https://...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: scheduler
+    attributes:
+      label: Scheduler type
+      options:
+        - Slurm
+        - PBS / Torque
+        - LSF
+        - SGE
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: input
+    id: hostname_pattern
+    attributes:
+      label: Public SSH hostname pattern (optional)
+      description: Only if publicly documented and non-sensitive.
+      placeholder: e.g. login.hpc.example.edu (omit if internal)
+    validations:
+      required: false
+
+  - type: input
+    id: path_patterns
+    attributes:
+      label: Remote home/scratch path patterns (optional)
+      description: Only if publicly documented.
+      placeholder: e.g. /home/{user}, /scratch/{user}
+    validations:
+      required: false
+
+  - type: textarea
+    id: queues
+    attributes:
+      label: Queue / partition information (optional)
+      description: Publicly documented partition names and limits.
+      placeholder: |
+        e.g. `long` (max 30 days), `short` (max 4 hours)
+
+  - type: textarea
+    id: modules
+    attributes:
+      label: Modules / environment commands (optional)
+      description: Publicly documented module loads or environment setup.
+      placeholder: |
+        e.g. module load centos7.3/applic/ansys/25.2
+
+  - type: checkboxes
+    id: desired_content
+    attributes:
+      label: Desired plugin content
+      description: What should the plugin provide?
+      options:
+        - label: Cluster/system profile (paths + scheduler commands)
+        - label: Slurm job template(s)
+        - label: Application/solver job template(s)
+        - label: Journal / job-script lint rules
+
+  - type: input
+    id: target_application
+    attributes:
+      label: Target solver/application (optional)
+      placeholder: e.g. ANSYS Fluent, OpenFOAM, GROMACS
+
+  - type: textarea
+    id: example_script
+    attributes:
+      label: Example sanitized job script (optional)
+      description: Remove usernames, project IDs, queue names that are not public, and anything confidential.
+      render: shell
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: Reason / use case
+      description: Why would this plugin help you and others?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: no_secrets
+    attributes:
+      label: Secret-free confirmation
+      options:
+        - required: true
+          label: I confirm this request contains no passwords, private keys, tokens, confidential hostnames, VPN details, personal data, or licensed/proprietary files.

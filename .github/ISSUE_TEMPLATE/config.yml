@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: HPC Client GUI application bug
+    url: https://github.com/mskomek/hpc-client-gui/issues/new/choose
+    about: >
+      Application crashes, SSH/SFTP/FTP transfer problems, Plugin Manager
+      errors, UI issues, and release problems belong in the main application
+      repository — not here.
+  - name: Documentation and guides
+    url: https://github.com/mskomek/hpc-client-gui#readme
+    about: Main application documentation, downloads, and support channels.

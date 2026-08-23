@@ -1,0 +1,90 @@
+name: Plugin content bug report
+description: Report an error in existing registry plugin content (wrong command, path, rule, or template)
+title: "Plugin content issue: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form only for **errors in published plugin content** — for
+        example a wrong cluster command, an outdated module name, an incorrect
+        lint rule, or a broken job template.
+
+        Application crashes, SSH/SFTP/FTP problems, and UI bugs belong in the
+        main application repository instead:
+        https://github.com/mskomek/hpc-client-gui/issues/new/choose
+
+        ⚠️ Do not include passwords, private keys, tokens, confidential
+        hostnames, VPN details, personal data, or licensed files.
+
+  - type: dropdown
+    id: plugin_id
+    attributes:
+      label: Plugin
+      options:
+        - org.hpcclient.truba
+        - org.hpcclient.fluent
+        - Other (describe below)
+    validations:
+      required: true
+
+  - type: input
+    id: plugin_version
+    attributes:
+      label: Plugin version
+      placeholder: e.g. 1.0.0 / 0.2.0
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: HPC Client GUI version
+      placeholder: e.g. 1.4.0
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: capability
+    attributes:
+      label: Affected capability
+      options:
+        - label: Cluster profile (paths/commands)
+        - label: Job template
+        - label: Lint rules
+        - label: Documentation inside the plugin
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the exact error text if any.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Official documentation supporting the correction
+      description: Link the public documentation that shows the correct behavior.
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Sanitized reproduction information
+      description: Minimal steps/data to reproduce. Remove all confidential values.
+
+  - type: checkboxes
+    id: no_secrets
+    attributes:
+      label: Secret-free confirmation
+      options:
+        - required: true
+          label: I confirm this report contains no secrets, private keys, tokens, confidential hostnames, or licensed files.
