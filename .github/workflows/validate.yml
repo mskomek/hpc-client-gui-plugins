@@ -26,6 +26,9 @@ jobs:
       - name: Run tests
         run: python -m pytest tests -q
 
+      - name: Documentation link and routing check
+        run: python scripts/check_docs_links.py
+
       - name: Validate registry
         run: python scripts/validate_registry.py
 
