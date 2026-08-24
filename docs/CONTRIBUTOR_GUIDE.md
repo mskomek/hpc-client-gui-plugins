@@ -19,7 +19,8 @@ plugins/<short-name>/<version>/
 ```
 
 Manifest file paths are relative to this directory. Allowed extensions are
-`.json`, `.md`, and `.txt`.
+`.json`, `.md`, `.txt`, and `.tpl`. Every file inside the version directory
+must be declared in `manifest.files`; undeclared extra files are rejected.
 
 ## 3. Write the payload
 
@@ -36,6 +37,16 @@ Manifest file paths are relative to this directory. Allowed extensions are
   `{{variable}}` placeholder syntax with typed variables
   (`string`, `integer`, `boolean`, `choice`, `path`). Do not hardcode
   unverified site-specific resource defaults; prefer required variables.
+- `.tpl` template files: plain-text scheduler script skeletons (for example
+  a Slurm submission script for ANSYS Fluent). A `.tpl` file is data, never
+  executed at install time; the app only reads it as text and renders
+  declared `{{variable}}` placeholders when the user explicitly creates a job
+  from the template. Declare each `.tpl` in `manifest.files` with role
+  `template-content`, list it in the template index entrypoint
+  (`template_index`) via its `content_path` plus a matching `sha256`, and
+  keep routing inside the index — the application never discovers `.tpl`
+  files by scanning directories. See
+  `plugins/fluent/0.2.0/templates/fluent_job.slurm.tpl` for a reference.
 
 ## 4. Register the plugin
 

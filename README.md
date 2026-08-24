@@ -1,9 +1,11 @@
 # hpc-client-gui-plugins
 
-> Official plugin registry for HPC Client GUI: cluster profiles, scheduler/application templates, and HPC lint rules.
+> Official declarative plugin registry for HPC Client GUI, including TRUBA and ANSYS Fluent integrations.
 
 This repository is the **official declarative plugin registry** for
 [HPC Client GUI](https://github.com/mskomek/hpc-client-gui).
+
+![HPC Client GUI Plugin Manager showing the TRUBA and ANSYS Fluent plugins](https://raw.githubusercontent.com/mskomek/hpc-client-gui/main/docs/assets/plugin-manager.png)
 
 ## What lives here
 
@@ -112,6 +114,23 @@ Cluster-profile plugins can define remote scheduler/status command templates
 that are eventually executed over SSH by the main application after an
 explicit user action. Review plugin content before installing it. See
 [SECURITY.md](SECURITY.md) and [docs/SECURITY_MODEL.md](docs/SECURITY_MODEL.md).
+
+## Links
+
+- **Main application:** [mskomek/hpc-client-gui](https://github.com/mskomek/hpc-client-gui)
+  — downloads, CLI guide, and full documentation.
+- **Plugin Manager user guide:** [PLUGINS_en.md](https://github.com/mskomek/hpc-client-gui/blob/main/src/hpc_gui/docs/PLUGINS_en.md)
+  ([Türkçe](https://github.com/mskomek/hpc-client-gui/blob/main/src/hpc_gui/docs/PLUGINS_tr.md)) —
+  installing, activating, rolling back, and removing plugins.
+- **Plugin development:** [docs/CONTRIBUTOR_GUIDE.md](docs/CONTRIBUTOR_GUIDE.md),
+  [docs/PLUGIN_API_V1.md](docs/PLUGIN_API_V1.md), and
+  [docs/REGISTRY_PROTOCOL.md](docs/REGISTRY_PROTOCOL.md).
+- **Questions and discussion:** use
+  [GitHub Discussions](https://github.com/mskomek/hpc-client-gui-plugins/discussions).
+- **Bug reports:** plugin content problems go through the
+  [plugin content bug form](https://github.com/mskomek/hpc-client-gui-plugins/issues/new?template=plugin-content-bug.yml);
+  security issues follow [SECURITY.md](SECURITY.md) (private security advisory)
+  and must never be opened as public issues.
 
 ## Contributing
 
