@@ -15,7 +15,9 @@ Checks, in order:
 6. every declared file exists with the declared size and SHA-256;
 7. payloads are declarative data (no executable-looking files);
 8. capability entrypoints are consistent with declared capabilities and
-   their payloads validate against their role schemas.
+   their payloads validate against their role schemas;
+9. version directories contain no undeclared extra files (immutable,
+   fully-enumerated directories).
 
 The security model stays declarative-only: no Python plugin modules, no
 executable hooks, no binaries, no installation-time command execution,
@@ -318,6 +320,20 @@ def validate_plugin_entry(entry: dict, seen_ids: dict, errors: list[str], warnin
         actual_hash = sha256_of(payload_path)
         if actual_hash != file_entry["sha256"]:
             errors.append(f"{file_label}: SHA-256 mismatch")
+
+    # Version directories are immutable and fully enumerated: every file on
+    # disk must be declared in manifest.files. Undeclared extras (including
+    # unreferenced .tpl templates) are rejected so clients that download
+    # exactly the declared files never miss content.
+    for existing in sorted(manifest_dir.rglob("*")):
+        if not existing.is_file():
+            continue
+        rel = existing.relative_to(manifest_dir).as_posix()
+        if rel != "manifest.json" and rel not in seen_paths:
+            errors.append(
+                f"{label}: undeclared extra file in version directory '{rel}' "
+                "(every file must be listed in manifest.files)"
+            )
 
     collect_executable_payload_errors(manifest.get("files", []), label, errors)
     validate_entrypoint_files(manifest, manifest_dir, label, errors)

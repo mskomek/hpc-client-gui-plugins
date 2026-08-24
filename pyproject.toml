@@ -1,9 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "hpc-client-gui-plugins"
-version = "0.1.0"
+version = "1.0.0"
 description = "Validation tooling for the official HPC Client GUI plugin registry"
+readme = "README.md"
+license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = []
+
+# This repository ships declarative plugin data (plugins/, schema/,
+# registry.json), not an importable Python package. The installable
+# distribution exists only so CI and contributors can run the validation
+# tooling in scripts/ via `pip install -e ".[dev]"`. Package discovery is
+# explicitly disabled and no payload files are packaged.
+[tool.setuptools]
+packages = []
+py-modules = []
+include-package-data = false
 
 [project.optional-dependencies]
 dev = [
