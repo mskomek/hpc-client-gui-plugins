@@ -1,0 +1,8 @@
+COMMAND FILE:
+  CFD-Post
+  > load filename=results.res
+  CONTOUR: Contour 1
+    Variable = Pressure
+  END
+END
+>quit

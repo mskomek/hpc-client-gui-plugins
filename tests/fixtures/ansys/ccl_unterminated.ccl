@@ -1,0 +1,6 @@
+LIBRARY:
+  CELL REGISTRY:
+    Cell 1:
+      Material = Air at 25 C
+  MATERIAL: Air at 25 C
+    Option = Constant Property

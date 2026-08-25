@@ -1,0 +1,5 @@
+/BATCH
+/PREP7
+*DO,I,1,10
+E,1
+*ENDIF

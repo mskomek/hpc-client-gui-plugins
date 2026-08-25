@@ -1,0 +1,11 @@
+COMMAND FILE:
+  CFX Pre
+  > load filename=Case.cfx, readonly=
+  FLOW: Flow Analysis 1
+    Solver Name = ANSYS CFX
+    FLOW DOMAIN: Domain 1
+      Domain Motion = Stationary
+    END
+  END
+END
+>quit

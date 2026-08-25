@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "source_id": "ansys-fluent-tui-25r2",
+  "description": "Curated Fluent TUI catalog. Coverage is intentionally partial: only commands whose menu path and availability across the supported version window are well established are listed. Unknown commands never produce errors - only low-confidence heuristic notes. introduced/removed use version ids from fluent_versions.json (null = available across the whole shipped window).",
+  "commands": {
+    "/file/set-tui-version": {
+      "menu": "file",
+      "summary": "Declare which Fluent TUI version the journal targets so later releases keep replaying it."
+    },
+    "/exit": {
+      "menu": "top-level",
+      "summary": "Exit Fluent; with a yes argument it discards unsaved data without prompting."
+    },
+    "/file/read-case": {
+      "menu": "file",
+      "summary": "Read a case file."
+    },
+    "/file/read-data": {
+      "menu": "file",
+      "summary": "Read a data file for the current case."
+    },
+    "/file/read-case-data": {
+      "menu": "file",
+      "summary": "Read a case and its data file."
+    },
+    "/file/write-case": {
+      "menu": "file",
+      "summary": "Write the current case file."
+    },
+    "/file/write-data": {
+      "menu": "file",
+      "summary": "Write the current data file."
+    },
+    "/file/write-case-data": {
+      "menu": "file",
+      "summary": "Write both case and data files."
+    },
+    "/file/read-mesh": {
+      "menu": "file",
+      "summary": "Read a mesh file without case settings."
+    },
+    "/file/write-mesh": {
+      "menu": "file",
+      "summary": "Write the mesh to a file."
+    },
+    "/file/import-cgns-mesh": {
+      "menu": "file/import",
+      "summary": "Import a CGNS mesh file."
+    },
+    "/file/export-ensight-gold": {
+      "menu": "file/export",
+      "summary": "Export solution data in EnSight Gold format."
+    },
+    "/file/export-cgns": {
+      "menu": "file/export",
+      "summary": "Export case/data in CGNS format."
+    },
+    "/file/auto-save/root-name": {
+      "menu": "file/auto-save",
+      "summary": "Set the root file name used by automatic case/data saving."
+    },
+    "/file/auto-save/data-frequency": {
+      "menu": "file/auto-save",
+      "summary": "Set how often data files are auto-saved."
+    },
+    "/file/auto-save/case-frequency": {
+      "menu": "file/auto-save",
+      "summary": "Set how often case files are auto-saved."
+    },
+    "/file/auto-save/retain-most-recent-files": {
+      "menu": "file/auto-save",
+      "summary": "Control retention of older autosave files."
+    },
+    "/file/start-transcript": {
+      "menu": "file",
+      "summary": "Start writing a transcript of the session to a file."
+    },
+    "/file/stop-transcript": {
+      "menu": "file",
+      "summary": "Stop transcript recording."
+    },
+    "/file/read-journal": {
+      "menu": "file",
+      "summary": "Replay another journal file."
+    },
+    "/file/start-journal": {
+      "menu": "file",
+      "summary": "Start recording subsequent actions into a journal file."
+    },
+    "/file/confirm-overwrite": {
+      "menu": "file",
+      "summary": "Enable or disable overwrite confirmation prompts for file output."
+    },
+    "/solve/iterate": {
+      "menu": "solve",
+      "summary": "Run steady-state iterations."
+    },
+    "/solve/dual-time-iterate": {
+      "menu": "solve",
+      "summary": "Run unsteady dual-time iterations."
+    },
+    "/solve/initialize/initialize-flow": {
+      "menu": "solve/initialize",
+      "summary": "Initialize the flow field with the current default values."
+    },
+    "/solve/initialize/hybrid-initialization": {
+      "menu": "solve/initialize",
+      "summary": "Run hybrid initialization."
+    },
+    "/solve/initialize/set-defaults": {
+      "menu": "solve/initialize",
+      "summary": "Set default initialization values."
+    },
+    "/solve/monitor/set-command": {
+      "menu": "solve/monitor",
+      "summary": "Define a command executed by the solution monitor."
+    },
+    "/mesh/check": {
+      "menu": "mesh",
+      "summary": "Check the mesh for errors."
+    },
+    "/mesh/check-verbosity": {
+      "menu": "mesh",
+      "summary": "Control mesh check verbosity."
+    },
+    "/mesh/size-info": {
+      "menu": "mesh",
+      "summary": "Report mesh size statistics."
+    },
+    "/define/models/steady": {
+      "menu": "define/models",
+      "summary": "Select the steady solver."
+    },
+    "/define/models/unsteady-1st-order": {
+      "menu": "define/models",
+      "summary": "Select first-order unsteady solver."
+    },
+    "/define/models/unsteady-2nd-order": {
+      "menu": "define/models",
+      "summary": "Select second-order unsteady solver."
+    },
+    "/define/models/viscous/ke-standard": {
+      "menu": "define/models/viscous",
+      "summary": "Select the standard k-epsilon turbulence model."
+    },
+    "/define/models/viscous/kw-sst": {
+      "menu": "define/models/viscous",
+      "summary": "Select the k-omega SST turbulence model."
+    },
+    "/define/models/energy": {
+      "menu": "define/models",
+      "summary": "Enable or disable the energy equation."
+    },
+    "/define/boundary-conditions/velocity-inlet": {
+      "menu": "define/boundary-conditions",
+      "summary": "Set conditions for a velocity-inlet zone."
+    },
+    "/define/boundary-conditions/pressure-inlet": {
+      "menu": "define/boundary-conditions",
+      "summary": "Set conditions for a pressure-inlet zone."
+    },
+    "/define/boundary-conditions/mass-flow-inlet": {
+      "menu": "define/boundary-conditions",
+      "summary": "Set conditions for a mass-flow-inlet zone."
+    },
+    "/define/boundary-conditions/pressure-outlet": {
+      "menu": "define/boundary-conditions",
+      "summary": "Set conditions for a pressure-outlet zone."
+    },
+    "/define/boundary-conditions/outflow": {
+      "menu": "define/boundary-conditions",
+      "summary": "Set conditions for an outflow zone."
+    },
+    "/define/boundary-conditions/wall": {
+      "menu": "define/boundary-conditions",
+      "summary": "Set conditions for a wall zone."
+    },
+    "/define/boundary-conditions/symmetry": {
+      "menu": "define/boundary-conditions",
+      "summary": "Set conditions for a symmetry zone."
+    },
+    "/define/boundary-conditions/axis": {
+      "menu": "define/boundary-conditions",
+      "summary": "Set conditions for an axis boundary."
+    },
+    "/define/boundary-conditions/interior": {
+      "menu": "define/boundary-conditions",
+      "summary": "Set conditions for an interior zone."
+    },
+    "/define/boundary-conditions/periodic": {
+      "menu": "define/boundary-conditions",
+      "summary": "Set conditions for a periodic zone."
+    },
+    "/define/boundary-conditions/copy-bc": {
+      "menu": "define/boundary-conditions",
+      "summary": "Copy boundary conditions between zones."
+    },
+    "/define/boundary-conditions/list-zones": {
+      "menu": "define/boundary-conditions",
+      "summary": "List zones and their types."
+    },
+    "/report/surface-integrals": {
+      "menu": "report",
+      "summary": "Report surface integrals such as area or flux."
+    },
+    "/report/volumes": {
+      "menu": "report",
+      "summary": "Report volume integrals."
+    },
+    "/report/forces": {
+      "menu": "report",
+      "summary": "Report forces and moments on zones."
+    },
+    "/report/fluxes/mass-flow": {
+      "menu": "report/fluxes",
+      "summary": "Report mass flow rate through boundaries."
+    },
+    "/report/summary": {
+      "menu": "report",
+      "summary": "Write a summary report of the setup."
+    },
+    "/surface/iso-surface": {
+      "menu": "surface",
+      "summary": "Create an iso-value surface."
+    },
+    "/surface/plane-surface": {
+      "menu": "surface",
+      "summary": "Create a plane surface."
+    },
+    "/surface/point-surface": {
+      "menu": "surface",
+      "summary": "Create a point surface."
+    },
+    "/parallel/print-usage": {
+      "menu": "parallel",
+      "summary": "Print parallel usage statistics."
+    }
+  },
+  "gui_prefixes": {
+    "/display/": "Graphics display commands require the graphics pipeline.",
+    "/plot/": "Plotting requires the graphics pipeline or plot file handling.",
+    "/views/": "View manipulation belongs to the GUI layer.",
+    "/scene/": "Scene manipulation belongs to the GUI layer.",
+    "/graphics/": "Graphics rendering options belong to the GUI layer."
+  },
+  "prompt_prone": {
+    "/exit": "A bare /exit asks whether unsaved data should be saved; journals normally end with '/exit yes' when run in batch."
+  },
+  "shell_indicators": [
+    "!",
+    "(system "
+  ],
+  "recognition": [
+    "/solve/iterate",
+    "/solve/dual-time-iterate",
+    "/file/read-case",
+    "/file/read-data",
+    "/file/read-case-data",
+    "/file/write-case",
+    "/file/write-data",
+    "/file/write-case-data",
+    "/file/auto-save/root-name",
+    "/file/auto-save/data-frequency",
+    "/file/auto-save/case-frequency",
+    "/file/start-transcript",
+    "/file/stop-transcript",
+    "/file/read-journal",
+    "/file/set-tui-version"
+  ]
+}

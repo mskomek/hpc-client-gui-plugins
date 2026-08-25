@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "plugin_api": 2,
+  "id": "org.hpcclient.ansyslint",
+  "name": "ANSYS Script & Journal Linter",
+  "version": "0.1.0",
+  "publisher": "HPC Client GUI",
+  "license": "MIT",
+  "description": "Unofficial offline linter for Ansys journals and scripts: Fluent TUI/Scheme, Workbench .wbjn with nested SendCommand, MAPDL inputs, CCL sessions (CFX-Pre, CFD-Post, TurboGrid), ICEM replays, System Coupling scripts, DesignModeler, Mechanical, SpaceClaim, AEDT and Motion. Structural, catalog-backed and clearly labelled heuristic checks with HPC portability rules.",
+  "requires_app": ">=1.5.0",
+  "capabilities": [
+    "linter-tool"
+  ],
+  "entrypoints": {
+    "linter_engine": "engine/ansys_lint/__init__.py"
+  },
+  "files": [
+    {
+      "path": "engine/ansys_lint/__init__.py",
+      "sha256": "c19d2dbfde26f4b9334b39c0c96f72f9773f4fb518ea4be18d857567861750c7",
+      "size": 2679,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/__main__.py",
+      "sha256": "152d2529787fa941e6942ee1e08b5cec972da225f20b0f1589a6cad771b49d35",
+      "size": 164,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/api.py",
+      "sha256": "f17dfa628711b0a787cd0f8eedf8ec901ccbeb23107357d5d67637509c7939e2",
+      "size": 7116,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/cli.py",
+      "sha256": "c164e946aea0a9a4f1aaad52fbe07037f5f8afdcfff2ce2a6de1a16011848ae6",
+      "size": 8002,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/data/fluent_tui.json",
+      "sha256": "f78414a4fa127bb9d05c27ca1a6270ded3f702ba7c094a09de8063783ace4f0d",
+      "size": 9044,
+      "role": "linter-data"
+    },
+    {
+      "path": "engine/ansys_lint/data/fluent_versions.json",
+      "sha256": "8483032c1696f922360255b95005b741f13fc5ff7b3040a67cb246d1b4bed7a6",
+      "size": 641,
+      "role": "linter-data"
+    },
+    {
+      "path": "engine/ansys_lint/data/mapdl_commands.json",
+      "sha256": "876e590995e7c2a87eeb90747c336799d87efabff2fa104377fef6eff492a5a3",
+      "size": 14103,
+      "role": "linter-data"
+    },
+    {
+      "path": "engine/ansys_lint/data/sources.json",
+      "sha256": "386f4a2839fc3517590b8023846a7c62f252fbfda53bb4eba3b2620309434d02",
+      "size": 14895,
+      "role": "linter-data"
+    },
+    {
+      "path": "engine/ansys_lint/detection.py",
+      "sha256": "8d47121cf0f8a0f2b4b6787fe54215830e23e87f6921584b9d57fe3131bd0e48",
+      "size": 10817,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/__init__.py",
+      "sha256": "7f41eeb3e6be355952634c5b44a070c47089ad56ea2d3c14a699b80d457555e7",
+      "size": 3451,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/aedt.py",
+      "sha256": "e3398cb5371a01b328acc2ce3ae1e9e183c6f6ee27672dceeeec57e87d337ece",
+      "size": 6987,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/aqwa.py",
+      "sha256": "716621fab3e8debd14206a6466f2be475b00bf2e6edaec3b9d210901a733c858",
+      "size": 2071,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/ccl.py",
+      "sha256": "528188046481e9f2ffd0374f019ee4c28249757a7b35fd50f76877ae0a195659",
+      "size": 14061,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/designmodeler.py",
+      "sha256": "9f5e0fa61c136e7ab84e8c9a82294282ba91e32b62aa9826b6d9a4bb5825d789",
+      "size": 5453,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/fluent.py",
+      "sha256": "8a9cd7fd6476c7e4809561e0415525bfe4522ad50bf4b3d8b1342f3dec0d28a4",
+      "size": 25001,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/icem.py",
+      "sha256": "18c9e3ef3b59ca2b6dc3d4f2c7a5cae81e3e229679b9e5051600faff7c19ff79",
+      "size": 13858,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/mapdl.py",
+      "sha256": "4caba60541d60b4ed02c1d24b6685f0d8d30240c679ed12d4d050362dafb84c4",
+      "size": 17748,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/mechanical.py",
+      "sha256": "951eb32caef67f43a7fc0474b2febabb73d31da993b9fd70b02b82b55ee18bd8",
+      "size": 8679,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/motion.py",
+      "sha256": "af070dd65d32fb0db4fa68fdfe82c4d48acf29e292a088a8152d650d81b73474",
+      "size": 5790,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/spaceclaim.py",
+      "sha256": "c725ed43a8098de6820447e4a8957e90bedfc82f5969cd3d62afce98f1a3597b",
+      "size": 6055,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/sysc.py",
+      "sha256": "63b4c4b90a5b48bbd799d6479549250957cbb4fee19ac9469f2a77c7a2aff714",
+      "size": 12164,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/dialects/workbench.py",
+      "sha256": "52cdcc4ef3cd998df92a6917ee672efe36b81952e066c277a9bad58874ccdb22",
+      "size": 26837,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/embedded.py",
+      "sha256": "6ba4181f2ac3caaa21735348b56d9d69530c30c182eddac1d30a2999191713a5",
+      "size": 8589,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/jscript.py",
+      "sha256": "251378b4f5d1fd5f1a3d3f91f9216cff62971f13a5e683cb46e908ed1e9ccfb7",
+      "size": 10069,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/model.py",
+      "sha256": "1da5331d9467e50df6cd03d05442373cbdbf622bda3d49c47e473e6366f0cf2b",
+      "size": 5515,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/qt_page.py",
+      "sha256": "2d705d54db69ef26a900a785378bdf7f591806c4ea31ee75288f6244449f9ce7",
+      "size": 13634,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/rules_common.py",
+      "sha256": "087b7687e93433df0c52a6c1ced960e5d2dd6758c6c35831267c80dc72989ad3",
+      "size": 8910,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/sources.py",
+      "sha256": "7158fee507925b2c793c51d015482aab8fcdcca16651e55c7a6681caf10f1d50",
+      "size": 2240,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/ansys_lint/textlines.py",
+      "sha256": "3c0aed40e64922836427995f7ce940ae8b22a307fd075ffa339221272d99f3e6",
+      "size": 2123,
+      "role": "linter-engine"
+    }
+  ]
+}
