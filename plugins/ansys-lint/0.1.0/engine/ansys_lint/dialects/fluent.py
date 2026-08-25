@@ -91,8 +91,11 @@ def default_version() -> str:
 
 
 def normalize_set_tui_value(raw: str) -> str | None:
-    """Map accepted spellings onto a pack version id ('25.2' style)."""
-    value = raw.strip().lower()
+    """Map accepted spellings onto a pack version id ('25.2' style).
+
+    Journals commonly quote the argument: /file/set-tui-version "25.2"
+    """
+    value = raw.strip().strip("\"'").lower()
     pack = load_version_pack()
     order: list[str] = list(pack["order"])
     if value in order:
@@ -208,8 +211,12 @@ def parse_journal_text(
     autosave_frequency_lines: list[int] = []
     exit_lines: list[tuple[int, bool]] = []
     referenced_files: list[tuple[str, int]] = []
+    unknown_commands: dict[str, tuple[int, int]] = {}
     scheme_depth = 0
     scheme_start_line: int | None = None
+    # Persistent Scheme lexer state: strings may span physical lines inside
+    # multi-line (%py-exec "...") style blocks.
+    scheme_lexer = {"in_string": False, "quote": "", "escaped": False}
 
     for index in range(1, lines.line_count + 1):
         raw = lines.line_text(index)
@@ -221,7 +228,10 @@ def parse_journal_text(
         if scheme_depth > 0 or stripped.startswith("("):
             if scheme_depth == 0:
                 scheme_start_line = index
-            scheme_depth += _paren_delta(stripped)
+                scheme_lexer["in_string"] = False
+                scheme_lexer["quote"] = ""
+                scheme_lexer["escaped"] = False
+            scheme_depth += _paren_delta_stateful(stripped, scheme_lexer)
             if scheme_depth <= 0:
                 scheme_depth = 0
                 start = scheme_start_line or index
@@ -337,26 +347,13 @@ def parse_journal_text(
                         source_id="ansys-fluent-tui-changes-25r2",
                     )
 
-        # Unknown commands: honest low-confidence note only.
-        if entry is None and not _has_known_children(cmd):
-            severity = Severity.INFO if options.strictness.value == "lenient" else Severity.WARNING
-            _add(
-                ctx,
-                lines,
-                code="FLUENT_TUI_UNKNOWN",
-                severity=severity,
-                message=f"'{cmd}' is not in the shipped {ctx.version} TUI catalog.",
-                line=index,
-                explanation=(
-                    "The shipped catalog covers only well-established commands. This "
-                    "command may still be valid; verify it against the official TUI "
-                    "reference for your installed release."
-                ),
-                suggested_fix="Confirm the exact menu path in the official Fluent TUI documentation.",
-                confidence=Confidence.LOW,
-                is_heuristic=True,
-                source_id="ansys-fluent-tui-25r2",
-            )
+        # Unknown commands: honest low-confidence note, aggregated per unique
+        # command so a catalog-partial file does not flood the report.
+        # Bare prompt answers ('/yes', '/no', ...) are valid journal tokens,
+        # not menus - they never count as unknown.
+        if entry is None and not _has_known_children(cmd) and token.lower() not in load_tui_catalog()["prompt_answers"]:
+            first_line, count = unknown_commands.get(cmd, (index, 0))
+            unknown_commands[cmd] = (first_line, count + 1)
 
         # GUI-dependent prefixes in unattended runs.
         if options.exec_mode.is_unattended:
@@ -450,6 +447,28 @@ def parse_journal_text(
             confidence=Confidence.HIGH,
             is_heuristic=False,
             source_id="ansys-fluent-journal-files-25r2",
+        )
+
+    # ---- Aggregated unknown-command notes ------------------------------------
+    unknown_severity = Severity.INFO if options.strictness.value == "lenient" else Severity.WARNING
+    for cmd, (first_line, count) in sorted(unknown_commands.items()):
+        suffix_note = f" (seen {count}x)" if count > 1 else ""
+        _add(
+            ctx,
+            lines,
+            code="FLUENT_TUI_UNKNOWN",
+            severity=unknown_severity,
+            message=f"'{cmd}' is not in the shipped {ctx.version} TUI catalog{suffix_note}.",
+            line=first_line,
+            explanation=(
+                "The shipped catalog covers only well-established commands. This "
+                "command may still be valid; verify it against the official TUI "
+                "reference for your installed release."
+            ),
+            suggested_fix="Confirm the exact menu path in the official Fluent TUI documentation.",
+            confidence=Confidence.LOW,
+            is_heuristic=True,
+            source_id="ansys-fluent-tui-25r2",
         )
 
     if scheme_depth > 0:
@@ -554,32 +573,31 @@ def _has_known_children(cmd: str) -> bool:
     return any(key.startswith(prefix) for key in load_tui_catalog()["commands"])
 
 
-def _paren_delta(line: str) -> int:
+def _paren_delta_stateful(line: str, state: dict) -> int:
+    """Per-line paren delta with persistent string/comment state.
+
+    Scheme strings may contain literal newlines (multi-line %py-exec
+    payloads), so quote state must survive across lines of one block.
+    ``state`` keys: in_string, quote, escaped.
+    """
     depth = 0
-    in_string = False
-    quote = ""
-    escaped = False
-    comment = False
     for ch in line:
-        if comment:
-            break
-        if escaped:
-            escaped = False
+        if state["escaped"]:
+            state["escaped"] = False
             continue
-        if ch == "\\" and in_string:
-            escaped = True
-            continue
-        if in_string:
-            if ch == quote:
-                in_string = False
+        if state["in_string"]:
+            if ch == "\\":
+                state["escaped"] = True
+                continue
+            if ch == state["quote"]:
+                state["in_string"] = False
             continue
         if ch in "\"'":
-            in_string = True
-            quote = ch
+            state["in_string"] = True
+            state["quote"] = ch
             continue
         if ch == ";":
-            comment = True
-            continue
+            break  # Scheme comment: rest of the line is ignored
         if ch == "(":
             depth += 1
         elif ch == ")":

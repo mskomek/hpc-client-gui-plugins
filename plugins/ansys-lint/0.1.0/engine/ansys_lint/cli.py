@@ -141,6 +141,15 @@ def render_text(run) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # Journals frequently carry non-ASCII comments (e.g. Turkish); never let
+    # a legacy console codepage crash the report.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            try:
+                stream.reconfigure(encoding="utf-8", errors="replace")
+            except (ValueError, OSError):  # pragma: no cover - exotic streams
+                pass
+
     parser = build_parser()
     args = parser.parse_args(argv)
 

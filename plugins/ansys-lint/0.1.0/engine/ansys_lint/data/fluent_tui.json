@@ -234,6 +234,122 @@
     "/parallel/print-usage": {
       "menu": "parallel",
       "summary": "Print parallel usage statistics."
+    },
+    "/solve/monitors/residual/print": {
+      "menu": "solve/monitors/residual",
+      "summary": "Print residuals after each iteration."
+    },
+    "/solve/monitors/residual/plot": {
+      "menu": "solve/monitors/residual",
+      "summary": "Plot residuals during the run."
+    },
+    "/solve/monitors/residual/check-convergence": {
+      "menu": "solve/monitors/residual",
+      "summary": "Report residual convergence checks."
+    },
+    "/solve/monitors/residual/convergence-criteria": {
+      "menu": "solve/monitors/residual",
+      "summary": "Set residual convergence criteria."
+    },
+    "/solve/monitors/residual/normalization": {
+      "menu": "solve/monitors/residual",
+      "summary": "Control residual normalization."
+    },
+    "/solve/set/pseudo-time-method": {
+      "menu": "solve/set",
+      "summary": "Select pseudo-transient time method behaviour."
+    },
+    "/solve/set/pseudo-time-scale-factor": {
+      "menu": "solve/set",
+      "summary": "Set the pseudo-time step scale factor."
+    },
+    "/solve/report-files/add": {
+      "menu": "solve/report-files",
+      "summary": "Add a report file that writes report definitions during the run."
+    },
+    "/solve/report-files/delete": {
+      "menu": "solve/report-files",
+      "summary": "Delete a configured report file."
+    },
+    "/solve/report-definitions/add": {
+      "menu": "solve/report-definitions",
+      "summary": "Add a report definition (surface/volume integrals, expressions)."
+    },
+    "/solve/report-definitions/compute": {
+      "menu": "solve/report-definitions",
+      "summary": "Compute report definitions immediately."
+    },
+    "/define/parameters/input-parameters/edit": {
+      "menu": "define/parameters",
+      "summary": "Edit a named input parameter."
+    },
+    "/define/parameters/enable-in-tui": {
+      "menu": "define/parameters",
+      "summary": "Enable parameter handling inside the TUI."
+    },
+    "/define/parameters/list-parameters": {
+      "menu": "define/parameters",
+      "summary": "List defined parameters."
+    },
+    "/define/parameters/list-parameters/input-parameters": {
+      "menu": "define/parameters/list-parameters",
+      "summary": "List input parameters."
+    },
+    "/define/parameters/list-parameters/output-parameters": {
+      "menu": "define/parameters/list-parameters",
+      "summary": "List output parameters."
+    },
+    "/define/operating-conditions/gravity": {
+      "menu": "define/operating-conditions",
+      "summary": "Enable gravity and set gravitational acceleration."
+    },
+    "/define/operating-conditions/operating-pressure": {
+      "menu": "define/operating-conditions",
+      "summary": "Set the operating pressure."
+    },
+    "/define/models/viscous/laminar": {
+      "menu": "define/models/viscous",
+      "summary": "Select laminar viscosity model."
+    },
+    "/define/models/viscous/near-wall-treatment/wall-omega-treatment": {
+      "menu": "define/models/viscous/near-wall-treatment",
+      "summary": "Select wall omega near-wall treatment for k-omega models."
+    },
+    "/define/models/viscous/turb-buoyancy-effects": {
+      "menu": "define/models/viscous",
+      "summary": "Toggle turbulence buoyancy effects."
+    },
+    "/define/models/viscous/curvature-correction": {
+      "menu": "define/models/viscous",
+      "summary": "Toggle curvature correction."
+    },
+    "/define/models/viscous/corner-flow-correction": {
+      "menu": "define/models/viscous",
+      "summary": "Toggle corner flow correction."
+    },
+    "/define/models/viscous/turbulence-expert/kato-launder-model": {
+      "menu": "define/models/viscous/turbulence-expert",
+      "summary": "Toggle Kato-Launder production limiter variant."
+    },
+    "/define/models/viscous/turbulence-expert/production-limiter": {
+      "menu": "define/models/viscous/turbulence-expert",
+      "summary": "Toggle turbulence production limiter."
+    },
+    "/solve/initialize/hyb-initialization": {
+      "menu": "solve/initialize",
+      "summary": "Run hybrid initialization (established alias)."
+    },
+    "/mesh/prepare-for-solve": {
+      "menu": "mesh",
+      "summary": "Prepare the mesh for the solver (quality checks/fixes)."
+    },
+    "/switch-to-solution-mode": {
+      "menu": "top-level",
+      "summary": "Switch the Fluent session from meshing mode to solution mode."
+    },
+    "/switch-to-meshing-mode": {
+      "menu": "top-level",
+      "summary": "Switch the Fluent session into meshing mode."
     }
   },
   "gui_prefixes": {
@@ -266,5 +382,10 @@
     "/file/stop-transcript",
     "/file/read-journal",
     "/file/set-tui-version"
+  ],
+  "prompt_answers": [
+    "yes",
+    "no",
+    "ok"
   ]
 }

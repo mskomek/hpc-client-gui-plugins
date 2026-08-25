@@ -22,6 +22,9 @@ from ..rules_common import scan_path_literal
 from ..textlines import LineIndex
 
 API_VERSION_RE = re.compile(r"SpaceClaim\.Api\.V(\d+)")
+# Recorded Discovery/SpaceClaim journals start with a header such as
+# "# Python Script, API Version = V252".
+DISCOVERY_HEADER_RE = re.compile(r"Python Script,\s*API Version\s*=\s*V\d+", re.IGNORECASE)
 SIGNATURES = (
     "SpaceClaim.Api",
     "Window.ActiveWindow",
@@ -29,6 +32,8 @@ SIGNATURES = (
     "Document.Save",
     "Model.",
     "Selection.",
+    "GetRootPart",
+    "GetRoot",
 )
 INTERACTIVE_TOKENS = (
     "Window.ActiveWindow",
@@ -156,6 +161,9 @@ def signature_score(file_name: str, text: str) -> tuple[float, list[str]]:
     if file_name.lower().endswith(".scscript"):
         score += 0.6
         evidence.append("extension .scscript")
+    if DISCOVERY_HEADER_RE.search(text[:400]):
+        score += 0.45
+        evidence.append("Discovery/SpaceClaim API version header")
     api_hit = bool(API_VERSION_RE.search(text))
     if api_hit:
         score += 0.35
@@ -164,4 +172,7 @@ def signature_score(file_name: str, text: str) -> tuple[float, list[str]]:
     if hits >= 2:
         score += 0.25
         evidence.append(f"{hits} product signatures")
+    elif hits == 1:
+        score += 0.1
+        evidence.append("1 product signature")
     return min(score, 0.99), evidence

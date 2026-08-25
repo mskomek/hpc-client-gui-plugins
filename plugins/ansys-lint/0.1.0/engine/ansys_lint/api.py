@@ -49,6 +49,22 @@ SUPPORTED_SUFFIXES = {
     ".dfjnl",
 }
 
+# Folder-scan noise filters: hidden directories, VCS metadata and vendored
+# dependency trees never contain Ansys journals.
+SKIP_DIRECTORY_NAMES = frozenset(
+    {
+        "node_modules",
+        "__pycache__",
+        ".git",
+        ".svn",
+        ".hg",
+        ".venv",
+        "venv",
+        ".pytest_cache",
+        ".ruff_cache",
+    }
+)
+
 
 def _read_text(path: Path) -> str:
     data = path.read_bytes()
@@ -172,15 +188,28 @@ def lint_file(path: str | Path, options: LintOptions | None = None) -> FileResul
     return lint_text(text, file_name=str(path), options=options)
 
 
+def _is_skipped_dir(name: str) -> bool:
+    return name.startswith(".") or name in SKIP_DIRECTORY_NAMES
+
+
 def collect_files(paths: list[str | Path], recursive: bool = True) -> list[Path]:
     files: list[Path] = []
     for entry in paths:
         entry_path = Path(entry)
         if entry_path.is_dir():
-            pattern = "**/*" if recursive else "*"
-            for candidate in sorted(entry_path.glob(pattern)):
-                if candidate.is_file() and candidate.suffix.lower() in SUPPORTED_SUFFIXES:
-                    files.append(candidate)
+            if recursive:
+                for root, dirs, names in os.walk(entry_path):
+                    # Prune hidden/vendor directories so the walker never
+                    # descends into them (huge dependency trees stay cheap).
+                    dirs[:] = sorted(d for d in dirs if not _is_skipped_dir(d))
+                    for name in sorted(names):
+                        candidate = Path(root) / name
+                        if candidate.suffix.lower() in SUPPORTED_SUFFIXES:
+                            files.append(candidate)
+            else:
+                for candidate in sorted(entry_path.iterdir()):
+                    if candidate.is_file() and candidate.suffix.lower() in SUPPORTED_SUFFIXES:
+                        files.append(candidate)
         elif entry_path.is_file():
             files.append(entry_path)
     seen: set[str] = set()

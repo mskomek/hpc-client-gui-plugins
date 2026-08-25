@@ -64,49 +64,65 @@ def _fluent_boost(text: str) -> tuple[float, list[str]]:
     return boost, evidence
 
 
-def _mapdl_boost(text: str) -> tuple[float, list[str]]:
-    hits = _MAPDL_TOKEN_RE.findall(text)
-    if len(hits) >= 2:
-        known = 0
-        catalog = None
-        try:
-            from .dialects.mapdl import load_catalog
+def _mapdl_boost(signature_text: str) -> tuple[float, list[str]]:
+    """Boost only when tokens actually appear in the shipped MAPDL catalog.
 
-            catalog = load_catalog()["commands"]
-        except Exception:  # pragma: no cover - catalog always ships
-            catalog = None
-        if catalog:
-            known = sum(1 for token in hits[:50] if token.strip("/*").upper() in catalog or token.upper() in catalog)
-        boost = min(0.4, 0.1 * max(len(hits), known))
+    Uppercase prose (error logs shout AT / NOT / ERROR ...) must never look
+    like an APDL batch file.
+    """
+    hits = _MAPDL_TOKEN_RE.findall(signature_text)
+    if len(hits) < 2:
+        return 0.0, []
+    try:
+        from .dialects.mapdl import load_catalog
+
+        catalog = load_catalog()["commands"]
+    except Exception:  # pragma: no cover - catalog always ships
+        catalog = None
+    if catalog is None:
+        boost = min(0.4, 0.1 * max(len(hits), 2))
         return boost, [f"{len(hits)} uppercase command tokens"]
-    return 0.0, []
+    known = sum(
+        1
+        for token in hits[:120]
+        if token.strip("/*").upper() in catalog or token.upper() in catalog
+    )
+    if known < 2:
+        return 0.03, [f"{len(hits)} uppercase tokens, none in the MAPDL catalog"]
+    boost = min(0.5, 0.12 * known)
+    return boost, [f"{known} catalogued MAPDL commands"]
 
 
 def detect(file_name: str, text: str, launch_command: str = "") -> DetectionOutcome:
     lowered_name = (file_name or "").lower()
 
+    # Signature scanning is prefix-capped: huge non-Ansys files (vendored
+    # bundles, transcripts) must not dominate scan time, and every real
+    # Ansys header/signature lives at the top of a file.
+    signature_text = text[:262144]
+
     # ---- Fluent version hint -------------------------------------------------
     detected_version = ""
-    match = re.search(r"set-tui-version\s+([0-9Rr. ]+)", text)
+    match = re.search(r"set-tui-version\s+([0-9Rr. ]+)", signature_text)
     if match:
         normalized = normalize_set_tui_value(match.group(1))
         if normalized:
             detected_version = normalized
 
-    wb_score, wb_evidence = wb_module.signature_score(lowered_name, text)
-    dm_score, dm_evidence = dm_module.signature_score(lowered_name, text)
-    sc_score, sc_evidence = sc_module.signature_score(lowered_name, text)
+    wb_score, wb_evidence = wb_module.signature_score(lowered_name, signature_text)
+    dm_score, dm_evidence = dm_module.signature_score(lowered_name, signature_text)
+    sc_score, sc_evidence = sc_module.signature_score(lowered_name, signature_text)
 
     fluent_base = 0.6 if lowered_name.endswith(".jou") else 0.05
-    fluent_boost, fluent_evidence = _fluent_boost(text)
+    fluent_boost, fluent_evidence = _fluent_boost(signature_text)
 
     mapdl_ext = {".dat": 0.25, ".inp": 0.3, ".mac": 0.55, ".log": 0.15}.get(
         _suffix(lowered_name), 0.03
     )
-    mapdl_boost, mapdl_evidence = _mapdl_boost(text)
+    mapdl_boost, mapdl_evidence = _mapdl_boost(signature_text)
 
     icem_base = 0.75 if lowered_name.endswith(".rpl") else 0.05
-    icem_hits = len(_ICEM_RE.findall(text))
+    icem_hits = len(_ICEM_RE.findall(signature_text))
     icem_boost = min(0.25, 0.08 * icem_hits) if icem_hits else 0.0
     icem_evidence = [f"{icem_hits} ic_* commands"] if icem_hits else []
 
@@ -136,7 +152,7 @@ def detect(file_name: str, text: str, launch_command: str = "") -> DetectionOutc
 
     sysc_base = 0.05
     sysc_evidence: list[str] = []
-    if sysc_module.is_sysc_script(text):
+    if sysc_module.is_sysc_script(signature_text):
         sysc_base = 0.55
         sysc_evidence.append("System Coupling datamodel calls")
 
@@ -144,13 +160,13 @@ def detect(file_name: str, text: str, launch_command: str = "") -> DetectionOutc
     mech_evidence: list[str] = []
     if lowered_name.endswith(".mcr"):
         mech_evidence.append("extension .mcr (recorded macro)")
-    if _MECH_RE.search(text):
+    if _MECH_RE.search(signature_text):
         mech_base += 0.52 if lowered_name.endswith(".py") else 0.3
         mech_evidence.append("ExtAPI/DataModel signatures")
 
     aedt_base = 0.05
     aedt_evidence: list[str] = []
-    aedt_hits = len(_AEDT_RE.findall(text))
+    aedt_hits = len(_AEDT_RE.findall(signature_text))
     if aedt_hits >= 2:
         aedt_base += 0.5 + 0.04 * min(aedt_hits, 6)
         aedt_evidence.append(f"{aedt_hits} oDesktop-family signatures")
@@ -218,6 +234,23 @@ def detect(file_name: str, text: str, launch_command: str = "") -> DetectionOutc
         best_product = max(candidates, key=lambda c: c.confidence)
         if best_product.confidence < LOW_THRESHOLD + 0.1:
             candidates.append(Candidate("__generic_python__", py_base + 0.05, tuple(py_evidence)))
+
+    # A .log file is almost never executable script source: captured session
+    # output can mention product APIs (GetRootPart, oDesktop ...) without
+    # being a Discovery/AEDT journal. Only the MAPDL path may cross the
+    # auto-lint threshold for logs - replayable Jobname.log inputs carry
+    # genuine catalogued APDL commands.
+    if _suffix(lowered_name) == ".log":
+        candidates = [
+            Candidate(
+                c.dialect,
+                min(c.confidence, 0.50),
+                c.evidence + (".log content ceiling",),
+            )
+            if c.dialect != "mapdl" and c.confidence > 0.50
+            else c
+            for c in candidates
+        ]
 
     candidates.sort(key=lambda c: c.confidence, reverse=True)
     best = candidates[0] if candidates else Candidate("unknown", 0.0)

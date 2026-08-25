@@ -192,6 +192,7 @@ def lint(
     lines = LineIndex(text)
     open_blocks: list[tuple[str, int]] = []
     referenced_files: list[tuple[str, int]] = []
+    unknown_commands: dict[str, tuple[int, int]] = {}
     strict = options.strictness.value == "strict"
     unattended = options.exec_mode.value != "interactive"
 
@@ -302,28 +303,10 @@ def lint(
                 else:
                     open_blocks.pop()
 
-            # --- Unknown commands -----------------------------------------------
+            # --- Unknown commands (aggregated per unique name) -------------------
             if entry is None:
-                severity = Severity.WARNING if strict else Severity.INFO
-                _add(
-                    ctx,
-                    lines,
-                    code="MAPDL_UNKNOWN_COMMAND",
-                    severity=severity,
-                    message=f"'{cmd}' is not in the shipped MAPDL catalog.",
-                    line=index,
-                    column=column,
-                    explanation=(
-                        "APDL is case-insensitive; this name was upper-cased before "
-                        "lookup. The shipped catalog covers common commands only, so "
-                        "the command may still be valid - verify it against the "
-                        "official Command Reference for your installed release."
-                    ),
-                    suggested_fix="Check spelling and availability in the official MAPDL Command Reference.",
-                    confidence=Confidence.LOW,
-                    is_heuristic=True,
-                    source_id=str(catalog["source_id"]),
-                )
+                first_line, count = unknown_commands.get(cmd, (index, 0))
+                unknown_commands[cmd] = (first_line, count + 1)
 
             # --- Processor context hints --------------------------------------------
             allowed = (entry or {}).get("processors") or []
@@ -405,6 +388,28 @@ def lint(
                         )
 
     # ---- End-of-file structural checks ----------------------------------------
+    # Aggregated unknown-command notes (one per unique name).
+    unknown_severity = Severity.WARNING if strict else Severity.INFO
+    for cmd, (first_line, count) in sorted(unknown_commands.items()):
+        suffix_note = f" (seen {count}x)" if count > 1 else ""
+        _add(
+            ctx,
+            lines,
+            code="MAPDL_UNKNOWN_COMMAND",
+            severity=unknown_severity,
+            message=f"'{cmd}' is not in the shipped MAPDL catalog{suffix_note}.",
+            line=first_line,
+            explanation=(
+                "APDL is case-insensitive; this name was upper-cased before "
+                "lookup. The shipped catalog covers common commands only, so "
+                "the command may still be valid - verify it against the "
+                "official Command Reference for your installed release."
+            ),
+            suggested_fix="Check spelling and availability in the official MAPDL Command Reference.",
+            confidence=Confidence.LOW,
+            is_heuristic=True,
+            source_id=str(catalog["source_id"]),
+        )
     if python_active:
         _check_python_block(ctx, lines, python_code_lines)
 

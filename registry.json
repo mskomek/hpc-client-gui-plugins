@@ -85,7 +85,7 @@
       "publisher": "HPC Client GUI",
       "requires_app": ">=1.5.0",
       "manifest_path": "plugins/ansys-lint/0.1.0/manifest.json",
-      "manifest_sha256": "6ba00a78f2ac8c95da342200d5eb01ebff9e4f44545c9a51a5f136a36f6f242b",
+      "manifest_sha256": "ee1420df996c6ee1659e7fa056a61c74b0bad0f3a41a8feaf0991586e2215d17",
       "official": true,
       "capabilities": [
         "linter-tool"
