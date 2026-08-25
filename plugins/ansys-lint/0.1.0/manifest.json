@@ -16,6 +16,18 @@
   },
   "files": [
     {
+      "path": "README.md",
+      "sha256": "3f5ba052ccab2e1fe5d0b9a727b236fc393966f99ffdc0dcf0999e60499f8bbb",
+      "size": 1096,
+      "role": "documentation"
+    },
+    {
+      "path": "docs/sources.md",
+      "sha256": "2b6bd72f5839c4334526aa6ceb34117a74b27a5d5ff8dfee4d46d4bbae2b9586",
+      "size": 7691,
+      "role": "documentation"
+    },
+    {
       "path": "engine/ansys_lint/__init__.py",
       "sha256": "c19d2dbfde26f4b9334b39c0c96f72f9773f4fb518ea4be18d857567861750c7",
       "size": 2679,
