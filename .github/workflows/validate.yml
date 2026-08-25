@@ -54,4 +54,4 @@ jobs:
       - name: Install Ruff
         run: pip install "ruff>=0.4"
       - name: Ruff check (E4/E7/E9/F)
-        run: ruff check scripts tests
+        run: ruff check scripts tests plugins

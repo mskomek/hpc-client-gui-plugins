@@ -13,15 +13,20 @@ Checks, in order:
    (``capabilities`` is authoritative for multi-capability plugins; the
    single legacy ``type`` field is kept for display compatibility);
 6. every declared file exists with the declared size and SHA-256;
-7. payloads are declarative data (no executable-looking files);
+7. payloads are declarative data (no executable-looking files), with one
+   Plugin API v2 exception: capability 'linter-tool' plugins may ship
+   Python engine files, every one of which must carry the
+   'linter-engine' role and is hash-pinned like any other payload;
 8. capability entrypoints are consistent with declared capabilities and
    their payloads validate against their role schemas;
 9. version directories contain no undeclared extra files (immutable,
    fully-enumerated directories).
 
-The security model stays declarative-only: no Python plugin modules, no
-executable hooks, no binaries, no installation-time command execution,
-exact-file downloads only, strict response-size and total-size limits.
+Plugin API v1 stays declarative-only: no Python modules, no executable
+hooks, no binaries, no installation-time command execution, exact-file
+downloads only, strict response-size and total-size limits. Plugin API
+v2 adds the hash-verified 'linter-tool' engine files; nothing executes
+at install time - engines load lazily and defensively at use time.
 
 Exit status is non-zero on any error.
 """
@@ -47,6 +52,13 @@ SCHEMA_DIR = REPO_ROOT / "schema"
 
 ALLOWED_PAYLOAD_EXTENSIONS = {".json", ".md", ".txt", ".tpl"}
 
+# Plugin API v2 (capability 'linter-tool') may additionally ship verified
+# Python engine files. Every .py file MUST carry the 'linter-engine' role,
+# and that role is only valid under plugin_api 2.
+V2_EXTRA_PAYLOAD_EXTENSIONS = {".py"}
+LINTER_ENGINE_ROLE = "linter-engine"
+LINTER_DATA_ROLE = "linter-data"
+
 SCHEMA_FOR_ROLE = {
     "cluster-profile": "cluster-profile.schema.json",
     "lint-index": "lint-index.schema.json",
@@ -62,6 +74,7 @@ CAPABILITY_ENTRYPOINT_KEYS = {
     "lint-rules": ("lint_index",),
     "job-template": ("template_index", "job_templates"),
     "application-tools": ("template_index", "job_templates"),
+    "linter-tool": ("linter_engine",),
 }
 
 ENTRYPOINT_ROLES = {
@@ -69,6 +82,7 @@ ENTRYPOINT_ROLES = {
     "lint_index": ("lint-index",),
     "template_index": ("template-index",),
     "job_templates": ("template-index",),
+    "linter_engine": ("linter-engine",),
 }
 
 
@@ -207,14 +221,35 @@ def validate_entrypoint_files(manifest: dict, manifest_dir: Path, label: str, er
                     validate_payload_role(file_entry["role"], payload_path, entry_label, errors)
 
 
-def collect_executable_payload_errors(files: list[dict], label: str, errors: list[str]) -> None:
+def collect_executable_payload_errors(
+    files: list[dict],
+    label: str,
+    errors: list[str],
+    plugin_api: int = 1,
+) -> None:
+    allowed = set(ALLOWED_PAYLOAD_EXTENSIONS)
+    if plugin_api == 2:
+        allowed |= V2_EXTRA_PAYLOAD_EXTENSIONS
     for entry in files:
         suffix = Path(entry["path"]).suffix.lower()
-        if suffix not in ALLOWED_PAYLOAD_EXTENSIONS:
+        role = entry.get("role")
+        if suffix not in allowed:
             errors.append(
                 f"{label}: payload '{entry['path']}' has executable-looking extension "
-                f"'{suffix or '<none>'}'; Plugin API v1 allows only "
-                f"{sorted(ALLOWED_PAYLOAD_EXTENSIONS)}"
+                f"'{suffix or '<none>'}'; Plugin API {plugin_api} allows only "
+                f"{sorted(allowed)}"
+            )
+            continue
+        if plugin_api == 2 and suffix == ".py" and role != LINTER_ENGINE_ROLE:
+            errors.append(
+                f"{label}: payload '{entry['path']}' is Python but has role "
+                f"'{role}'; under Plugin API v2 every .py file must use the "
+                f"'{LINTER_ENGINE_ROLE}' role"
+            )
+        if role == LINTER_ENGINE_ROLE and (plugin_api != 2 or suffix != ".py"):
+            errors.append(
+                f"{label}: payload '{entry['path']}' uses role '{LINTER_ENGINE_ROLE}' "
+                f"which requires Plugin API v2 and a .py extension"
             )
 
 
@@ -324,18 +359,28 @@ def validate_plugin_entry(entry: dict, seen_ids: dict, errors: list[str], warnin
     # Version directories are immutable and fully enumerated: every file on
     # disk must be declared in manifest.files. Undeclared extras (including
     # unreferenced .tpl templates) are rejected so clients that download
-    # exactly the declared files never miss content.
+    # exactly the declared files never miss content. Python bytecode caches
+    # are local-runtime artifacts, never published content.
     for existing in sorted(manifest_dir.rglob("*")):
         if not existing.is_file():
             continue
         rel = existing.relative_to(manifest_dir).as_posix()
-        if rel != "manifest.json" and rel not in seen_paths:
+        if rel == "manifest.json" or rel in seen_paths:
+            continue
+        if "__pycache__" in PurePosixPath(rel).parts or rel.endswith(".pyc"):
             errors.append(
-                f"{label}: undeclared extra file in version directory '{rel}' "
-                "(every file must be listed in manifest.files)"
+                f"{label}: local bytecode cache '{rel}' must not be committed; "
+                "remove it from the version directory"
             )
+            continue
+        errors.append(
+            f"{label}: undeclared extra file in version directory '{rel}' "
+            "(every file must be listed in manifest.files)"
+        )
 
-    collect_executable_payload_errors(manifest.get("files", []), label, errors)
+    collect_executable_payload_errors(
+        manifest.get("files", []), label, errors, int(manifest.get("plugin_api", 1))
+    )
     validate_entrypoint_files(manifest, manifest_dir, label, errors)
 
 

@@ -2,18 +2,37 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "HPC Client GUI plugin registry",
   "type": "object",
-  "required": ["schema_version", "plugin_api", "repository", "plugins"],
+  "required": [
+    "schema_version",
+    "plugin_api",
+    "repository",
+    "plugins"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": {"const": 1},
-    "plugin_api": {"const": 1},
+    "schema_version": {
+      "const": 1
+    },
+    "plugin_api": {
+      "const": 1
+    },
     "repository": {
       "type": "object",
-      "required": ["owner", "name", "raw_base"],
+      "required": [
+        "owner",
+        "name",
+        "raw_base"
+      ],
       "additionalProperties": false,
       "properties": {
-        "owner": {"type": "string", "minLength": 1},
-        "name": {"type": "string", "minLength": 1},
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
         "raw_base": {
           "type": "string",
           "pattern": "^https://"
@@ -22,7 +41,9 @@
     },
     "plugins": {
       "type": "array",
-      "items": {"$ref": "#/definitions/pluginEntry"}
+      "items": {
+        "$ref": "#/definitions/pluginEntry"
+      }
     }
   },
   "definitions": {
@@ -37,13 +58,25 @@
     "relativePath": {
       "type": "string",
       "minLength": 1,
-      "not": {"oneOf": [
-        {"pattern": "^/"},
-        {"pattern": "(^|/)\\.\\.(/|$)"},
-        {"pattern": "\\\\"},
-        {"pattern": "[A-Za-z]:"},
-        {"pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://"}
-      ]}
+      "not": {
+        "oneOf": [
+          {
+            "pattern": "^/"
+          },
+          {
+            "pattern": "(^|/)\\.\\.(/|$)"
+          },
+          {
+            "pattern": "\\\\"
+          },
+          {
+            "pattern": "[A-Za-z]:"
+          },
+          {
+            "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://"
+          }
+        ]
+      }
     },
     "versionRange": {
       "type": "string",
@@ -54,7 +87,8 @@
         "cluster-profile",
         "lint-rules",
         "job-template",
-        "application-tools"
+        "application-tools",
+        "linter-tool"
       ]
     },
     "capability": {
@@ -62,7 +96,8 @@
         "cluster-profile",
         "lint-rules",
         "job-template",
-        "application-tools"
+        "application-tools",
+        "linter-tool"
       ]
     },
     "pluginEntry": {
@@ -87,30 +122,69 @@
           "pattern": "^[a-z][a-z0-9]*(?:\\.[a-z0-9]+)+$",
           "maxLength": 128
         },
-        "name": {"type": "string", "minLength": 1, "maxLength": 80},
-        "version": {"$ref": "#/definitions/semver"},
-        "plugin_api": {"const": 1},
-        "type": {"$ref": "#/definitions/pluginType"},
-        "description": {"type": "string", "minLength": 1},
-        "publisher": {"type": "string", "minLength": 1},
-        "requires_app": {"$ref": "#/definitions/versionRange"},
-        "manifest_path": {"$ref": "#/definitions/relativePath"},
-        "manifest_sha256": {"$ref": "#/definitions/sha256Hex"},
-        "official": {"type": "boolean"},
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "version": {
+          "$ref": "#/definitions/semver"
+        },
+        "plugin_api": {
+          "enum": [
+            1,
+            2
+          ]
+        },
+        "type": {
+          "$ref": "#/definitions/pluginType"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publisher": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requires_app": {
+          "$ref": "#/definitions/versionRange"
+        },
+        "manifest_path": {
+          "$ref": "#/definitions/relativePath"
+        },
+        "manifest_sha256": {
+          "$ref": "#/definitions/sha256Hex"
+        },
+        "official": {
+          "type": "boolean"
+        },
         "capabilities": {
           "type": "array",
-          "items": {"$ref": "#/definitions/capability"},
+          "items": {
+            "$ref": "#/definitions/capability"
+          },
           "minItems": 1,
           "maxItems": 8
         },
         "keywords": {
           "type": "array",
-          "items": {"type": "string"},
+          "items": {
+            "type": "string"
+          },
           "maxItems": 16
         },
-        "homepage": {"type": "string", "pattern": "^https://"},
-        "repository": {"type": "string", "pattern": "^https://"},
-        "license": {"type": "string"}
+        "homepage": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "repository": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "license": {
+          "type": "string"
+        }
       }
     }
   }
