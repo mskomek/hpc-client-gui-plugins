@@ -30,6 +30,9 @@ def main() -> int:
     if engine is None:
         print("error: no plugins/ansys-lint/*/engine directory found", file=sys.stderr)
         return 3
+    # The engine ships inside an immutable plugin version directory; never
+    # let import machinery drop __pycache__ artifacts there.
+    sys.dont_write_bytecode = True
     sys.path.insert(0, str(engine))
     try:
         from ansys_lint.cli import main as cli_main

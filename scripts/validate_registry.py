@@ -359,8 +359,9 @@ def validate_plugin_entry(entry: dict, seen_ids: dict, errors: list[str], warnin
     # Version directories are immutable and fully enumerated: every file on
     # disk must be declared in manifest.files. Undeclared extras (including
     # unreferenced .tpl templates) are rejected so clients that download
-    # exactly the declared files never miss content. Python bytecode caches
-    # are local-runtime artifacts, never published content.
+    # exactly the declared files never miss content. Local Python bytecode
+    # caches are runtime artifacts, never published content: they surface as
+    # warnings (hygiene signal) instead of failing local validation.
     for existing in sorted(manifest_dir.rglob("*")):
         if not existing.is_file():
             continue
@@ -368,9 +369,9 @@ def validate_plugin_entry(entry: dict, seen_ids: dict, errors: list[str], warnin
         if rel == "manifest.json" or rel in seen_paths:
             continue
         if "__pycache__" in PurePosixPath(rel).parts or rel.endswith(".pyc"):
-            errors.append(
-                f"{label}: local bytecode cache '{rel}' must not be committed; "
-                "remove it from the version directory"
+            warnings.append(
+                f"{label}: local bytecode cache present on disk (never commit "
+                f"it): '{rel}'"
             )
             continue
         errors.append(
