@@ -53,8 +53,8 @@
     },
     {
       "path": "engine/ansys_lint/data/fluent_tui.json",
-      "sha256": "bcfe7ba784c7dbbdc4782e35e45afef2e543cabe526088c1e7daea95c20f787a",
-      "size": 13562,
+      "sha256": "d653aa38061e61734fa18a3c50eea52715960d8572d941146a0719d7e680e9aa",
+      "size": 16928,
       "role": "linter-data"
     },
     {
@@ -113,8 +113,8 @@
     },
     {
       "path": "engine/ansys_lint/dialects/fluent.py",
-      "sha256": "a6d1a1a21b1452f788847d4b8d47c2345e4268379cb68e9f53fd0b58d1fb8b71",
-      "size": 26340,
+      "sha256": "3a52628233aa5df6f2268515658dbf42909f48b72cd3765b040b16dee22ff5d9",
+      "size": 26556,
       "role": "linter-engine"
     },
     {

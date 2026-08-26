@@ -350,6 +350,86 @@
     "/switch-to-meshing-mode": {
       "menu": "top-level",
       "summary": "Switch the Fluent session into meshing mode."
+    },
+    "/solve/report-files/list-properties": {
+      "menu": "solve/report-files",
+      "summary": "List properties of configured report files."
+    },
+    "/solve/report-files/list": {
+      "menu": "solve/report-files",
+      "summary": "List configured report files."
+    },
+    "/solve/report-definitions/list": {
+      "menu": "solve/report-definitions",
+      "summary": "List defined report definitions."
+    },
+    "/file/interpolate/write-data": {
+      "menu": "file/interpolate",
+      "summary": "Write solution data in interpolation format."
+    },
+    "/file/interpolate/read-data": {
+      "menu": "file/interpolate",
+      "summary": "Read interpolation data for the current mesh."
+    },
+    "/diagnostics/perform-summary": {
+      "menu": "diagnostics",
+      "summary": "Run case/setup diagnostic checks."
+    },
+    "/solve/set/under-relaxation": {
+      "menu": "solve/set/under-relaxation",
+      "summary": "Set solution under-relaxation factors."
+    },
+    "/solve/set/under-relaxation/k": {
+      "menu": "solve/set/under-relaxation",
+      "summary": "Under-relaxation factor for turbulent kinetic energy."
+    },
+    "/solve/set/under-relaxation/mom": {
+      "menu": "solve/set/under-relaxation",
+      "summary": "Under-relaxation factor for momentum equations."
+    },
+    "/solve/set/under-relaxation/omega": {
+      "menu": "solve/set/under-relaxation",
+      "summary": "Under-relaxation factor for specific dissipation rate."
+    },
+    "/solve/set/under-relaxation/pressure": {
+      "menu": "solve/set/under-relaxation",
+      "summary": "Under-relaxation factor for pressure."
+    },
+    "/solve/set/under-relaxation/temperature": {
+      "menu": "solve/set/under-relaxation",
+      "summary": "Under-relaxation factor for temperature (energy equation)."
+    },
+    "/define/boundary-conditions/set/fluid": {
+      "menu": "define/boundary-conditions/set",
+      "summary": "Set fluid zone conditions."
+    },
+    "/define/boundary-conditions/set/solid": {
+      "menu": "define/boundary-conditions/set",
+      "summary": "Set solid zone conditions."
+    },
+    "/define/boundary-conditions/set/velocity-inlet": {
+      "menu": "define/boundary-conditions/set",
+      "summary": "Set velocity-inlet zone conditions."
+    },
+    "/define/boundary-conditions/set/wall": {
+      "menu": "define/boundary-conditions/set",
+      "summary": "Set wall zone conditions."
+    },
+    "/define/materials/change-create": {
+      "menu": "define/materials",
+      "summary": "Change or create a material."
+    },
+    "/define/named-expressions/add": {
+      "menu": "define/named-expressions",
+      "summary": "Add a named expression."
+    },
+    "/surface/line-surface": {
+      "menu": "surface",
+      "summary": "Create a line surface from two points."
+    },
+    "/surface/list-surfaces": {
+      "menu": "surface",
+      "summary": "List defined surfaces."
     }
   },
   "gui_prefixes": {

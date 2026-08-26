@@ -212,6 +212,7 @@ def parse_journal_text(
     exit_lines: list[tuple[int, bool]] = []
     referenced_files: list[tuple[str, int]] = []
     unknown_commands: dict[str, tuple[int, int]] = {}
+    prompt_answer_lines = 0
     scheme_depth = 0
     scheme_start_line: int | None = None
     # Persistent Scheme lexer state: strings may span physical lines inside
@@ -265,13 +266,19 @@ def parse_journal_text(
             continue
 
         # --- TUI command ----------------------------------------------------
-        body = stripped.lstrip("/")
-        token_match = TUI_TOKEN_RE.match(body)
+        # Journal convention (per the official journaling guide): real menu
+        # paths start with '/'. Bare words are answers to interactive prompts
+        # of the preceding command (report-definitions/add, monitor setup,
+        # yes/no confirmations ...) - replay content, never commands.
+        if not stripped.startswith("/"):
+            prompt_answer_lines += 1
+            continue
+        token_match = TUI_TOKEN_RE.match(stripped[1:])
         if token_match is None:
             continue
         token = token_match.group(0)
         cmd = "/" + token.lower()
-        rest = body[token_match.end() :].strip()
+        rest = stripped[1:][token_match.end() :].strip()
 
         if cmd == "/file/set-tui-version":
             declared_seen = True
@@ -349,9 +356,7 @@ def parse_journal_text(
 
         # Unknown commands: honest low-confidence note, aggregated per unique
         # command so a catalog-partial file does not flood the report.
-        # Bare prompt answers ('/yes', '/no', ...) are valid journal tokens,
-        # not menus - they never count as unknown.
-        if entry is None and not _has_known_children(cmd) and token.lower() not in load_tui_catalog()["prompt_answers"]:
+        if entry is None and not _has_known_children(cmd):
             first_line, count = unknown_commands.get(cmd, (index, 0))
             unknown_commands[cmd] = (first_line, count + 1)
 

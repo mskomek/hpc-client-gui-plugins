@@ -147,8 +147,11 @@ diagnostic; source-backed ones include `source_id`, `source_url` and
 
 ## Limitations
 
-- The Fluent TUI catalog is deliberately partial (~60 high-confidence
-  commands). Unknown commands yield informational notes, never errors.
+- The Fluent TUI catalog ships 100+ high-confidence commands covering the
+  common file/solve/monitor/report/parameter/viscous families (validated
+  against real production journals). Unknown commands yield informational
+  notes, never errors. Bare prompt-answer lines are replay content and are
+  not treated as commands at all.
 - No MAPDL/Mechanical/SpaceClaim/AEDT/Aqwa API validation is claimed.
 - CCL object-level cross-product validity (CFD-Post objects in TurboGrid)
   is not checked.
