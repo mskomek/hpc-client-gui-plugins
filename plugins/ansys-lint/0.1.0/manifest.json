@@ -173,14 +173,14 @@
     },
     {
       "path": "engine/ansys_lint/model.py",
-      "sha256": "1da5331d9467e50df6cd03d05442373cbdbf622bda3d49c47e473e6366f0cf2b",
-      "size": 5515,
+      "sha256": "7809d55ca1274285e961325c95a9dd6f87dba434d7d0445c79adb82e43034f42",
+      "size": 6094,
       "role": "linter-engine"
     },
     {
       "path": "engine/ansys_lint/qt_page.py",
-      "sha256": "2d705d54db69ef26a900a785378bdf7f591806c4ea31ee75288f6244449f9ce7",
-      "size": 13634,
+      "sha256": "05bd176e98fbc200de1101ffcbd0a59438351d7dea5abab0b90520763deff188",
+      "size": 13654,
       "role": "linter-engine"
     },
     {
