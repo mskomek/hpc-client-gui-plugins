@@ -4,7 +4,7 @@ The main application guarantees that ``find_registry_entry`` only ever
 selects versions whose ``requires_app`` range admits the running release.
 This test is the registry-side mirror: it verifies with PEP 440 tooling
 (``packaging``) that every published entry is installable by the current
-application release line (1.4.x) and uses only Plugin API v1.
+application release line and uses only Plugin API v1.
 
 It intentionally avoids importing application code so the plugin
 repository stays independently validatable.
@@ -20,7 +20,10 @@ from packaging.specifiers import InvalidSpecifier, SpecifierSet
 from packaging.version import Version
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-CURRENT_APP_VERSION = Version("1.4.0")
+# Latest supported application release. Advance alongside the pinned
+# APPLICATION_REF in .github/workflows/validate.yml (see
+# docs/CONSUMER_CONTRACT.md).
+CURRENT_APP_VERSION = Version("1.5.3")
 
 # Operators supported by Plugin API v1 (see docs/PLUGIN_API_V1.md).
 SUPPORTED_OPERATORS = {">=", "<=", "==", "~="}
