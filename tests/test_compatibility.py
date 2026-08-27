@@ -23,7 +23,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 # Latest supported application release. Advance alongside the pinned
 # APPLICATION_REF in .github/workflows/validate.yml (see
 # docs/CONSUMER_CONTRACT.md).
-CURRENT_APP_VERSION = Version("1.5.0")
+CURRENT_APP_VERSION = Version("1.5.3")
 
 # Operators supported by Plugin API v1 (see docs/PLUGIN_API_V1.md).
 SUPPORTED_OPERATORS = {">=", "<=", "==", "~="}

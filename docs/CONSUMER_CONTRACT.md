@@ -22,7 +22,7 @@ image and is **required/blocking** for every pull request:
 - It tests **this checkout** (the proposed registry revision), never plugin
   `main` again.
 - It checks out the latest supported application release at an explicit,
-  immutable tag — currently `v1.5.0` (`APPLICATION_REF`) — and runs that
+  immutable tag — currently `v1.5.3` (`APPLICATION_REF`) — and runs that
   application's real plugin contract, loader, and validator logic against the
   proposed revision.
 - Payloads stay declarative-only: no executable plugin code and no
