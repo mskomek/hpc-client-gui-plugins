@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+title: "HPC Client GUI Plugins"
+message: "If you use this plugin registry, please cite it."
+type: software
+authors:
+  - family-names: "Komek"
+    given-names: "M"
+    website: "https://github.com/mskomek"
+repository-code: "https://github.com/mskomek/hpc-client-gui-plugins"
+url: "https://github.com/mskomek/hpc-client-gui-plugins"
+license: MIT
+version: 1.0.0
+date-released: 2026-08-27
+keywords:
+  - HPC
+  - plugins
+  - engineering
+  - ANSYS Fluent
+  - TRUBA

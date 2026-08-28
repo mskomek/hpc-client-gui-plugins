@@ -5,6 +5,9 @@
 This repository is the **official plugin registry** for
 [HPC Client GUI](https://github.com/mskomek/hpc-client-gui).
 
+Project links: [Wiki](https://github.com/mskomek/hpc-client-gui-plugins/wiki) ·
+[Roadmap](ROADMAP.md) · [Citation](CITATION.cff)
+
 ![HPC Client GUI Plugin Manager showing the TRUBA and ANSYS Fluent plugins](https://raw.githubusercontent.com/mskomek/hpc-client-gui/main/docs/assets/plugin-manager.png)
 
 ## What lives here
