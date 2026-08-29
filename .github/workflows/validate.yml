@@ -65,12 +65,14 @@ jobs:
   # ref below in a dedicated PR and record it in docs/CONSUMER_CONTRACT.md.
   # The ref is always an immutable application tag, never a branch.
   consumer-contract:
-    name: Consumer contract (real app v1.5.4 release)
+    name: Consumer contract (app v1.5.5 release candidate)
     runs-on: ubuntu-latest
     env:
       # Keep this comment block beside the ref. See docs/CONSUMER_CONTRACT.md
       # for the advancement procedure.
-      APPLICATION_REF: b7458a32ce0ce42a9d886bb0c8194b358d84ef95
+      # Temporary immutable candidate pin. Replace with the v1.5.5 release tag
+      # after the application PR is merged and that release is published.
+      APPLICATION_REF: 6244a637155433e5af134d01d7869150282f2526
       HPC_GUI_CONTRACT_REPO: ${{ github.workspace }}/hpc-client-gui-plugins
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2

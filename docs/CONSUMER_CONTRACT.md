@@ -4,10 +4,11 @@ The registry and application validate each other against immutable release
 refs. The registry-side `consumer-contract` job checks this checkout with the
 application's real plugin contract suite.
 
-The legacy consumer pin is the actual published v1.5.4 release commit
-`b7458a32ce0ce42a9d886bb0c8194b358d84ef95`. The next contract pin must be the
-immutable v1.5.5 release tag after that release exists; candidate branches are
-not release pins. Plugin API v2 engines are
+The current coordinated candidate pin is immutable application commit
+`6244a637155433e5af134d01d7869150282f2526`, which prepares v1.5.5. After the
+application PR is merged and v1.5.5 is published, replace it with that release
+tag. The published v1.5.4 contract predates structured provider support and
+cannot validate the newer registry entries. Plugin API v2 engines are
 hash-verified and loaded only after explicit user action; registry validation
 never imports or executes them.
 
