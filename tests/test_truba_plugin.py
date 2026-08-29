@@ -20,10 +20,13 @@ def load(rel_path: str):
     return json.loads((REPO_ROOT / rel_path).read_text(encoding="utf-8"))
 
 
-def truba_registry_entry() -> dict:
+def truba_registry_entry(version: str = "1.0.0") -> dict:
     registry = load("registry.json")
-    entries = [p for p in registry["plugins"] if p["id"] == "org.hpcclient.truba"]
-    assert len(entries) == 1, "exactly one official TRUBA registry entry expected"
+    entries = [
+        p for p in registry["plugins"]
+        if p["id"] == "org.hpcclient.truba" and p["version"] == version
+    ]
+    assert len(entries) == 1, f"exactly one TRUBA registry entry expected for {version}"
     return entries[0]
 
 
@@ -97,3 +100,12 @@ def test_plugin_contains_no_credentials_or_hosts():
     readme = (REPO_ROOT / "plugins/truba/1.0.0/README.md").read_text(encoding="utf-8")
     assert "no credentials of any kind" in readme
     assert "not** an official TÜBİTAK ULAKBİM/TRUBA client" in readme
+
+
+def test_truba_v2_profile_is_published_for_app_1_5():
+    entry = truba_registry_entry("1.1.0")
+    assert entry["requires_app"] == ">=1.5.0"
+    profile = load("plugins/truba/1.1.0/cluster-profile.json")
+    assert profile["schema_version"] == 2
+    assert {item["id"] for item in profile["storage"]} == {"home", "scratch"}
+    assert profile["quota_sources"][0]["enabled"] is False

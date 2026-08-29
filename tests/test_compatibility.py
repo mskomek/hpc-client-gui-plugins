@@ -25,7 +25,7 @@ from packaging.specifiers import InvalidSpecifier, SpecifierSet
 from packaging.version import Version
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-CURRENT_APP_VERSION = Version("1.4.0")
+CURRENT_APP_VERSION = Version("1.5.3")
 V2_APP_FLOOR = Version("1.5.3")
 
 # Operators supported by Plugin API v1 (see docs/PLUGIN_API_V1.md).
