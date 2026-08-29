@@ -70,7 +70,7 @@ jobs:
     env:
       # Keep this comment block beside the ref. See docs/CONSUMER_CONTRACT.md
       # for the advancement procedure.
-      APPLICATION_REF: 0c4e225b98245a8935a4090d50aa69827d157096
+      APPLICATION_REF: 801e73a53526d4abe4cb91595de8d1f76cfe6a96
       HPC_GUI_CONTRACT_REPO: ${{ github.workspace }}/hpc-client-gui-plugins
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2

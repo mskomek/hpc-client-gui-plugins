@@ -1,0 +1,6 @@
+- [ ] no credentials, hosts, accounts, or measured data
+- [ ] only verified public paths and documentation
+- [ ] quota disabled unless a reviewed backend exists
+- [ ] generate the package; do not overwrite a version directory
+- [ ] validate registry, hashes, schemas, tests, and Ruff
+- [ ] add registry entry explicitly and review immutable versions
