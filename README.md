@@ -44,7 +44,7 @@ server-side installation is needed on HPC clusters.
 
 | Plugin                        | Capabilities                      | Latest version | Requires app |
 | ----------------------------- | --------------------------------- | -------------- | ------------ |
-| TRUBA                         | Cluster profile                   | 1.1.0          | >=1.5.3      |
+| TRUBA                         | Cluster profile                   | 1.2.0          | >=1.5.4      |
 | ANSYS Fluent Tools            | Journal lint + Slurm job template | 0.2.0          | >=1.4.0      |
 | ANSYS Script & Journal Linter | Linter tool (Plugin API v2)       | 0.1.0          | >=1.5.0      |
 
@@ -146,6 +146,7 @@ explicit user action. Review plugin content before installing it. See
   [docs/PLUGIN_API_V1.md](docs/PLUGIN_API_V1.md), and
   [docs/REGISTRY_PROTOCOL.md](docs/REGISTRY_PROTOCOL.md).
 - **Release notes:** [docs/RELEASE_NOTES.md](docs/RELEASE_NOTES.md).
+- **Provider guide:** [docs/ADDING_CLUSTER_PROVIDER.md](docs/ADDING_CLUSTER_PROVIDER.md).
 - **TRUBA Wiki draft:** [docs/WIKI_TRUBA.md](docs/WIKI_TRUBA.md).
 - **Questions and discussion:** use
   [GitHub Discussions](https://github.com/mskomek/hpc-client-gui-plugins/discussions).

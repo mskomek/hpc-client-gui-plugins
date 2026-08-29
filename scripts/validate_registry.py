@@ -166,6 +166,51 @@ def validate_payload_role(role: str, path: Path, label: str, errors: list[str]) 
         errors.append(f"{label}: payload is not valid JSON ({exc})")
         return
     validate_against_schema(instance, SCHEMA_DIR / schema_name, f"{label} [{role}]", errors)
+    if role == "cluster-profile":
+        errors.extend(f"{label}: {problem}" for problem in validate_cluster_profile(instance))
+
+
+def validate_cluster_profile(profile: object) -> list[str]:
+    """Semantic checks Draft 7 cannot express for v2 provider payloads."""
+    if not isinstance(profile, dict) or profile.get("schema_version") != 2:
+        return []
+    errors: list[str] = []
+    safe_id = re.compile(r"^[a-z][a-z0-9_-]{0,63}$")
+    for section, label in ((profile.get("storage"), "storage"), (profile.get("quota_sources"), "quota_sources")):
+        ids: set[str] = set()
+        for index, item in enumerate(section or []):
+            if not isinstance(item, dict):
+                continue
+            ident = item.get("id")
+            if not isinstance(ident, str) or not safe_id.fullmatch(ident):
+                errors.append(f"{label}[{index}].id must match {safe_id.pattern}")
+            elif ident in ids:
+                errors.append(f"duplicate {label} id '{ident}'")
+            ids.add(ident)
+            if label == "storage" and item.get("kind") not in {None, "home", "scratch", "project", "custom", "node-local"}:
+                errors.append(f"storage[{index}].kind is unsupported")
+            if label == "storage" and item.get("access_context") not in {None, "login-node", "shared", "compute-node", "unknown"}:
+                errors.append(f"storage[{index}].access_context is unsupported")
+            if label == "quota_sources":
+                if item.get("scope") not in {None, "user", "group", "project", "unknown"}:
+                    errors.append(f"quota_sources[{index}].scope is unsupported")
+                command = item.get("command_template")
+                if isinstance(command, str) and any(ord(c) < 32 and c not in "\t" for c in command):
+                    errors.append(f"quota_sources[{index}].command_template contains control characters")
+                if isinstance(command, str) and ("\n" in command or "\r" in command):
+                    errors.append(f"quota_sources[{index}].command_template must be single-line")
+    storage = profile.get("storage") or []
+    source_ids = {item.get("id") for item in (profile.get("quota_sources") or []) if isinstance(item, dict)}
+    for index, item in enumerate(storage):
+        if isinstance(item, dict) and item.get("quota_source_id") and item["quota_source_id"] not in source_ids:
+            errors.append(f"storage[{index}].quota_source_id references an unknown source")
+    paths = profile.get("paths") or {}
+    for alias, kind in (("home_dir", "home"), ("scratch_dir", "scratch")):
+        alias_value = paths.get(alias)
+        matches = [item.get("path_template") for item in storage if isinstance(item, dict) and item.get("kind") == kind]
+        if alias_value and matches and any(value and value != alias_value for value in matches):
+            errors.append(f"paths.{alias} conflicts with structured {kind} storage")
+    return errors
 
 
 def validate_entrypoint_files(manifest: dict, manifest_dir: Path, label: str, errors: list[str]) -> None:
