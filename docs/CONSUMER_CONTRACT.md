@@ -5,7 +5,7 @@ refs. The registry-side `consumer-contract` job checks this checkout with the
 application's real plugin contract suite.
 
 The current coordinated candidate pin is immutable application commit
-`6244a637155433e5af134d01d7869150282f2526`, which prepares v1.5.5. After the
+`05e92dc558259bf307b6cbee13a07bd70c65079e`, which prepares v1.5.5. After the
 application PR is merged and v1.5.5 is published, replace it with that release
 tag. The published v1.5.4 contract predates structured provider support and
 cannot validate the newer registry entries. Plugin API v2 engines are
