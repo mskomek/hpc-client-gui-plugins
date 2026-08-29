@@ -44,7 +44,7 @@ server-side installation is needed on HPC clusters.
 
 | Plugin                        | Capabilities                      | Latest version | Requires app |
 | ----------------------------- | --------------------------------- | -------------- | ------------ |
-| TRUBA                         | Cluster profile                   | 1.2.0          | >=1.5.4      |
+| TRUBA                         | Cluster profile                   | 1.3.0          | >=1.5.5      |
 | ANSYS Fluent Tools            | Journal lint + Slurm job template | 0.2.0          | >=1.4.0      |
 | ANSYS Script & Journal Linter | Linter tool (Plugin API v2)       | 0.1.0          | >=1.5.0      |
 
@@ -124,7 +124,7 @@ embedded public key are planned as future hardening beyond Plugin API v1.
 
 Cluster command templates and application lint rules must cite their source:
 TRUBA-specific commands reference the official TRUBA documentation (see each
-plugin's `docs/sources.md`), and application rules cite vendor documentation
+plugin's declared documentation sources (where present), and application rules cite vendor documentation
 or observed behavior. Do not ship unverifiable commands "on style" — change
 working commands only when tests or authoritative documentation justify it.
 

@@ -176,6 +176,7 @@ def validate_cluster_profile(profile: object) -> list[str]:
         return []
     errors: list[str] = []
     safe_id = re.compile(r"^[a-z][a-z0-9_-]{0,63}$")
+    quota_placeholders = {"user", "subject", "path", "path_q"}
     for section, label in ((profile.get("storage"), "storage"), (profile.get("quota_sources"), "quota_sources")):
         ids: set[str] = set()
         for index, item in enumerate(section or []):
@@ -199,6 +200,17 @@ def validate_cluster_profile(profile: object) -> list[str]:
                     errors.append(f"quota_sources[{index}].command_template contains control characters")
                 if isinstance(command, str) and ("\n" in command or "\r" in command):
                     errors.append(f"quota_sources[{index}].command_template must be single-line")
+                for field in ("command_template", "subject_template"):
+                    value = item.get(field)
+                    if not isinstance(value, str):
+                        continue
+                    for placeholder in re.findall(r"\{([A-Za-z_][A-Za-z0-9_]*)\}", value):
+                        if placeholder not in quota_placeholders:
+                            errors.append(
+                                f"quota_sources[{index}].{field} uses unknown placeholder {{{placeholder}}}"
+                            )
+                    if "\n" in value or "\r" in value or any(ord(c) < 32 for c in value):
+                        errors.append(f"quota_sources[{index}].{field} must be single-line and control-free")
     storage = profile.get("storage") or []
     source_ids = {item.get("id") for item in (profile.get("quota_sources") or []) if isinstance(item, dict)}
     for index, item in enumerate(storage):

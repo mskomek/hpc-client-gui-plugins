@@ -10,6 +10,22 @@
     {
       "id": "org.hpcclient.truba",
       "name": "TRUBA",
+      "version": "1.3.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "TRUBA/ARF defaults with conservative structured storage metadata.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.5.5",
+      "manifest_path": "plugins/truba/1.3.0/manifest.json",
+      "manifest_sha256": "b7940de3f8455d89dd995c060343dd6f8da2eafcf839623c0084026a63584ecf",
+      "official": true,
+      "capabilities": ["cluster-profile"],
+      "keywords": ["truba", "arf", "slurm", "cluster-profile"],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.truba",
+      "name": "TRUBA",
       "version": "1.2.0",
       "plugin_api": 1,
       "type": "cluster-profile",

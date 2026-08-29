@@ -3,7 +3,7 @@
 Generate a package with the repository scaffolder:
 
 ```bash
-python scripts/scaffold_cluster_profile.py --plugin-id org.hpcclient.example --profile-id example --name "Example HPC" --version 0.1.0 --requires-app ">=1.5.4" --template minimal --output-dir staging/example/0.1.0
+python scripts/scaffold_cluster_profile.py --plugin-id org.hpcclient.example --profile-id example --name "Example HPC" --version 0.1.0 --requires-app ">=1.5.5" --template minimal --output-dir staging/example/0.1.0
 ```
 
 1. Generate or copy the minimal template.
