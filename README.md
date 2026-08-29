@@ -12,11 +12,11 @@ Project links: [Wiki](https://github.com/mskomek/hpc-client-gui-plugins/wiki) ·
 
 ## What lives here
 
-- `registry.json` - the machine-readable index of published plugins.
-- `schema/` - JSON Schemas for every plugin payload type (Plugin API v1/v2).
-- `plugins/` - plugin payload directories (`manifest.json` + data files).
-- `docs/` - Plugin API v1/v2, registry protocol, security model, contributor guide.
-- `scripts/` - developer validation/hash-refresh tooling (never shipped to clusters).
+- `registry.json` — the machine-readable index of published plugins.
+- `schema/` — JSON Schemas for every plugin payload type (cluster profiles support v1/v2).
+- `plugins/` — plugin payload directories (`manifest.json` + data files).
+- `docs/` — Plugin API v1/v2, registry protocol, security model, contributor guide.
+- `scripts/` — developer validation/hash-refresh tooling (never shipped to clusters).
 
 Plugins are **declarative data only**: JSON metadata, cluster profiles, lint
 rules, templates, and Markdown documentation. No Python modules, binaries, or
@@ -44,7 +44,7 @@ server-side installation is needed on HPC clusters.
 
 | Plugin                        | Capabilities                      | Latest version | Requires app |
 | ----------------------------- | --------------------------------- | -------------- | ------------ |
-| TRUBA                         | Cluster profile                   | 1.0.0          | >=1.4.0      |
+| TRUBA                         | Cluster profile                   | 1.1.0          | >=1.5.3      |
 | ANSYS Fluent Tools            | Journal lint + Slurm job template | 0.2.0          | >=1.4.0      |
 | ANSYS Script & Journal Linter | Linter tool (Plugin API v2)       | 0.1.0          | >=1.5.0      |
 
@@ -93,6 +93,9 @@ the cluster is needed.
   offers versions whose range admits the running release; when no version is
   requested explicitly, the highest compatible version wins regardless of
   listing order.
+- **Cluster profile v2.** Structured `storage` and `quota_sources` sections
+  use `schema_version: 2`; quota sources remain disabled unless the app has a
+  reviewed backend, user consent, and an active connection.
 - **Updates and rollback.** Installing a newer version activates it after full
   verification; the previous version directory stays on disk so users can roll
   back from the Installed tab. Reinstalling an identical verified version is
@@ -142,6 +145,8 @@ explicit user action. Review plugin content before installing it. See
 - **Plugin development:** [docs/CONTRIBUTOR_GUIDE.md](docs/CONTRIBUTOR_GUIDE.md),
   [docs/PLUGIN_API_V1.md](docs/PLUGIN_API_V1.md), and
   [docs/REGISTRY_PROTOCOL.md](docs/REGISTRY_PROTOCOL.md).
+- **Release notes:** [docs/RELEASE_NOTES.md](docs/RELEASE_NOTES.md).
+- **TRUBA Wiki draft:** [docs/WIKI_TRUBA.md](docs/WIKI_TRUBA.md).
 - **Questions and discussion:** use
   [GitHub Discussions](https://github.com/mskomek/hpc-client-gui-plugins/discussions).
 - **Bug reports:** plugin content problems go through the

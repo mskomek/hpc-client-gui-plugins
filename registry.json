@@ -10,6 +10,28 @@
     {
       "id": "org.hpcclient.truba",
       "name": "TRUBA",
+      "version": "1.1.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "TRUBA cluster profile with structured storage metadata.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.5.4",
+      "manifest_path": "plugins/truba/1.1.0/manifest.json",
+      "manifest_sha256": "b34f8e328360bccdbeb07ed25a31211235a4cde738d5fa27b28a0cf87dee9b1c",
+      "official": true,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "truba",
+        "slurm",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.truba",
+      "name": "TRUBA",
       "version": "1.0.0",
       "plugin_api": 1,
       "type": "cluster-profile",

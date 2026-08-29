@@ -1,0 +1,53 @@
+{
+  "schema_version": 2,
+  "profile_id": "truba",
+  "name": "TRUBA",
+  "scheduler": "slurm",
+  "description": "TRUBA cluster profile with structured storage metadata.",
+  "paths": {
+    "home_dir": "/arf/home/{user}",
+    "scratch_dir": "/arf/scratch/{user}"
+  },
+  "commands": {
+    "squeue_command": "squeue -h -u {user} -o \"%i|%P|%j|%u|%T|%M|%D|%C|%R\"",
+    "sbatch_command": "cd -- {script_dir_q} && sbatch -- {script_name_q}",
+    "scancel_command": "scancel {job_id_q}",
+    "sacct_command": "sacct -u {user} --format=JobID,JobName,State,Elapsed,MaxRSS,AllocTRES",
+    "scontrol_command": "scontrol show job {job_id_q}",
+    "status_command": "lssrv",
+    "active_job_ids_command": "squeue -h -u {user} -o \"%A\"",
+    "job_state_command": "sacct -n -X -j {job_id_q} -o State -P"
+  },
+  "metadata": {
+    "maintainer": "HPC Client GUI",
+    "documentation_url": "https://www.truba.gov.tr/"
+  },
+  "storage": [
+    {
+      "id": "home",
+      "label": "Home",
+      "kind": "home",
+      "path_template": "/arf/home/{user}",
+      "legacy_path_key": "home_dir",
+      "access_context": "login-node"
+    },
+    {
+      "id": "scratch",
+      "label": "Scratch",
+      "kind": "scratch",
+      "path_template": "/arf/scratch/{user}",
+      "legacy_path_key": "scratch_dir",
+      "access_context": "login-node",
+      "policy": {"cleanup_note": "Scratch may be periodically cleaned."}
+    }
+  ],
+  "quota_sources": [
+    {
+      "id": "home-quota",
+      "enabled": false,
+      "backend_id": "",
+      "command_template": "",
+      "note": "No verified automated quota command is published."
+    }
+  ]
+}

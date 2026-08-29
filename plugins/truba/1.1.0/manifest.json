@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "plugin_api": 1,
+  "id": "org.hpcclient.truba",
+  "name": "TRUBA",
+  "version": "1.1.0",
+  "publisher": "HPC Client GUI",
+  "license": "MIT",
+  "description": "TRUBA cluster profile with structured storage metadata.",
+  "requires_app": ">=1.5.4",
+  "capabilities": [
+    "cluster-profile"
+  ],
+  "entrypoints": {
+    "cluster_profiles": [
+      "cluster-profile.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "cluster-profile.json",
+      "sha256": "3e145bf40f45118e4aafccdd308de8fcbb21114c756ed6a2c37cd8349e1c00bb",
+      "size": 1610,
+      "role": "cluster-profile"
+    },
+    {
+      "path": "README.md",
+      "sha256": "467aac5beca5ecf6610b3dab6f5c595fc4b41cbb5fc718daf53978b170a143db",
+      "size": 465,
+      "role": "documentation"
+    }
+  ]
+}
