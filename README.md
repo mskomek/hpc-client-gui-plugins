@@ -131,6 +131,7 @@ explicit user action. Review plugin content before installing it. See
 - **Plugin development:** [docs/CONTRIBUTOR_GUIDE.md](docs/CONTRIBUTOR_GUIDE.md),
   [docs/PLUGIN_API_V1.md](docs/PLUGIN_API_V1.md), and
   [docs/REGISTRY_PROTOCOL.md](docs/REGISTRY_PROTOCOL.md).
+- **Release notes:** [docs/RELEASE_NOTES.md](docs/RELEASE_NOTES.md).
 - **Questions and discussion:** use
   [GitHub Discussions](https://github.com/mskomek/hpc-client-gui-plugins/discussions).
 - **Bug reports:** plugin content problems go through the
