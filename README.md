@@ -13,7 +13,7 @@ Project links: [Wiki](https://github.com/mskomek/hpc-client-gui-plugins/wiki) ·
 ## What lives here
 
 - `registry.json` — the machine-readable index of published plugins.
-- `schema/` — JSON Schemas for every plugin payload type (Plugin API v1).
+- `schema/` — JSON Schemas for every plugin payload type (cluster profiles support v1/v2).
 - `plugins/` — plugin payload directories (`manifest.json` + data files).
 - `docs/` — Plugin API v1, registry protocol, security model, contributor guide.
 - `scripts/` — developer validation/hash-refresh tooling (never shipped to clusters).
@@ -37,7 +37,7 @@ server-side installation is needed on HPC clusters.
 
 | Plugin             | Capabilities                      | Latest version |
 | ------------------ | --------------------------------- | -------------- |
-| TRUBA              | Cluster profile                   | 1.0.0          |
+| TRUBA              | Cluster profile                   | 1.1.0          |
 | ANSYS Fluent Tools | Journal lint + Slurm job template | 0.2.0          |
 
 HPC Client GUI is an independent community project. It is **not** an official
@@ -79,6 +79,9 @@ the cluster is needed.
   offers versions whose range admits the running release; when no version is
   requested explicitly, the highest compatible version wins regardless of
   listing order.
+- **Cluster profile v2.** Structured `storage` and `quota_sources` sections
+  use `schema_version: 2`; quota sources remain disabled unless the app has a
+  reviewed backend, user consent, and an active connection.
 - **Updates and rollback.** Installing a newer version activates it after full
   verification; the previous version directory stays on disk so users can roll
   back from the Installed tab. Reinstalling an identical verified version is
