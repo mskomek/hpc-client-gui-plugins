@@ -4,7 +4,8 @@ The registry and application validate each other against immutable release
 refs. The registry-side `consumer-contract` job checks this checkout with the
 application's real plugin contract suite.
 
-The current v2 consumer pin is application `v1.5.3`. Plugin API v2 engines are
+The current v2 consumer pin is application commit
+`b6d93e99494eb317f714fb70fb4272ea8b0f073e` (the v1.5.3 contract update). Plugin API v2 engines are
 hash-verified and loaded only after explicit user action; registry validation
 never imports or executes them.
 
@@ -43,7 +44,7 @@ image and is **required/blocking** for every pull request:
 1. When a new application release becomes the oldest supported consumer
    (for example after v1.5.x is broadly deployed), open a dedicated PR that
    updates:
-   - `APPLICATION_REF` / `ref:` in the `consumer-contract` job of
+    - `APPLICATION_REF` / `ref:` in the `consumer-contract` job of
      `.github/workflows/validate.yml`;
    - `CURRENT_APP_VERSION` in `tests/test_compatibility.py`.
 2. Both values must reference immutable tags/versions, never branches.
