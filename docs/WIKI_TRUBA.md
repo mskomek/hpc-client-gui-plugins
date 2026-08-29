@@ -8,7 +8,11 @@ Slurm cluster profile.
 - **1.0.0** — legacy profile fields and Slurm command templates; compatible
   with HPC Client GUI `>=1.4.0`.
 - **1.1.0** — cluster-profile schema v2 with structured Home and Scratch
-  metadata; requires HPC Client GUI `>=1.5.0`.
+  metadata; requires HPC Client GUI `>=1.5.4`.
+- **1.2.0** — conservative structured storage and disabled quota metadata;
+  requires HPC Client GUI `>=1.5.4`.
+- **1.3.0** — refreshed ARF references and full storage template;
+  requires HPC Client GUI `>=1.5.5`.
 
 ## Storage
 
@@ -33,6 +37,8 @@ ULAKBİM/TRUBA client.
 
 ## Sources
 
-Site information: [TRUBA](https://www.truba.gov.tr/). Verify current site
-policies, partitions, module availability, retention, and access permissions
-with the cluster administrators before submitting jobs.
+See the direct [ARF storage documentation](https://docs.truba.gov.tr/1-kaynaklar/arf/arf_depolama_kaynaklari.html),
+[ARF connection documentation](https://docs.truba.gov.tr/1-kaynaklar/arf/arf_baglanti.html),
+and [SSH documentation](https://docs.truba.gov.tr/2-temel_bilgiler/ssh_baglanti/index.html).
+Verify current site policies, partitions, module availability, retention, and
+access permissions with the cluster administrators before submitting jobs.
