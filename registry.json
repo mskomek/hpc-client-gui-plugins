@@ -15,9 +15,9 @@
       "type": "cluster-profile",
       "description": "TRUBA cluster profile with structured storage metadata.",
       "publisher": "HPC Client GUI",
-      "requires_app": ">=1.5.0",
+      "requires_app": ">=1.5.4",
       "manifest_path": "plugins/truba/1.1.0/manifest.json",
-      "manifest_sha256": "0af424eea70470417eb93218d2887ef5ab938449a96dec4487c6aecaf7956d07",
+      "manifest_sha256": "b34f8e328360bccdbeb07ed25a31211235a4cde738d5fa27b28a0cf87dee9b1c",
       "official": true,
       "capabilities": [
         "cluster-profile"

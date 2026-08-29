@@ -33,7 +33,7 @@ image and is **required/blocking** for every pull request:
 - It tests **this checkout** (the proposed registry revision), never plugin
   `main` again.
 - It checks out the latest supported application release at an explicit,
-  immutable tag — currently `v1.5.3` (`APPLICATION_REF`) — and runs that
+  immutable commit (`APPLICATION_REF`) and runs that
   application's real plugin contract, loader, and validator logic against the
   proposed revision.
 - Payloads stay declarative-only: no executable plugin code and no
@@ -47,5 +47,5 @@ image and is **required/blocking** for every pull request:
     - `APPLICATION_REF` / `ref:` in the `consumer-contract` job of
      `.github/workflows/validate.yml`;
    - `CURRENT_APP_VERSION` in `tests/test_compatibility.py`.
-2. Both values must reference immutable tags/versions, never branches.
+2. Both values must reference immutable tags, versions, or commits, never branches.
 3. Confirm the job is green before merge; it blocks otherwise.

@@ -6,10 +6,8 @@ This test is the registry-side mirror: it verifies with PEP 440 tooling
 (``packaging``) that every published entry targets its declared Plugin
 API generation correctly:
 
-- Plugin API v1 entries stay installable by the 1.4.x application line;
-- Plugin API v2 entries (capability 'linter-tool') require application
-  >= 1.5.0, the first release that understands them, so older clients
-  never select a package they cannot load.
+- All published entries stay installable by the current application line.
+- Plugin API v2 entries remain hidden from pre-v2 application releases.
 
 It intentionally avoids importing application code so the plugin
 repository stays independently validatable.
@@ -25,8 +23,9 @@ from packaging.specifiers import InvalidSpecifier, SpecifierSet
 from packaging.version import Version
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-CURRENT_APP_VERSION = Version("1.5.3")
-V2_APP_FLOOR = Version("1.5.3")
+PRE_V2_APP_VERSION = Version("1.4.0")
+V2_APP_FLOOR = Version("1.5.0")
+CURRENT_APP_VERSION = Version("1.5.4")
 
 # Operators supported by Plugin API v1 (see docs/PLUGIN_API_V1.md).
 SUPPORTED_OPERATORS = {">=", "<=", "==", "~="}
@@ -62,26 +61,26 @@ def test_all_published_versions_installable_on_target_app_lines(registry: dict):
     problems = []
     for entry in registry["plugins"]:
         try:
-            ok_v1_line = _range_admits(str(entry["requires_app"]), CURRENT_APP_VERSION)
-            ok_v2_line = _range_admits(str(entry["requires_app"]), V2_APP_FLOOR)
+            current_ok = _range_admits(str(entry["requires_app"]), CURRENT_APP_VERSION)
+            v2_ok = _range_admits(str(entry["requires_app"]), V2_APP_FLOOR)
+            pre_v2_ok = _range_admits(str(entry["requires_app"]), PRE_V2_APP_VERSION)
         except InvalidSpecifier:
-            ok_v1_line = ok_v2_line = False
-        if entry["plugin_api"] == 1:
-            if not ok_v1_line:
-                problems.append(
-                    f"{entry['id']}@{entry['version']} requires_app="
-                    f"'{entry['requires_app']}' excludes {CURRENT_APP_VERSION}"
-                )
-        else:
-            if not ok_v2_line:
+            current_ok = v2_ok = pre_v2_ok = False
+        if not current_ok:
+            problems.append(
+                f"{entry['id']}@{entry['version']} requires_app="
+                f"'{entry['requires_app']}' excludes {CURRENT_APP_VERSION}"
+            )
+        if entry["plugin_api"] == 2:
+            if not v2_ok:
                 problems.append(
                     f"{entry['id']}@{entry['version']} requires_app="
                     f"'{entry['requires_app']}' excludes {V2_APP_FLOOR}"
                 )
-            if ok_v1_line:
+            if pre_v2_ok:
                 problems.append(
                     f"{entry['id']}@{entry['version']} is Plugin API v2 but "
-                    f"would be selected by old clients on {CURRENT_APP_VERSION}"
+                    f"would be selected by pre-v2 clients on {PRE_V2_APP_VERSION}"
                 )
     assert not problems, "\n".join(problems)
 

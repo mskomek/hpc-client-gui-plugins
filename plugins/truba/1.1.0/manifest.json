@@ -7,7 +7,7 @@
   "publisher": "HPC Client GUI",
   "license": "MIT",
   "description": "TRUBA cluster profile with structured storage metadata.",
-  "requires_app": ">=1.5.0",
+  "requires_app": ">=1.5.4",
   "capabilities": [
     "cluster-profile"
   ],
