@@ -102,9 +102,9 @@ def test_plugin_contains_no_credentials_or_hosts():
     assert "not** an official TÜBİTAK ULAKBİM/TRUBA client" in readme
 
 
-def test_truba_v2_profile_is_published_for_app_1_5():
+def test_truba_v2_profile_is_published_for_app_1_5_4():
     entry = truba_registry_entry("1.1.0")
-    assert entry["requires_app"] == ">=1.5.0"
+    assert entry["requires_app"] == ">=1.5.4"
     profile = load("plugins/truba/1.1.0/cluster-profile.json")
     assert profile["schema_version"] == 2
     assert {item["id"] for item in profile["storage"]} == {"home", "scratch"}

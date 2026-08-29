@@ -65,12 +65,12 @@ jobs:
   # ref below in a dedicated PR and record it in docs/CONSUMER_CONTRACT.md.
   # The ref is always an immutable application tag, never a branch.
   consumer-contract:
-    name: Consumer contract (app v1.5.3)
+    name: Consumer contract (app v1.5.4)
     runs-on: ubuntu-latest
     env:
       # Keep this comment block beside the ref. See docs/CONSUMER_CONTRACT.md
       # for the advancement procedure.
-      APPLICATION_REF: b6d93e99494eb317f714fb70fb4272ea8b0f073e
+      APPLICATION_REF: 0c4e225b98245a8935a4090d50aa69827d157096
       HPC_GUI_CONTRACT_REPO: ${{ github.workspace }}/hpc-client-gui-plugins
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2

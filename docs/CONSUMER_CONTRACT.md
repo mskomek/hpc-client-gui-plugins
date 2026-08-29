@@ -5,7 +5,7 @@ refs. The registry-side `consumer-contract` job checks this checkout with the
 application's real plugin contract suite.
 
 The current v2 consumer pin is application commit
-`b6d93e99494eb317f714fb70fb4272ea8b0f073e` (the v1.5.3 contract update). Plugin API v2 engines are
+`0c4e225b98245a8935a4090d50aa69827d157096` (the v1.5.4 contract update). Plugin API v2 engines are
 hash-verified and loaded only after explicit user action; registry validation
 never imports or executes them.
 
