@@ -1,7 +1,0 @@
-# SetScriptVersion(Version="25.2")
-template = GetTemplate(Template="Mechanical APDL")
-system = CreateSystem(template)
-container = system.GetContainer(ComponentName="Setup")
-container.SendCommand(
-    Command="/SYS,rm -rf /tmp/scratch\n/PREP7\nET,1,SOLID186\n*DO,I,1,10\n*ENDDO\nFINISH"
-)

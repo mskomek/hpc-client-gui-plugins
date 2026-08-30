@@ -1,7 +1,0 @@
-# SetScriptVersion(Version="25.2")
-template1 = GetTemplate(Template="FLUENT")
-system1 = CreateSystem(template1)
-setup1 = system1.GetContainer(ComponentName="Setup")
-setup1.SendCommand(
-    Command="/file/set-tui-version 25.2\n/file/read-case C:\\temp\\case.cas.h5\n/solve/iterate 50\n/exit yes"
-)

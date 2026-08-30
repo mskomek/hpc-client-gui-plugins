@@ -4,11 +4,9 @@ The main application guarantees that ``find_registry_entry`` only ever
 selects versions whose ``requires_app`` range admits the running release.
 This test is the registry-side mirror: it verifies with PEP 440 tooling
 (``packaging``) that every published entry targets its declared Plugin
-API generation correctly:
+API correctly:
 
 - All published entries stay installable by the current application line.
-- Plugin API v2 entries remain hidden from pre-v2 application releases.
-
 It intentionally avoids importing application code so the plugin
 repository stays independently validatable.
 """
@@ -23,8 +21,6 @@ from packaging.specifiers import InvalidSpecifier, SpecifierSet
 from packaging.version import Version
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-PRE_V2_APP_VERSION = Version("1.4.0")
-V2_APP_FLOOR = Version("1.5.0")
 CURRENT_APP_VERSION = Version("1.5.5")
 
 # Operators supported by Plugin API v1 (see docs/PLUGIN_API_V1.md).
@@ -47,14 +43,8 @@ def _range_admits(requires_app: str, version: Version) -> bool:
 def test_registry_protocol_and_entry_api_versions(registry: dict):
     assert registry["plugin_api"] == 1
     for entry in registry["plugins"]:
-        if entry["plugin_api"] == 1:
-            assert "linter-tool" not in entry.get("capabilities", [])
-        else:
-            assert entry["plugin_api"] == 2
-            assert "linter-tool" in entry.get("capabilities", []), (
-                f"{entry['id']}@{entry['version']}: Plugin API v2 entries must "
-                "declare the linter-tool capability"
-            )
+        assert entry["plugin_api"] == 1
+        assert "linter-tool" not in entry.get("capabilities", [])
 
 
 def test_all_published_versions_installable_on_target_app_lines(registry: dict):
@@ -62,26 +52,13 @@ def test_all_published_versions_installable_on_target_app_lines(registry: dict):
     for entry in registry["plugins"]:
         try:
             current_ok = _range_admits(str(entry["requires_app"]), CURRENT_APP_VERSION)
-            v2_ok = _range_admits(str(entry["requires_app"]), V2_APP_FLOOR)
-            pre_v2_ok = _range_admits(str(entry["requires_app"]), PRE_V2_APP_VERSION)
         except InvalidSpecifier:
-            current_ok = v2_ok = pre_v2_ok = False
+            current_ok = False
         if not current_ok:
             problems.append(
                 f"{entry['id']}@{entry['version']} requires_app="
                 f"'{entry['requires_app']}' excludes {CURRENT_APP_VERSION}"
             )
-        if entry["plugin_api"] == 2:
-            if not v2_ok:
-                problems.append(
-                    f"{entry['id']}@{entry['version']} requires_app="
-                    f"'{entry['requires_app']}' excludes {V2_APP_FLOOR}"
-                )
-            if pre_v2_ok:
-                problems.append(
-                    f"{entry['id']}@{entry['version']} is Plugin API v2 but "
-                    f"would be selected by pre-v2 clients on {PRE_V2_APP_VERSION}"
-                )
     assert not problems, "\n".join(problems)
 
 

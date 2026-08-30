@@ -8,12 +8,11 @@ The current coordinated candidate pin is immutable application commit
 `05e92dc558259bf307b6cbee13a07bd70c65079e`, which prepares v1.5.5. After the
 application PR is merged and v1.5.5 is published, replace it with that release
 tag. The published v1.5.4 contract predates structured provider support and
-cannot validate the newer registry entries. Plugin API v2 engines are
-hash-verified and loaded only after explicit user action; registry validation
-never imports or executes them.
+cannot validate the newer registry entries. The current contract permits only
+declarative Plugin API v1 packages and never imports plugin payloads.
 
-When advancing the pin, update `APPLICATION_REF` and the v2 compatibility
-floor together, then require a green consumer-contract job before merging.
+When advancing the pin, update `APPLICATION_REF`, then require a green
+consumer-contract job before merging.
 The plugin registry is consumed by the HPC Client GUI application in two
 directions, and both are guarded in CI:
 

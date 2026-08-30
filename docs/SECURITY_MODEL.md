@@ -23,28 +23,12 @@ application executes as plugin code.
 6. **Failed network/plugin operations must not crash the app** and network
    work stays off the GUI thread.
 
-## What Plugin API v2 adds (linter tools)
+## Executable plugin generations
 
-v2 keeps every guarantee above and adds exactly one capability,
-`linter-tool`: a hash-verified pure-Python engine shipped inside the plugin
-payload (role `linter-engine`, `.py` only, `plugin_api: 2` only). The
-additional rules:
-
-- **Nothing executes at install time** - unchanged. The engine module loads
-  lazily, only when the user explicitly opens the tool, wrapped in defensive
-  error handling that cannot affect application startup or other plugins.
-- Every engine byte is pinned by the same
-  `registry -> manifest -> file` SHA-256 chain as declarative data.
-- Engine files are restricted to the official registry's review workflow:
-  changes to published versions require a new version directory whose diff
-  is visible in a pull request.
-- v2 plugins must require an application version that actually implements
-  v2 (`>= 1.5.0`), enforced on both registry and client sides.
-
-The trust level of a v2 linter engine equals the trust level of this
-repository itself: running it executes code reviewed here. That is why the
-capability exists at all (a parser-based linter cannot be expressed as
-regex data) and why it is limited to official, hash-pinned packages.
+Executable plugin generations are unsupported. The registry schema and
+validator reject Python, native binaries, scripts, executable archives, and
+unknown payload roles. Application-owned engines may consume declarative
+rules selected by an allowlisted engine identifier; plugin files never run.
 
 ## Explicit non-guarantees
 
@@ -56,8 +40,6 @@ regex data) and why it is limited to official, hash-pinned packages.
 - Cluster profiles contain remote scheduler/status command templates. These
   are privileged declarative data: review them like you would review shell
   commands before running them on a cluster you care about.
-- Linter engines execute with the user's privileges when the tool page is
-  opened. Review engine diffs like you would review any code you run.
 
 ## Reporting
 

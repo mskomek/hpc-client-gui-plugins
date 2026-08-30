@@ -1,8 +1,0 @@
-COMMAND FILE:
-  TurboGrid Session
-  > load filename=machine.tse
-  TOPLOGY SET: TopoSet1
-    Boundary Conditions = Inlet
-  END
-END
->save state filename=out.cst

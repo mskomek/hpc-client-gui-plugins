@@ -128,32 +128,6 @@
         "template"
       ],
       "license": "MIT"
-    },
-    {
-      "id": "org.hpcclient.ansyslint",
-      "name": "ANSYS Script & Journal Linter",
-      "version": "0.1.0",
-      "plugin_api": 2,
-      "type": "linter-tool",
-      "description": "Unofficial offline linter for Ansys journals/scripts across Fluent, MAPDL, Workbench, CCL products, ICEM, System Coupling and more.",
-      "publisher": "HPC Client GUI",
-      "requires_app": ">=1.5.0",
-      "manifest_path": "plugins/ansys-lint/0.1.0/manifest.json",
-      "manifest_sha256": "191f9e1ab195955f7d9eaf07deb0ee3d3d340fdfda3afd54ed700eb2005e6498",
-      "official": true,
-      "capabilities": [
-        "linter-tool"
-      ],
-      "keywords": [
-        "ansys",
-        "fluent",
-        "mapdl",
-        "workbench",
-        "journal",
-        "linter",
-        "hpc"
-      ],
-      "license": "MIT"
     }
   ]
 }
