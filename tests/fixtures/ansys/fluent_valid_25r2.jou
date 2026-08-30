@@ -1,7 +1,0 @@
-/file/set-tui-version 25.2
-/file/confirm-overwrite yes
-/file/read-case wing.cas.h5
-/file/read-data wing.dat.h5
-/solve/iterate 200
-/file/write-case-data wing_out
-/exit yes

@@ -1,4 +1,0 @@
-# ICEM replay with external execution
-set hostname [exec hostname]
-exec rm -rf /tmp/oldmesh
-ic_part part-001

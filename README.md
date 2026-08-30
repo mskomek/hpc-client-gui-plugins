@@ -1,6 +1,6 @@
 # hpc-client-gui-plugins
 
-> Official plugin registry for HPC Client GUI: TRUBA and ANSYS Fluent integrations, cluster profiles, scheduler/application templates, HPC lint rules, and linter tools.
+> Official data-only plugin registry for HPC Client GUI: TRUBA and ANSYS Fluent integrations, cluster profiles, scheduler/application templates, and HPC lint rules.
 
 This repository is the **official plugin registry** for
 [HPC Client GUI](https://github.com/mskomek/hpc-client-gui).
@@ -15,7 +15,7 @@ Project links: [Wiki](https://github.com/mskomek/hpc-client-gui-plugins/wiki) ·
 - `registry.json` — the machine-readable index of published plugins.
 - `schema/` — JSON Schemas for every plugin payload type (cluster profiles support v1/v2).
 - `plugins/` — plugin payload directories (`manifest.json` + data files).
-- `docs/` — Plugin API v1/v2, registry protocol, security model, contributor guide.
+- `docs/` — Plugin API v1, registry protocol, security model, contributor guide.
 - `scripts/` — developer validation/hash-refresh tooling (never shipped to clusters).
 
 Plugins are **declarative data only**: JSON metadata, cluster profiles, lint
@@ -23,19 +23,12 @@ rules, templates, and Markdown documentation. No Python modules, binaries, or
 hooks are distributed through this registry, and installing a plugin never
 executes its content.
 
-The single Plugin API v2 exception is the `linter-tool` capability: one
-hash-verified pure-Python engine package (role `linter-engine`), loaded
-lazily and only on explicit user action. See
-[Plugin API v2](docs/PLUGIN_API_V2.md).
-
 Initial plugin categories:
 
 - `cluster-profile` - site/scheduler definitions such as TRUBA.
 - `lint-rules` - HPC application linters such as ANSYS Fluent journal checks.
 - `job-template` - reusable job submission templates.
 - `application-tools` - application-specific helper definitions.
-- `linter-tool` - Plugin API v2 linter engines (currently: ANSYS Script &
-  Journal Linter).
 
 Installation happens from inside the HPC Client GUI Plugin Manager; no
 server-side installation is needed on HPC clusters.
@@ -46,13 +39,6 @@ server-side installation is needed on HPC clusters.
 | ----------------------------- | --------------------------------- | -------------- | ------------ |
 | TRUBA                         | Cluster profile                   | 1.3.0          | >=1.5.5      |
 | ANSYS Fluent Tools            | Journal lint + Slurm job template | 0.2.0          | >=1.4.0      |
-| ANSYS Script & Journal Linter | Linter tool (Plugin API v2)       | 0.1.0          | >=1.5.0      |
-
-The ANSYS Script & Journal Linter is an unofficial offline linter for Ansys
-journals and scripts across Fluent, MAPDL, Workbench (including nested
-`SendCommand` payloads), CCL products, ICEM replays, System Coupling and
-more. See its [documentation](docs/ANSYS_LINTER.md) for exact-vs-heuristic
-coverage details. It is not affiliated with or endorsed by ANSYS, Inc.
 
 HPC Client GUI is an independent community project. It is **not** an official
 TÜBİTAK ULAKBİM/TRUBA or ANSYS, Inc. product, and these plugins are not

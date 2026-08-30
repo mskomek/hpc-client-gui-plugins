@@ -4,9 +4,8 @@ Plugin API v1 is **declarative**. A plugin is a set of data files described by
 a `manifest.json`, published under a stable version directory in this
 repository and indexed by the top-level `registry.json`.
 
-> v1 remains fully supported and unchanged. Plugin API v2 adds one
-> opt-in capability for hash-verified linter engines; see
-> [PLUGIN_API_V2.md](PLUGIN_API_V2.md).
+Plugin API v1 is the only supported plugin API. Executable plugin generations
+are rejected and must be republished as declarative data.
 
 ## What v1 allows
 

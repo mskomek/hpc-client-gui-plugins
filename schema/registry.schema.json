@@ -87,8 +87,7 @@
         "cluster-profile",
         "lint-rules",
         "job-template",
-        "application-tools",
-        "linter-tool"
+        "application-tools"
       ]
     },
     "capability": {
@@ -96,8 +95,7 @@
         "cluster-profile",
         "lint-rules",
         "job-template",
-        "application-tools",
-        "linter-tool"
+        "application-tools"
       ]
     },
     "pluginEntry": {
@@ -130,12 +128,7 @@
         "version": {
           "$ref": "#/definitions/semver"
         },
-        "plugin_api": {
-          "enum": [
-            1,
-            2
-          ]
-        },
+        "plugin_api": { "const": 1 },
         "type": {
           "$ref": "#/definitions/pluginType"
         },

@@ -1,4 +1,0 @@
-/file/read-case wing.cas.h5
-/solve/iterate 200
-/file/write-case-data wing_out
-/exit yes

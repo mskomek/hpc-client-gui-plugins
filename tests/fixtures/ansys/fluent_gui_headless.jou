@@ -1,5 +1,0 @@
-/file/set-tui-version 25.2
-/file/read-case C:\users\demo\wing.cas.h5
-/solve/iterate 100
-/display/set/picture
-/exit
