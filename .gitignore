@@ -1,6 +1,17 @@
 __pycache__/
 *.py[cod]
+.venv/
+venv/
+.env
 .pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.tmp-*/
+*.log
+rules.md
+AGENTS.md
+CLAUDE.md
 *.egg-info/
 build/
 dist/
