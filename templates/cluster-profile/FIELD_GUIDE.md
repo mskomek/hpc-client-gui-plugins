@@ -27,7 +27,8 @@ destructive commands or executable hooks.
 Each storage row requires `id` and `label`. `kind` is normally `home`,
 `scratch`, `project`, `custom`, or `node-local`; `enabled` controls whether it
 is advertised. `path_template` is the documented path and may contain
-`{user}`. `access_context` describes where it is reachable, such as `login`.
+`{user}`. `access_context` describes where it is reachable; supported values
+are `login-node`, `shared`, `compute-node`, and `unknown`.
 
 `policy.backup` is a verified backup statement. `policy.retention_days` is a
 verified non-negative number of days, or `null` when unknown. Do not guess
@@ -37,7 +38,11 @@ either value. Other useful policy fields include `cleanup_note`,
 ## Quota entries
 
 Quota is optional and separate from storage. A quota row has an `id` and may
-include `enabled`, `backend_id`, `command_template`, and `scope`. A blank or
+include `enabled`, `backend_id`, `command_template`, and `scope`. `backend_id`
+must refer to a reviewed backend already supported and allow-listed by HPC
+Client GUI; adding a provider row cannot create a backend. Provider plugins
+cannot ship executable quota parsers or arbitrary quota code. Quota commands
+accept only `{user}`, `{subject}`, `{path}`, and `{path_q}`. A blank or
 disabled command must remain disabled: the app performs no quota request,
 probe, timer, retry, `df`, `du`, or `find` fallback. Never copy a quota command
 from another site.

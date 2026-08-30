@@ -120,7 +120,14 @@ not real site information:
     "module_paths": [],
     "setup_notes": "Software is normally loaded using environment modules."
   },
-  "storage": [],
+  "storage": [
+    {"id": "home", "label": "Home", "kind": "home", "enabled": true,
+     "path_template": "/home/{user}", "access_context": "login-node",
+     "policy": {"backup": null, "retention_days": null}},
+    {"id": "scratch", "label": "Scratch", "kind": "scratch", "enabled": true,
+     "path_template": "/scratch/{user}", "access_context": "login-node",
+     "policy": {"backup": null, "retention_days": null}}
+  ],
   "quota_sources": []
 }
 ```
@@ -137,10 +144,10 @@ only and must not be copied without explicit institutional documentation:
 ```json
 "storage": [
   {"id": "home", "label": "Home", "kind": "home", "enabled": true,
-   "path_template": "/home/{user}", "access_context": "login",
+   "path_template": "/home/{user}", "access_context": "login-node",
    "policy": {"backup": true, "retention_days": null}},
   {"id": "scratch", "label": "Scratch", "kind": "scratch", "enabled": true,
-   "path_template": "/scratch/{user}", "access_context": "login",
+   "path_template": "/scratch/{user}", "access_context": "login-node",
    "policy": {"backup": false, "retention_days": 30}}
 ]
 ```
@@ -159,7 +166,10 @@ queries are separate. You may describe Home, Scratch, and Project storage
 without defining a quota command.
 
 If no command is officially verified, omit `quota_sources` or use an explicitly
-disabled record:
+disabled record. Adding a `quota_sources` row does not implement quota support:
+`backend_id` must name a reviewed backend already allow-listed by HPC Client
+GUI. Provider plugins cannot ship executable quota parsers or arbitrary quota
+code.
 
 ```json
 "quota_sources": [{"id": "example-quota", "enabled": false,
@@ -172,12 +182,20 @@ center. Do not present a status command such as TRUBA's `lssrv` as quota.
 TRUBA documents storage but keeps automated quota disabled because no verified
 automated quota command was available for its published release.
 
-Supported command placeholders are `{user}`, `{job_id}`, `{job_id_q}`,
+### Scheduler command placeholders
+
+Scheduler/job commands support `{user}`, `{job_id}`, `{job_id_q}`,
 `{script_dir}`, `{script_dir_q}`, `{script_name}`, and `{script_name_q}`.
-Unknown placeholders and multiline command templates are rejected where the
-validator applies those rules. The `_q` forms are quoted shell arguments and
-should be preferred for paths, IDs, and names. Commands must be read-only and
-safe; destructive commands and executable hooks are prohibited.
+The `_q` forms are quoted shell arguments and should be preferred for paths,
+IDs, and names.
+
+### Quota command placeholders
+
+Quota fields use their separate allow-list: `{user}`, `{subject}`, `{path}`,
+and `{path_q}`. Unknown placeholders and multiline command templates are
+rejected where the validator applies those rules. All provider commands must
+be read-only and safe; destructive commands and executable hooks are
+prohibited.
 
 ## Publish the package and registry entry
 
