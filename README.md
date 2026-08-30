@@ -51,6 +51,12 @@ through the dedicated issue form:
 
 **[→ Request a plugin](https://github.com/mskomek/hpc-client-gui-plugins/issues/new?template=plugin-request.yml)**
 
+### Add a new HPC provider
+
+Start with the [cluster provider tutorial](docs/ADDING_CLUSTER_PROVIDER.md).
+If you only want to request support and do not want to write the profile,
+use the [plugin request form](https://github.com/mskomek/hpc-client-gui-plugins/issues/new?template=plugin-request.yml).
+
 Good requests include: support for another HPC center, a new Slurm cluster
 profile, PBS/other scheduler profiles for future consideration, ANSYS Fluent
 or OpenFOAM job templates, journal/job-script lint rules, and
@@ -128,7 +134,8 @@ explicit user action. Review plugin content before installing it. See
 - **Plugin Manager user guide:** [PLUGINS_en.md](https://github.com/mskomek/hpc-client-gui/blob/main/src/hpc_gui/docs/PLUGINS_en.md)
   ([Türkçe](https://github.com/mskomek/hpc-client-gui/blob/main/src/hpc_gui/docs/PLUGINS_tr.md)) —
   installing, activating, rolling back, and removing plugins.
-- **Plugin development:** [docs/CONTRIBUTOR_GUIDE.md](docs/CONTRIBUTOR_GUIDE.md),
+- **Plugin development:** [cluster provider tutorial](docs/ADDING_CLUSTER_PROVIDER.md),
+  [docs/CONTRIBUTOR_GUIDE.md](docs/CONTRIBUTOR_GUIDE.md),
   [docs/PLUGIN_API_V1.md](docs/PLUGIN_API_V1.md), and
   [docs/REGISTRY_PROTOCOL.md](docs/REGISTRY_PROTOCOL.md).
 - **Release notes:** [docs/RELEASE_NOTES.md](docs/RELEASE_NOTES.md).

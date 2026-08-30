@@ -1,0 +1,13 @@
+{
+  "schema_version": 2,
+  "profile_id": "example",
+  "name": "Example HPC",
+  "scheduler": "slurm",
+  "description": "",
+  "metadata": {"maintainer": ""},
+  "site": {"public_name": "Example HPC", "region": "", "access_note": ""},
+  "scheduler_hints": {"queue_notes": "", "account_notes": "", "partitions": []},
+  "software": {"module_paths": [], "setup_notes": ""},
+  "storage": [],
+  "quota_sources": []
+}
