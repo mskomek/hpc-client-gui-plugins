@@ -1,0 +1,7 @@
+# ICEM CFD replay script
+ic_undo_begin
+ic_point pnt.001 0.0 0.0 0.0
+ic_curve crv.001 pnt.001 pnt.002
+ic_part part-001
+ic_hex_mesh block-001
+ic_undo_end

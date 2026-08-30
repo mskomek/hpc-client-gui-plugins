@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Cluster profile field guide
 
 Use `schema/cluster-profile.schema.json` as the authority. A profile must have
@@ -41,3 +42,9 @@ include `enabled`, `backend_id`, `command_template`, and `scope`. A blank or
 disabled command must remain disabled: the app performs no quota request,
 probe, timer, retry, `df`, `du`, or `find` fallback. Never copy a quota command
 from another site.
+=======
+Required: `schema_version`, safe `profile_id`, nonblank `name`, and `scheduler: slurm`.
+Optional sections may be omitted or use blank/null text. Storage IDs and quota
+source IDs are unique; supported kinds are home, scratch, project, custom, and
+node-local. Quota scopes are user, group, project, or unknown. URLs are HTTPS.
+>>>>>>> origin/main

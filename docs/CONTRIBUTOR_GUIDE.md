@@ -53,7 +53,7 @@ must be declared in `manifest.files`; undeclared extra files are rejected.
 For a minimal profile, generate a starting payload with:
 
 ```bash
-python scripts/scaffold_cluster_profile.py --profile-id my-site --name "My Site" --output cluster-profile.json
+python scripts/scaffold_cluster_profile.py --plugin-id org.hpcclient.example --profile-id my-site --name "My Site" --version 0.1.0 --requires-app ">=1.5.5" --template minimal --output-dir staging/my-site/0.1.0
 ```
 
 ## 4. Register the plugin

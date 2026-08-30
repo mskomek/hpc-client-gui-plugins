@@ -13,15 +13,20 @@ Checks, in order:
    (``capabilities`` is authoritative for multi-capability plugins; the
    single legacy ``type`` field is kept for display compatibility);
 6. every declared file exists with the declared size and SHA-256;
-7. payloads are declarative data (no executable-looking files);
+7. payloads are declarative data (no executable-looking files), with one
+   Plugin API v2 exception: capability 'linter-tool' plugins may ship
+   Python engine files, every one of which must carry the
+   'linter-engine' role and is hash-pinned like any other payload;
 8. capability entrypoints are consistent with declared capabilities and
    their payloads validate against their role schemas;
 9. version directories contain no undeclared extra files (immutable,
    fully-enumerated directories).
 
-The security model stays declarative-only: no Python plugin modules, no
-executable hooks, no binaries, no installation-time command execution,
-exact-file downloads only, strict response-size and total-size limits.
+Plugin API v1 stays declarative-only: no Python modules, no executable
+hooks, no binaries, no installation-time command execution, exact-file
+downloads only, strict response-size and total-size limits. Plugin API
+v2 adds the hash-verified 'linter-tool' engine files; nothing executes
+at install time - engines load lazily and defensively at use time.
 
 Exit status is non-zero on any error.
 """
@@ -47,6 +52,13 @@ SCHEMA_DIR = REPO_ROOT / "schema"
 
 ALLOWED_PAYLOAD_EXTENSIONS = {".json", ".md", ".txt", ".tpl"}
 
+# Plugin API v2 (capability 'linter-tool') may additionally ship verified
+# Python engine files. Every .py file MUST carry the 'linter-engine' role,
+# and that role is only valid under plugin_api 2.
+V2_EXTRA_PAYLOAD_EXTENSIONS = {".py"}
+LINTER_ENGINE_ROLE = "linter-engine"
+LINTER_DATA_ROLE = "linter-data"
+
 SCHEMA_FOR_ROLE = {
     "cluster-profile": "cluster-profile.schema.json",
     "lint-index": "lint-index.schema.json",
@@ -62,6 +74,7 @@ CAPABILITY_ENTRYPOINT_KEYS = {
     "lint-rules": ("lint_index",),
     "job-template": ("template_index", "job_templates"),
     "application-tools": ("template_index", "job_templates"),
+    "linter-tool": ("linter_engine",),
 }
 
 ENTRYPOINT_ROLES = {
@@ -69,6 +82,7 @@ ENTRYPOINT_ROLES = {
     "lint_index": ("lint-index",),
     "template_index": ("template-index",),
     "job_templates": ("template-index",),
+    "linter_engine": ("linter-engine",),
 }
 
 
@@ -152,6 +166,63 @@ def validate_payload_role(role: str, path: Path, label: str, errors: list[str]) 
         errors.append(f"{label}: payload is not valid JSON ({exc})")
         return
     validate_against_schema(instance, SCHEMA_DIR / schema_name, f"{label} [{role}]", errors)
+    if role == "cluster-profile":
+        errors.extend(f"{label}: {problem}" for problem in validate_cluster_profile(instance))
+
+
+def validate_cluster_profile(profile: object) -> list[str]:
+    """Semantic checks Draft 7 cannot express for v2 provider payloads."""
+    if not isinstance(profile, dict) or profile.get("schema_version") != 2:
+        return []
+    errors: list[str] = []
+    safe_id = re.compile(r"^[a-z][a-z0-9_-]{0,63}$")
+    quota_placeholders = {"user", "subject", "path", "path_q"}
+    for section, label in ((profile.get("storage"), "storage"), (profile.get("quota_sources"), "quota_sources")):
+        ids: set[str] = set()
+        for index, item in enumerate(section or []):
+            if not isinstance(item, dict):
+                continue
+            ident = item.get("id")
+            if not isinstance(ident, str) or not safe_id.fullmatch(ident):
+                errors.append(f"{label}[{index}].id must match {safe_id.pattern}")
+            elif ident in ids:
+                errors.append(f"duplicate {label} id '{ident}'")
+            ids.add(ident)
+            if label == "storage" and item.get("kind") not in {None, "home", "scratch", "project", "custom", "node-local"}:
+                errors.append(f"storage[{index}].kind is unsupported")
+            if label == "storage" and item.get("access_context") not in {None, "login-node", "shared", "compute-node", "unknown"}:
+                errors.append(f"storage[{index}].access_context is unsupported")
+            if label == "quota_sources":
+                if item.get("scope") not in {None, "user", "group", "project", "unknown"}:
+                    errors.append(f"quota_sources[{index}].scope is unsupported")
+                command = item.get("command_template")
+                if isinstance(command, str) and any(ord(c) < 32 and c not in "\t" for c in command):
+                    errors.append(f"quota_sources[{index}].command_template contains control characters")
+                if isinstance(command, str) and ("\n" in command or "\r" in command):
+                    errors.append(f"quota_sources[{index}].command_template must be single-line")
+                for field in ("command_template", "subject_template"):
+                    value = item.get(field)
+                    if not isinstance(value, str):
+                        continue
+                    for placeholder in re.findall(r"\{([A-Za-z_][A-Za-z0-9_]*)\}", value):
+                        if placeholder not in quota_placeholders:
+                            errors.append(
+                                f"quota_sources[{index}].{field} uses unknown placeholder {{{placeholder}}}"
+                            )
+                    if "\n" in value or "\r" in value or any(ord(c) < 32 for c in value):
+                        errors.append(f"quota_sources[{index}].{field} must be single-line and control-free")
+    storage = profile.get("storage") or []
+    source_ids = {item.get("id") for item in (profile.get("quota_sources") or []) if isinstance(item, dict)}
+    for index, item in enumerate(storage):
+        if isinstance(item, dict) and item.get("quota_source_id") and item["quota_source_id"] not in source_ids:
+            errors.append(f"storage[{index}].quota_source_id references an unknown source")
+    paths = profile.get("paths") or {}
+    for alias, kind in (("home_dir", "home"), ("scratch_dir", "scratch")):
+        alias_value = paths.get(alias)
+        matches = [item.get("path_template") for item in storage if isinstance(item, dict) and item.get("kind") == kind]
+        if alias_value and matches and any(value and value != alias_value for value in matches):
+            errors.append(f"paths.{alias} conflicts with structured {kind} storage")
+    return errors
 
 
 def validate_entrypoint_files(manifest: dict, manifest_dir: Path, label: str, errors: list[str]) -> None:
@@ -207,14 +278,35 @@ def validate_entrypoint_files(manifest: dict, manifest_dir: Path, label: str, er
                     validate_payload_role(file_entry["role"], payload_path, entry_label, errors)
 
 
-def collect_executable_payload_errors(files: list[dict], label: str, errors: list[str]) -> None:
+def collect_executable_payload_errors(
+    files: list[dict],
+    label: str,
+    errors: list[str],
+    plugin_api: int = 1,
+) -> None:
+    allowed = set(ALLOWED_PAYLOAD_EXTENSIONS)
+    if plugin_api == 2:
+        allowed |= V2_EXTRA_PAYLOAD_EXTENSIONS
     for entry in files:
         suffix = Path(entry["path"]).suffix.lower()
-        if suffix not in ALLOWED_PAYLOAD_EXTENSIONS:
+        role = entry.get("role")
+        if suffix not in allowed:
             errors.append(
                 f"{label}: payload '{entry['path']}' has executable-looking extension "
-                f"'{suffix or '<none>'}'; Plugin API v1 allows only "
-                f"{sorted(ALLOWED_PAYLOAD_EXTENSIONS)}"
+                f"'{suffix or '<none>'}'; Plugin API {plugin_api} allows only "
+                f"{sorted(allowed)}"
+            )
+            continue
+        if plugin_api == 2 and suffix == ".py" and role != LINTER_ENGINE_ROLE:
+            errors.append(
+                f"{label}: payload '{entry['path']}' is Python but has role "
+                f"'{role}'; under Plugin API v2 every .py file must use the "
+                f"'{LINTER_ENGINE_ROLE}' role"
+            )
+        if role == LINTER_ENGINE_ROLE and (plugin_api != 2 or suffix != ".py"):
+            errors.append(
+                f"{label}: payload '{entry['path']}' uses role '{LINTER_ENGINE_ROLE}' "
+                f"which requires Plugin API v2 and a .py extension"
             )
 
 
@@ -324,18 +416,29 @@ def validate_plugin_entry(entry: dict, seen_ids: dict, errors: list[str], warnin
     # Version directories are immutable and fully enumerated: every file on
     # disk must be declared in manifest.files. Undeclared extras (including
     # unreferenced .tpl templates) are rejected so clients that download
-    # exactly the declared files never miss content.
+    # exactly the declared files never miss content. Local Python bytecode
+    # caches are runtime artifacts, never published content: they surface as
+    # warnings (hygiene signal) instead of failing local validation.
     for existing in sorted(manifest_dir.rglob("*")):
         if not existing.is_file():
             continue
         rel = existing.relative_to(manifest_dir).as_posix()
-        if rel != "manifest.json" and rel not in seen_paths:
-            errors.append(
-                f"{label}: undeclared extra file in version directory '{rel}' "
-                "(every file must be listed in manifest.files)"
+        if rel == "manifest.json" or rel in seen_paths:
+            continue
+        if "__pycache__" in PurePosixPath(rel).parts or rel.endswith(".pyc"):
+            warnings.append(
+                f"{label}: local bytecode cache present on disk (never commit "
+                f"it): '{rel}'"
             )
+            continue
+        errors.append(
+            f"{label}: undeclared extra file in version directory '{rel}' "
+            "(every file must be listed in manifest.files)"
+        )
 
-    collect_executable_payload_errors(manifest.get("files", []), label, errors)
+    collect_executable_payload_errors(
+        manifest.get("files", []), label, errors, int(manifest.get("plugin_api", 1))
+    )
     validate_entrypoint_files(manifest, manifest_dir, label, errors)
 
 

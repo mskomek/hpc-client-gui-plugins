@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Journal>
+  <Operation Name="Import" Type="Geometry" File="C:\models\gear.step" />
+  <Operation>
+    <Setting Key="Duration" Value="2.0" />
+  </Operation
+</Journal>

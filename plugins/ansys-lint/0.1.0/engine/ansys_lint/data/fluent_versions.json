@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "description": "Fluent version pack index. Adding a release means adding an entry here plus (optionally) catalog deltas in fluent_tui.json - parser logic never changes.",
+  "order": ["24.2", "25.1", "25.2", "26.1"],
+  "default_version": "25.2",
+  "versions": {
+    "24.2": {
+      "release": "2024 R2",
+      "set_tui_version_value": "24.2"
+    },
+    "25.1": {
+      "release": "2025 R1",
+      "set_tui_version_value": "25.1"
+    },
+    "25.2": {
+      "release": "2025 R2",
+      "set_tui_version_value": "25.2"
+    },
+    "26.1": {
+      "release": "2026 R1",
+      "set_tui_version_value": "26.1"
+    }
+  }
+}

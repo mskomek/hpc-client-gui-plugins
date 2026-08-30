@@ -1,0 +1,37 @@
+{
+  "schema_version": 2,
+  "profile_id": "truba",
+  "name": "TRUBA",
+  "scheduler": "slurm",
+  "description": "TRUBA/ARF defaults; these settings do not imply MareNostrum 5 behavior.",
+  "paths": {"home_dir": "/arf/home/{user}", "scratch_dir": "/arf/scratch/{user}"},
+  "commands": {
+    "squeue_command": "squeue -h -u {user} -o \"%i|%P|%j|%u|%T|%M|%D|%C|%R\"",
+    "sbatch_command": "cd -- {script_dir_q} && sbatch -- {script_name_q}",
+    "scancel_command": "scancel {job_id_q}",
+    "sacct_command": "sacct -u {user} --format=JobID,JobName,State,Elapsed,MaxRSS,AllocTRES",
+    "scontrol_command": "scontrol show job {job_id_q}",
+    "status_command": "lssrv",
+    "active_job_ids_command": "squeue -h -u {user} -o \"%A\"",
+    "job_state_command": "sacct -n -X -j {job_id_q} -o State -P"
+  },
+  "metadata": {
+    "maintainer": "HPC Client GUI",
+    "documentation_url": "https://docs.truba.gov.tr/1-kaynaklar/arf/arf_depolama_kaynaklari.html",
+    "support_url": "https://github.com/mskomek/hpc-client-gui-plugins/issues",
+    "source_refs": [
+      "https://docs.truba.gov.tr/1-kaynaklar/arf/arf_depolama_kaynaklari.html",
+      "https://docs.truba.gov.tr/1-kaynaklar/arf/arf_baglanti.html",
+      "https://docs.truba.gov.tr/2-temel_bilgiler/ssh_baglanti/index.html"
+    ]
+  },
+  "site": {"public_name": "TRUBA / ARF", "access_note": "Public access and VPN/SSH requirements vary; consult current official documentation."},
+  "storage": [
+    {"id": "home", "label": "Home", "kind": "home", "enabled": true, "path_template": "/arf/home/{user}", "legacy_path_key": "home_dir", "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "No central backup is documented for this area."}},
+    {"id": "scratch", "label": "Scratch", "kind": "scratch", "enabled": true, "path_template": "/arf/scratch/{user}", "legacy_path_key": "scratch_dir", "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "Scratch data may be cleaned according to site policy; retain important data elsewhere."}},
+    {"id": "project", "label": "Project", "kind": "project", "enabled": false, "path_template": "", "access_context": "unknown", "policy": {"backup": null}},
+    {"id": "custom", "label": "Custom", "kind": "custom", "enabled": false, "path_template": "", "access_context": "unknown", "policy": {"backup": null}},
+    {"id": "node-local", "label": "Node-local", "kind": "node-local", "enabled": false, "path_template": "", "access_context": "compute-node", "policy": {"backup": null}}
+  ],
+  "quota_sources": [{"id": "truba-quota", "enabled": false, "backend_id": "", "command_template": "", "scope": "unknown", "note": "No automated quota command was verified for this release; lssrv is status information, not quota."}]
+}

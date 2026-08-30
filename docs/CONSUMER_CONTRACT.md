@@ -1,5 +1,19 @@
 # Consumer contract (application ↔ registry)
 
+The registry and application validate each other against immutable release
+refs. The registry-side `consumer-contract` job checks this checkout with the
+application's real plugin contract suite.
+
+The current coordinated candidate pin is immutable application commit
+`05e92dc558259bf307b6cbee13a07bd70c65079e`, which prepares v1.5.5. After the
+application PR is merged and v1.5.5 is published, replace it with that release
+tag. The published v1.5.4 contract predates structured provider support and
+cannot validate the newer registry entries. Plugin API v2 engines are
+hash-verified and loaded only after explicit user action; registry validation
+never imports or executes them.
+
+When advancing the pin, update `APPLICATION_REF` and the v2 compatibility
+floor together, then require a green consumer-contract job before merging.
 The plugin registry is consumed by the HPC Client GUI application in two
 directions, and both are guarded in CI:
 
@@ -22,7 +36,7 @@ image and is **required/blocking** for every pull request:
 - It tests **this checkout** (the proposed registry revision), never plugin
   `main` again.
 - It checks out the latest supported application release at an explicit,
-  immutable tag — currently `v1.5.3` (`APPLICATION_REF`) — and runs that
+  immutable commit (`APPLICATION_REF`) and runs that
   application's real plugin contract, loader, and validator logic against the
   proposed revision.
 - Payloads stay declarative-only: no executable plugin code and no
@@ -33,8 +47,8 @@ image and is **required/blocking** for every pull request:
 1. When a new application release becomes the oldest supported consumer
    (for example after v1.5.x is broadly deployed), open a dedicated PR that
    updates:
-   - `APPLICATION_REF` / `ref:` in the `consumer-contract` job of
+    - `APPLICATION_REF` / `ref:` in the `consumer-contract` job of
      `.github/workflows/validate.yml`;
    - `CURRENT_APP_VERSION` in `tests/test_compatibility.py`.
-2. Both values must reference immutable tags/versions, never branches.
+2. Both values must reference immutable tags, versions, or commits, never branches.
 3. Confirm the job is green before merge; it blocks otherwise.

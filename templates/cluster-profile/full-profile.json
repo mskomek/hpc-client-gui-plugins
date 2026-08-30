@@ -4,10 +4,25 @@
   "name": "Example HPC",
   "scheduler": "slurm",
   "description": "",
+<<<<<<< HEAD
   "metadata": {"maintainer": ""},
   "site": {"public_name": "Example HPC", "region": "", "access_note": ""},
   "scheduler_hints": {"queue_notes": "", "account_notes": "", "partitions": []},
   "software": {"module_paths": [], "setup_notes": ""},
   "storage": [],
   "quota_sources": []
+=======
+  "metadata": {"maintainer": "", "documentation_url": null, "support_url": null},
+  "site": {"public_name": "", "region": "", "access_note": "", "documentation_url": null},
+  "scheduler_hints": {"queue_notes": "", "account_notes": "", "partitions": []},
+  "software": {"module_paths": [], "setup_notes": ""},
+  "storage": [
+    {"id": "home", "label": "Home", "kind": "home", "enabled": true, "path_template": "", "access_context": "unknown", "policy": {"backup": null, "retention_days": null}},
+    {"id": "scratch", "label": "Scratch", "kind": "scratch", "enabled": true, "path_template": "", "access_context": "unknown", "policy": {"backup": null, "retention_days": null}},
+    {"id": "project", "label": "Project", "kind": "project", "enabled": true, "path_template": "", "access_context": "unknown", "policy": {"backup": null, "retention_days": null}},
+    {"id": "custom", "label": "Custom", "kind": "custom", "enabled": true, "path_template": "", "access_context": "unknown", "policy": {"backup": null, "retention_days": null}},
+    {"id": "node-local", "label": "Node local", "kind": "node-local", "enabled": true, "path_template": "", "access_context": "unknown", "policy": {"backup": null, "retention_days": null}}
+  ],
+  "quota_sources": [{"id": "example-quota", "enabled": false, "backend_id": "", "command_template": "", "scope": "unknown"}]
+>>>>>>> origin/main
 }

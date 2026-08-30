@@ -10,14 +10,46 @@
     {
       "id": "org.hpcclient.truba",
       "name": "TRUBA",
+      "version": "1.3.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "TRUBA/ARF defaults with conservative structured storage metadata.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.5.5",
+      "manifest_path": "plugins/truba/1.3.0/manifest.json",
+      "manifest_sha256": "b7940de3f8455d89dd995c060343dd6f8da2eafcf839623c0084026a63584ecf",
+      "official": true,
+      "capabilities": ["cluster-profile"],
+      "keywords": ["truba", "arf", "slurm", "cluster-profile"],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.truba",
+      "name": "TRUBA",
+      "version": "1.2.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "TRUBA/ARF cluster profile with conservative structured storage metadata.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.5.4",
+      "manifest_path": "plugins/truba/1.2.0/manifest.json",
+      "manifest_sha256": "f6afb55c6892cdf288b0091d3ae41070643835d9c8f9ef98e95f07db7f17b3a6",
+      "official": true,
+      "capabilities": ["cluster-profile"],
+      "keywords": ["truba", "slurm", "cluster-profile"],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.truba",
+      "name": "TRUBA",
       "version": "1.1.0",
       "plugin_api": 1,
       "type": "cluster-profile",
       "description": "TRUBA cluster profile with structured storage metadata.",
       "publisher": "HPC Client GUI",
-      "requires_app": ">=1.5.0",
+      "requires_app": ">=1.5.4",
       "manifest_path": "plugins/truba/1.1.0/manifest.json",
-      "manifest_sha256": "0af424eea70470417eb93218d2887ef5ab938449a96dec4487c6aecaf7956d07",
+      "manifest_sha256": "b34f8e328360bccdbeb07ed25a31211235a4cde738d5fa27b28a0cf87dee9b1c",
       "official": true,
       "capabilities": [
         "cluster-profile"
@@ -94,6 +126,32 @@
         "journal",
         "lint",
         "template"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.ansyslint",
+      "name": "ANSYS Script & Journal Linter",
+      "version": "0.1.0",
+      "plugin_api": 2,
+      "type": "linter-tool",
+      "description": "Unofficial offline linter for Ansys journals/scripts across Fluent, MAPDL, Workbench, CCL products, ICEM, System Coupling and more.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.5.0",
+      "manifest_path": "plugins/ansys-lint/0.1.0/manifest.json",
+      "manifest_sha256": "191f9e1ab195955f7d9eaf07deb0ee3d3d340fdfda3afd54ed700eb2005e6498",
+      "official": true,
+      "capabilities": [
+        "linter-tool"
+      ],
+      "keywords": [
+        "ansys",
+        "fluent",
+        "mapdl",
+        "workbench",
+        "journal",
+        "linter",
+        "hpc"
       ],
       "license": "MIT"
     }
