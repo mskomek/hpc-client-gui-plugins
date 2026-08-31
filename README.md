@@ -68,6 +68,10 @@ through the dedicated issue form:
 ### Add a new HPC provider
 
 Start with the [cluster provider tutorial](docs/ADDING_CLUSTER_PROVIDER.md).
+Every cluster-profile package must include a structured `sources.md` with
+Access, Scheduler, Storage, Quota, Last verified, and Known limitations
+sections. Report changed hostnames, partitions, quota commands, retention
+policies, or authentication methods with official evidence.
 If you only want to request support and do not want to write the profile,
 use the [plugin request form](https://github.com/mskomek/hpc-client-gui-plugins/issues/new?template=plugin-request.yml).
 

@@ -28,6 +28,12 @@
       "sha256": "467aac5beca5ecf6610b3dab6f5c595fc4b41cbb5fc718daf53978b170a143db",
       "size": 465,
       "role": "documentation"
+    },
+    {
+      "path": "sources.md",
+      "sha256": "284cabee677a74fba49f82a7bbd578c6e95f96bd0acd37a93bfb1de3fc19b881",
+      "size": 485,
+      "role": "documentation"
     }
   ]
 }

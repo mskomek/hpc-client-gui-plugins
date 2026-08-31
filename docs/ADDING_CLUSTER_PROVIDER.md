@@ -1,5 +1,10 @@
 # Adding a cluster provider
 
+Each provider version must include `sources.md` with these headings: `Access`,
+`Scheduler`, `Storage`, `Quota`, `Last verified`, and `Known limitations`.
+Record the exact official URLs and verification date; do not claim facts that
+cannot be sourced.
+
 A cluster provider is a declarative plugin describing institution-specific
 defaults: cluster identity, Slurm guidance, known storage locations, public
 documentation, and optional quota integration. Provider plugins live in
