@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "plugin_api": 1,
+  "id": "org.hpcclient.tacc.stampede3",
+  "name": "TACC Stampede3",
+  "version": "1.0.0",
+  "publisher": "HPC Client GUI community",
+  "license": "MIT",
+  "description": "Declarative community profile for TACC Stampede3.",
+  "requires_app": ">=1.5.8",
+  "capabilities": [
+    "cluster-profile"
+  ],
+  "entrypoints": {
+    "cluster_profiles": [
+      "cluster-profile.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "cluster-profile.json",
+      "sha256": "c0912a4852cec1dbd7832f70b40426c7c705570cb6b1eb5f1ec87561458ee1aa",
+      "size": 3195,
+      "role": "cluster-profile"
+    },
+    {
+      "path": "README.md",
+      "sha256": "e1404515b834ee41eec78dc85781416ddae362e745874a70cbf563ad031e790f",
+      "size": 591,
+      "role": "documentation"
+    },
+    {
+      "path": "sources.md",
+      "sha256": "8877769c91c305c2b8bd59d93001c2af11a7fdb862feaec3bb885d04c0dbed09",
+      "size": 391,
+      "role": "documentation"
+    }
+  ]
+}

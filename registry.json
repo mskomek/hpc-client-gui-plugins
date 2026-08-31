@@ -8,6 +8,30 @@
   },
   "plugins": [
     {
+      "id": "org.hpcclient.tacc.stampede3",
+      "name": "TACC Stampede3",
+      "version": "1.0.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "Declarative community profile for TACC Stampede3.",
+      "publisher": "HPC Client GUI community",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/stampede3/1.0.0/manifest.json",
+      "manifest_sha256": "c71d41bf06d92665be1356f67068108da7f23fc2f9fa4b6f9cae29772d8771b2",
+      "official": false,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "tacc",
+        "stampede3",
+        "slurm",
+        "mfa",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
       "id": "org.hpcclient.pawsey.setonix",
       "name": "Pawsey Setonix",
       "version": "1.0.0",
