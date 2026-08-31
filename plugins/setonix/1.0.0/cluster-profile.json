@@ -1,0 +1,21 @@
+{
+  "schema_version": 2,
+  "profile_id": "setonix",
+  "name": "Pawsey Setonix",
+  "scheduler": "slurm",
+  "description": "Declarative community profile for Pawsey Setonix.",
+  "paths": {"home_dir": "/home/{user}", "scratch_dir": "/scratch/{project}"},
+  "commands": {"squeue_command": "squeue -h -u {user} -o \"%i|%P|%j|%u|%T|%M|%D|%C|%R\"", "sbatch_command": "cd -- {script_dir_q} && sbatch -- {script_name_q}", "scancel_command": "scancel {job_id_q}", "sacct_command": "sacct -u {user} --format=JobID,JobName,State,Elapsed,MaxRSS,AllocTRES", "scontrol_command": "scontrol show job {job_id_q}", "active_job_ids_command": "squeue -h -u {user} -o \"%A\"", "job_state_command": "sacct -n -X -j {job_id_q} -o State -P"},
+  "metadata": {"maintainer": "HPC Client GUI community", "documentation_url": "https://pawsey.org.au/systems/setonix/", "support_url": "https://github.com/mskomek/hpc-client-gui-plugins/issues", "source_refs": ["https://pawsey.atlassian.net/wiki/spaces/US/pages/51926034/How+to+log+into+Setonix", "https://pawsey.org.au/systems/setonix/", "https://sydney-informatics-hub.github.io/usyd-pawsey-onboarding-guide/notebooks/data_transfer.html"], "last_verified": "2026-08-31"},
+  "site": {"public_name": "Pawsey Setonix", "region": "Australia", "access_note": "Pawsey account and active Setonix allocation required."},
+  "access": {"hosts": [{"host": "setonix.pawsey.org.au", "port": 22, "role": "login"}, {"host": "data-mover.pawsey.org.au", "port": 22, "role": "data-mover"}], "auth_methods": ["password", "ssh-key"], "access_note": "Data-mover metadata is descriptive only; transfers are not automatically rerouted.", "documentation_url": "https://pawsey.atlassian.net/wiki/spaces/US/pages/51926034/How+to+log+into+Setonix"},
+  "requirements": {"project": {"required": true, "label": "Pawsey project", "help": "Enter the active Setonix allocation/project identifier."}, "account": {"required": true, "label": "Slurm account", "help": "Use the account supplied with the active Pawsey allocation."}},
+  "scheduler_hints": {"queue_notes": "Verify current partition policy before submitting jobs.", "account_notes": "An active Pawsey allocation/account is required.", "partitions": ["work", "gpu", "highmem", "copy", "debug", "long"]},
+  "software": {"module_paths": [], "setup_notes": "Use the Pawsey software modules documented for Setonix."},
+  "storage": [
+    {"id": "home", "label": "Home", "kind": "home", "enabled": true, "path_template": "/home/{user}", "access_context": "login-node", "policy": {"backup": null}},
+    {"id": "scratch", "label": "Scratch", "kind": "scratch", "enabled": true, "path_template": "/scratch/{project}", "access_context": "login-node", "policy": {"backup": null, "cleanup_note": "Pawsey purge policy is site-managed; consult current documentation before relying on a retention period."}},
+    {"id": "software", "label": "Software", "kind": "custom", "enabled": true, "path_template": "/software", "access_context": "shared", "policy": {"backup": null}}
+  ],
+  "quota_sources": []
+}
