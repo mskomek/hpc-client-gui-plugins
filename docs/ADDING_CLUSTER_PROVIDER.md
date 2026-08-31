@@ -4,6 +4,8 @@ Each provider version must include `sources.md` with these headings: `Access`,
 `Scheduler`, `Storage`, `Quota`, `Last verified`, and `Known limitations`.
 Record the exact official URLs and verification date; do not claim facts that
 cannot be sourced.
+`last_verified` means the metadata was checked against those official sources
+on that date; it is not a file-creation timestamp.
 
 A cluster provider is a declarative plugin describing institution-specific
 defaults: cluster identity, Slurm guidance, known storage locations, public

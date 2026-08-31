@@ -19,8 +19,8 @@
   "files": [
     {
       "path": "cluster-profile.json",
-      "sha256": "941c33d04ef08b7776dd5d864cfc5cb2fd6516f5f59216181355bdd7f4c3d9fe",
-      "size": 3271,
+      "sha256": "50899e2bbb88d9ce8f4db9cdae15fb712e0ee103e4b7462a3067a6fb465b7999",
+      "size": 3169,
       "role": "cluster-profile"
     },
     {
@@ -31,8 +31,8 @@
     },
     {
       "path": "sources.md",
-      "sha256": "02fa374970bb72ebfaefab3c0d14dccbe6baf7bffc9e355cc0ad5ffb6a701153",
-      "size": 801,
+      "sha256": "416ac489f51308d3a8cf78b1270b2603ed3ee8bb9636de405f3d7a1b12132243",
+      "size": 679,
       "role": "documentation"
     }
   ]

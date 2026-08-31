@@ -19,8 +19,8 @@
   "files": [
     {
       "path": "cluster-profile.json",
-      "sha256": "7b18aa7b55ee97b16f8c4af4bf1eb6a2f1e5c55f5dcdaeb89f4c7a94c6747476",
-      "size": 3198,
+      "sha256": "f622881962eabbe906279aad97717aa9d8bc1818f7b1a577d2ce30eb7335c4d7",
+      "size": 3167,
       "role": "cluster-profile"
     },
     {

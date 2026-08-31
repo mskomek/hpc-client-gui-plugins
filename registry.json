@@ -65,7 +65,7 @@
       "publisher": "HPC Client GUI community",
       "requires_app": ">=1.5.8",
       "manifest_path": "plugins/setonix/1.0.0/manifest.json",
-      "manifest_sha256": "f5a8146cb50b6e5e37a0b0ab82dfe04c81702b823f223b09a3b6dcbb4a136383",
+      "manifest_sha256": "271c8bbf38bfa0099802a3c96b56b1b861175ab5e5a8f5d3bae25c22fff1cf83",
       "official": false,
       "capabilities": [
         "cluster-profile"
@@ -88,7 +88,7 @@
       "publisher": "HPC Client GUI community",
       "requires_app": ">=1.5.8",
       "manifest_path": "plugins/lumi/1.0.0/manifest.json",
-      "manifest_sha256": "5b4fcc5be4f11a2c4c7a5212f020adf29534e8116b7e24c3783e0e1bc3464e14",
+      "manifest_sha256": "7a00f92b7e97fca5880b5f6ff86735d7c45059bbad9f710f58c00e702c1ff840",
       "official": false,
       "capabilities": [
         "cluster-profile"
@@ -110,7 +110,7 @@
       "publisher": "HPC Client GUI community",
       "requires_app": ">=1.5.8",
       "manifest_path": "plugins/perlmutter/1.0.0/manifest.json",
-      "manifest_sha256": "ec6313c3552e959ecb356c4627bbeddbc8d56ae9856d1cd79324d9e40a7f5b64",
+      "manifest_sha256": "fe58e780ff0cca9c16a7c7be640c9152a2132dfb6c2fbc5d4e0e3ebdcb80ad3c",
       "official": false,
       "capabilities": [
         "cluster-profile"
@@ -133,7 +133,7 @@
       "publisher": "HPC Client GUI",
       "requires_app": ">=1.5.5",
       "manifest_path": "plugins/truba/1.3.0/manifest.json",
-      "manifest_sha256": "94a45fa307ecc67f380959d7013ca40988af9b14dae33e0984d940b96cf410e5",
+      "manifest_sha256": "b7940de3f8455d89dd995c060343dd6f8da2eafcf839623c0084026a63584ecf",
       "official": true,
       "capabilities": [
         "cluster-profile"
@@ -156,7 +156,7 @@
       "publisher": "HPC Client GUI",
       "requires_app": ">=1.5.4",
       "manifest_path": "plugins/truba/1.2.0/manifest.json",
-      "manifest_sha256": "9a8c9363714238475ced27c2e7656f4149d3976c7a5596b2f36a68400e04bda2",
+      "manifest_sha256": "f6afb55c6892cdf288b0091d3ae41070643835d9c8f9ef98e95f07db7f17b3a6",
       "official": true,
       "capabilities": [
         "cluster-profile"
@@ -178,7 +178,7 @@
       "publisher": "HPC Client GUI",
       "requires_app": ">=1.5.4",
       "manifest_path": "plugins/truba/1.1.0/manifest.json",
-      "manifest_sha256": "8cef49b3c8ca5b139d52509cea6d039eeb8d7bfe1b5f9a7a8936449d06f684be",
+      "manifest_sha256": "b34f8e328360bccdbeb07ed25a31211235a4cde738d5fa27b28a0cf87dee9b1c",
       "official": true,
       "capabilities": [
         "cluster-profile"
@@ -200,7 +200,7 @@
       "publisher": "HPC Client GUI",
       "requires_app": ">=1.4.0",
       "manifest_path": "plugins/truba/1.0.0/manifest.json",
-      "manifest_sha256": "264cd64fc1902471602bd27ed346f1152dfca11e4bbe4619357de4e9fa0b4442",
+      "manifest_sha256": "f5f2cb9f3990a07209038658c03d908e91ec050bfcda479b40f8574a071b7390",
       "official": true,
       "capabilities": [
         "cluster-profile"

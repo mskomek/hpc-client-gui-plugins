@@ -1,15 +1,13 @@
-# Plugin API v2 (linter tools)
+# Legacy Plugin API v2 marker
 
-Plugin API v2 is a **strictly additive** evolution of
-[Plugin API v1](PLUGIN_API_V1.md). Everything documented for v1 remains
-true: declarative data payloads, exact-file downloads, per-file SHA-256
-verification, immutable version directories, official-registry-only
-distribution.
+This document is retained for migration only. It is not a general executable
+plugin API. Cluster providers use the declarative [Plugin API v1](PLUGIN_API_V1.md);
+executable code is limited to [Trusted Tool API v1](TRUSTED_TOOL_API_V1.md).
 
 ## What v2 adds
 
-Exactly one new capability, `linter-tool`, which allows a plugin to ship a
-hash-verified **pure-Python linter engine** inside its payload:
+The current ANSYS package carries the historical numeric marker `2` and the
+`linter-tool` capability for compatibility with existing registry tooling:
 
 ```json
 {
@@ -21,14 +19,14 @@ hash-verified **pure-Python linter engine** inside its payload:
 }
 ```
 
-Rules enforced by the registry validator and the application:
+The application additionally enforces:
 
-- every `.py` payload file must carry the role `linter-engine`;
+- only `org.hpcclient.ansyslint` from publisher `HPC Client GUI` is approved;
 - the `linter-engine` role is only valid under `plugin_api: 2`;
 - data files keep using `.json` (new role `linter-data`);
 - the entrypoint path must point at a declared `linter-engine` file;
 - all existing size/count/hash limits apply unchanged;
-- nothing executes at install time. The engine module loads lazily and
+- nothing executes at install time. The approved engine loads lazily and
   defensively when the user opens the tool; any failure is contained and
   reported without affecting other plugins or application startup.
 
@@ -40,7 +38,7 @@ Rules enforced by the registry validator and the application:
 
 ## Compatibility contract
 
-v2 plugins must declare `requires_app` ranges that exclude releases older
+The approved tool must declare `requires_app` ranges that exclude releases older
 than the first application version implementing v2 (>= 1.5.0), so old
 clients can never select a package they cannot load.
 `tests/test_compatibility.py` enforces this on the registry side.

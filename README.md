@@ -18,15 +18,12 @@ Project links: [Wiki](https://github.com/mskomek/hpc-client-gui-plugins/wiki) ·
 - `docs/` — Plugin API v1/v2, registry protocol, security model, contributor guide.
 - `scripts/` — developer validation/hash-refresh tooling (never shipped to clusters).
 
-Plugins are **declarative data only**: JSON metadata, cluster profiles, lint
-rules, templates, and Markdown documentation. No Python modules, binaries, or
-hooks are distributed through this registry, and installing a plugin never
-executes its content.
-
-The single Plugin API v2 exception is the `linter-tool` capability: one
-hash-verified pure-Python engine package (role `linter-engine`), loaded
-lazily and only on explicit user action. See
-[Plugin API v2](docs/PLUGIN_API_V2.md).
+Cluster provider plugins are **declarative data only**: JSON metadata, cluster
+profiles, lint rules, templates, and Markdown documentation. The separately
+reviewed ANSYS Lint package is an application-owned Trusted Tool; it is the
+only executable package and is loaded only after identity and hash checks.
+Unknown packages cannot obtain execution rights by declaring a capability.
+See [the trusted-tool model](docs/TRUSTED_TOOL_MODEL.md).
 
 Initial plugin categories:
 
@@ -34,8 +31,7 @@ Initial plugin categories:
 - `lint-rules` - HPC application linters such as ANSYS Fluent journal checks.
 - `job-template` - reusable job submission templates.
 - `application-tools` - application-specific helper definitions.
-- `linter-tool` - Plugin API v2 linter engines (currently: ANSYS Script &
-  Journal Linter).
+- `linter-tool` - the application-owned ANSYS Trusted Tool.
 
 Installation happens from inside the HPC Client GUI Plugin Manager; no
 server-side installation is needed on HPC clusters.

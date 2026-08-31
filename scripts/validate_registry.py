@@ -58,6 +58,9 @@ ALLOWED_PAYLOAD_EXTENSIONS = {".json", ".md", ".txt", ".tpl"}
 V2_EXTRA_PAYLOAD_EXTENSIONS = {".py"}
 LINTER_ENGINE_ROLE = "linter-engine"
 LINTER_DATA_ROLE = "linter-data"
+TRUSTED_TOOL_ID = "org.hpcclient.ansyslint"
+TRUSTED_TOOL_PUBLISHER = "HPC Client GUI"
+TRUSTED_TOOL_ENTRYPOINT = "engine/ansys_lint/__init__.py"
 
 SCHEMA_FOR_ROLE = {
     "cluster-profile": "cluster-profile.schema.json",
@@ -243,6 +246,13 @@ def validate_entrypoint_files(manifest: dict, manifest_dir: Path, label: str, er
     capabilities = set(manifest.get("capabilities", []))
     entrypoints = manifest.get("entrypoints", {})
     declared_files = {entry["path"]: entry for entry in manifest.get("files", [])}
+
+    if manifest.get("plugin_api") == 2 and (
+        manifest.get("id") != TRUSTED_TOOL_ID
+        or manifest.get("publisher") != TRUSTED_TOOL_PUBLISHER
+        or manifest.get("entrypoints", {}).get("linter_engine") != TRUSTED_TOOL_ENTRYPOINT
+    ):
+        errors.append(f"{label}: executable payload is not an approved trusted tool")
 
     # Every entrypoint key must be justified by a matching capability.
     allowed_keys = {

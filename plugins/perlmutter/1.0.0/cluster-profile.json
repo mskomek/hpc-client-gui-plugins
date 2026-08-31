@@ -28,7 +28,7 @@
   "site": {"public_name": "NERSC Perlmutter", "region": "United States", "access_note": "NERSC institutional account required."},
   "access": {
     "hosts": [{"host": "perlmutter.nersc.gov", "port": 22, "role": "login"}],
-    "auth_methods": ["password", "ssh-key", "ssh-agent", "keyboard-interactive", "ssh-certificate"],
+    "auth_methods": ["ssh-key", "ssh-agent", "keyboard-interactive"],
     "access_note": "sshproxy can create a temporary key; run it manually before connecting.",
     "documentation_url": "https://docs.nersc.gov/connect/"
   },
