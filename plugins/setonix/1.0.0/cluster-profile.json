@@ -17,5 +17,5 @@
     {"id": "scratch", "label": "Scratch", "kind": "scratch", "enabled": true, "path_template": "/scratch/{project}", "access_context": "login-node", "policy": {"backup": null, "cleanup_note": "Pawsey purge policy is site-managed; consult current documentation before relying on a retention period."}},
     {"id": "software", "label": "Software", "kind": "custom", "enabled": true, "path_template": "/software", "access_context": "shared", "policy": {"backup": null}}
   ],
-  "quota_sources": []
+  "quota_sources": [{"id": "setonix-account-balance", "enabled": true, "backend_id": "pawsey-account-balance", "command_template": "pawseyAccountBalance -s", "scope": "project", "note": "Application-owned parser for the documented filesystem usage summary."}]
 }

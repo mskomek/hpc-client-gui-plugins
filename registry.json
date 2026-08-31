@@ -65,7 +65,7 @@
       "publisher": "HPC Client GUI community",
       "requires_app": ">=1.5.8",
       "manifest_path": "plugins/setonix/1.0.0/manifest.json",
-      "manifest_sha256": "f7bb23bd3698731583667ec3d7923b94ab11ef1ea610d7e7f084dc99f5693a90",
+      "manifest_sha256": "f5a8146cb50b6e5e37a0b0ab82dfe04c81702b823f223b09a3b6dcbb4a136383",
       "official": false,
       "capabilities": [
         "cluster-profile"

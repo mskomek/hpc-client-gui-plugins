@@ -19,20 +19,20 @@
   "files": [
     {
       "path": "cluster-profile.json",
-      "sha256": "e3c814c30bfb68f7c6e84a9adc08e24b3c07428cb9ddf68becff4bfc446e8947",
-      "size": 3033,
+      "sha256": "941c33d04ef08b7776dd5d864cfc5cb2fd6516f5f59216181355bdd7f4c3d9fe",
+      "size": 3271,
       "role": "cluster-profile"
     },
     {
       "path": "README.md",
-      "sha256": "d40318f3230c65e30bd7840069d8043dbfcd022eb162f4e96e07ee2baaf30493",
-      "size": 484,
+      "sha256": "f254b0a438a38b369dc35adc487bc1a6696a1d0ff4075954ca17d5c58444d719",
+      "size": 511,
       "role": "documentation"
     },
     {
       "path": "sources.md",
-      "sha256": "54740fbc046781259b67004ee5ea6482385ce693c6576aa2c2b78f2489a019b8",
-      "size": 430,
+      "sha256": "02fa374970bb72ebfaefab3c0d14dccbe6baf7bffc9e355cc0ad5ffb6a701153",
+      "size": 801,
       "role": "documentation"
     }
   ]
