@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "plugin_api": 1,
+  "id": "org.hpcclient.nersc.perlmutter",
+  "name": "NERSC Perlmutter",
+  "version": "1.0.0",
+  "publisher": "HPC Client GUI community",
+  "license": "MIT",
+  "description": "Declarative community profile for NERSC Perlmutter.",
+  "requires_app": ">=1.5.8",
+  "capabilities": [
+    "cluster-profile"
+  ],
+  "entrypoints": {
+    "cluster_profiles": [
+      "cluster-profile.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "cluster-profile.json",
+      "sha256": "7b18aa7b55ee97b16f8c4af4bf1eb6a2f1e5c55f5dcdaeb89f4c7a94c6747476",
+      "size": 3198,
+      "role": "cluster-profile"
+    },
+    {
+      "path": "README.md",
+      "sha256": "d492c5740b2000cc0359a9bfad4d81abe0171cc211ee661ca3be4e90de88db6c",
+      "size": 640,
+      "role": "documentation"
+    },
+    {
+      "path": "sources.md",
+      "sha256": "92155085e5edffde8b7e015d987e55356314a3f16954e4fee716a7d80abd14db",
+      "size": 377,
+      "role": "documentation"
+    }
+  ]
+}
