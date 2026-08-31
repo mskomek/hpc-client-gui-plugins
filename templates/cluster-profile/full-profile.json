@@ -6,6 +6,11 @@
   "description": "",
   "metadata": {"maintainer": ""},
   "site": {"public_name": "Example HPC", "region": "", "access_note": ""},
+  "access": {"hosts": [], "auth_methods": [], "access_note": "", "documentation_url": null},
+  "requirements": {
+    "project": {"required": false, "label": "Project", "help": ""},
+    "account": {"required": false, "label": "Account", "help": ""}
+  },
   "scheduler_hints": {"queue_notes": "", "account_notes": "", "partitions": []},
   "software": {"module_paths": [], "setup_notes": ""},
   "storage": [],

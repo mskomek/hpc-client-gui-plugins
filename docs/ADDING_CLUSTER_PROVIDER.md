@@ -155,9 +155,13 @@ only and must not be copied without explicit institutional documentation:
 Common kinds are `home`, `scratch`, `project`, `custom`, and `node-local`.
 Storage metadata helps users recognize where they are browsing, understand
 where output belongs, associate job working/output paths with an area, and
-learn each area's purpose. `{user}` is replaced with the connected user's
-local account name when the app uses the path. A project path may instead use a
-site-documented group placeholder or remain blank until the path is known.
+learn each area's purpose. `{user}`, `{user_first}`, `{project}`, and `{account}`
+are application-owned placeholders. Missing project/account values are never
+guessed. A resolver may use only a path template or the allow-listed remote
+variables `HOME`, `SCRATCH`, `WORK`, and `PROJECT`; it cannot contain commands
+or arbitrary environment names. `access.auth_methods` is descriptive and does
+not grant automatic support. Optional `requirements.project` and
+`requirements.account` describe values the user may need to provide.
 
 ## Quota monitoring is optional
 

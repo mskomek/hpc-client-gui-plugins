@@ -177,6 +177,7 @@ def validate_cluster_profile(profile: object) -> list[str]:
     errors: list[str] = []
     safe_id = re.compile(r"^[a-z][a-z0-9_-]{0,63}$")
     quota_placeholders = {"user", "subject", "path", "path_q"}
+    storage_placeholders = {"user", "user_first", "project", "account"}
     for section, label in ((profile.get("storage"), "storage"), (profile.get("quota_sources"), "quota_sources")):
         ids: set[str] = set()
         for index, item in enumerate(section or []):
@@ -192,6 +193,19 @@ def validate_cluster_profile(profile: object) -> list[str]:
                 errors.append(f"storage[{index}].kind is unsupported")
             if label == "storage" and item.get("access_context") not in {None, "login-node", "shared", "compute-node", "unknown"}:
                 errors.append(f"storage[{index}].access_context is unsupported")
+            if label == "storage":
+                path_template = item.get("path_template")
+                if isinstance(path_template, str):
+                    for placeholder in re.findall(r"\{([A-Za-z_][A-Za-z0-9_]*)\}", path_template):
+                        if placeholder not in storage_placeholders:
+                            errors.append(f"storage[{index}].path_template uses unknown placeholder {{{placeholder}}}")
+                resolver = item.get("resolver")
+                if isinstance(resolver, dict):
+                    resolver_type = resolver.get("type")
+                    if resolver_type == "template" and not isinstance(resolver.get("template"), str):
+                        errors.append(f"storage[{index}].resolver.template is required for template resolver")
+                    if resolver_type == "remote-environment" and "variable" not in resolver:
+                        errors.append(f"storage[{index}].resolver.variable is required for remote-environment resolver")
             if label == "quota_sources":
                 if item.get("scope") not in {None, "user", "group", "project", "unknown"}:
                     errors.append(f"quota_sources[{index}].scope is unsupported")

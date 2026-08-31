@@ -39,6 +39,8 @@
         "site": {"$ref": "#/definitions/site"},
         "scheduler_hints": {"$ref": "#/definitions/scheduler_hints"},
         "software": {"$ref": "#/definitions/software"},
+        "access": {"$ref": "#/definitions/access"},
+        "requirements": {"$ref": "#/definitions/requirements"},
         "storage": {"type": "array", "items": {"$ref": "#/definitions/storage"}},
         "quota_sources": {"type": "array", "items": {"$ref": "#/definitions/quota_source"}}
       }
@@ -78,12 +80,34 @@
     "software": {"type": "object", "additionalProperties": false, "properties": {
       "module_paths": {"type": "array", "items": {"type": "string"}}, "setup_notes": {"type": ["string", "null"]}
     }},
+    "access": {"type": "object", "additionalProperties": false, "properties": {
+      "hosts": {"type": "array", "items": {"$ref": "#/definitions/access_host"}},
+      "auth_methods": {"type": "array", "items": {"enum": ["password", "ssh-key", "ssh-agent", "keyboard-interactive", "ssh-certificate"]}},
+      "access_note": {"type": ["string", "null"]},
+      "documentation_url": {"type": ["string", "null"], "pattern": "^https://"}
+    }},
+    "access_host": {"type": "object", "required": ["host"], "additionalProperties": false, "properties": {
+      "host": {"type": "string", "minLength": 1}, "port": {"type": "integer", "minimum": 1, "maximum": 65535},
+      "role": {"type": "string", "minLength": 1}
+    }},
+    "requirements": {"type": "object", "additionalProperties": false, "properties": {
+      "project": {"$ref": "#/definitions/requirement"}, "account": {"$ref": "#/definitions/requirement"}
+    }},
+    "requirement": {"type": "object", "required": ["required", "label"], "additionalProperties": false, "properties": {
+      "required": {"type": "boolean"}, "label": {"type": "string", "minLength": 1}, "help": {"type": "string"}
+    }},
     "storage": {"type": "object", "required": ["id", "label"], "additionalProperties": false, "properties": {
       "id": {"type": "string", "minLength": 1}, "label": {"type": "string", "minLength": 1},
       "enabled": {"type": "boolean"}, "kind": {"type": ["string", "null"]}, "path_template": {"type": ["string", "null"]},
       "legacy_path_key": {"type": ["string", "null"]}, "purpose": {"type": ["string", "null"]},
-      "access_context": {"type": ["string", "null"]}, "quota_source_id": {"type": ["string", "null"]},
+      "access_context": {"type": ["string", "null"]},
+      "resolver": {"$ref": "#/definitions/resolver"}, "quota_source_id": {"type": ["string", "null"]},
       "quota_pool_id": {"type": ["string", "null"]}, "policy": {"$ref": "#/definitions/policy"}
+    }},
+    "resolver": {"type": "object", "required": ["type"], "additionalProperties": false, "properties": {
+      "type": {"enum": ["template", "remote-environment"]},
+      "template": {"type": "string", "minLength": 1},
+      "variable": {"enum": ["HOME", "SCRATCH", "WORK", "PROJECT"]}
     }},
     "policy": {"type": "object", "additionalProperties": false, "properties": {
       "backup": {"type": ["boolean", "null"]}, "cleanup_note": {"type": ["string", "null"]},

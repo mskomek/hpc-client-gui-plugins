@@ -14,6 +14,8 @@ use schema v2 and `scheduler: "slurm"`.
 | `site` | Optional | Public name, region, access note, and docs URL. |
 | `scheduler_hints` | Optional | Verified queue, account, and partition guidance. |
 | `software` | Optional | Module paths and plain-language setup notes. |
+| `access` | Optional | Descriptive hosts, authentication methods, and access guidance. |
+| `requirements` | Optional | User-supplied project/account inputs; never guessed. |
 | `storage` | Optional | Known filesystem areas; omit unknown areas. |
 | `quota_sources` | Optional | Explicitly reviewed quota integrations only. |
 
@@ -27,8 +29,12 @@ destructive commands or executable hooks.
 Each storage row requires `id` and `label`. `kind` is normally `home`,
 `scratch`, `project`, `custom`, or `node-local`; `enabled` controls whether it
 is advertised. `path_template` is the documented path and may contain
-`{user}`. `access_context` describes where it is reachable; supported values
+`{user}`, `{user_first}`, `{project}`, or `{account}`. `access_context` describes where it is reachable; supported values
 are `login-node`, `shared`, `compute-node`, and `unknown`.
+
+`resolver` may use `template` or `remote-environment`. The latter resolves only
+`HOME`, `SCRATCH`, `WORK`, or `PROJECT`; providers cannot define commands or
+arbitrary environment names. `access.auth_methods` is descriptive only.
 
 `policy.backup` is a verified backup statement. `policy.retention_days` is a
 verified non-negative number of days, or `null` when unknown. Do not guess
