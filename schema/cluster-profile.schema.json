@@ -107,7 +107,7 @@
     "resolver": {"type": "object", "required": ["type"], "additionalProperties": false, "properties": {
       "type": {"enum": ["template", "remote-environment"]},
       "template": {"type": "string", "minLength": 1},
-      "variable": {"enum": ["HOME", "SCRATCH", "WORK", "PROJECT"]}
+      "variable": {"enum": ["HOME", "SCRATCH", "WORK", "PROJECT", "FAST", "PUBLIC", "DRES"]}
     }},
     "policy": {"type": "object", "additionalProperties": false, "properties": {
       "backup": {"type": ["boolean", "null"]}, "cleanup_note": {"type": ["string", "null"]},

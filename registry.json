@@ -8,6 +8,30 @@
   },
   "plugins": [
     {
+      "id": "org.hpcclient.cineca.leonardo",
+      "name": "CINECA Leonardo",
+      "version": "1.0.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "Declarative community profile for CINECA Leonardo.",
+      "publisher": "HPC Client GUI community",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/leonardo/1.0.0/manifest.json",
+      "manifest_sha256": "007166884f98f127c809b76aa6d2e6d17e0f08edfe0a244ce7533c6dae63edd7",
+      "official": false,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "cineca",
+        "leonardo",
+        "slurm",
+        "ssh-certificate",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
       "id": "org.hpcclient.tacc.stampede3",
       "name": "TACC Stampede3",
       "version": "1.0.0",
