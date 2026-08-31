@@ -8,6 +8,28 @@
   },
   "plugins": [
     {
+      "id": "org.hpcclient.lumi",
+      "name": "LUMI",
+      "version": "1.0.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "Declarative community profile for the LUMI supercomputer.",
+      "publisher": "HPC Client GUI community",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/lumi/1.0.0/manifest.json",
+      "manifest_sha256": "5b4fcc5be4f11a2c4c7a5212f020adf29534e8116b7e24c3783e0e1bc3464e14",
+      "official": false,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "lumi",
+        "slurm",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
       "id": "org.hpcclient.nersc.perlmutter",
       "name": "NERSC Perlmutter",
       "version": "1.0.0",
