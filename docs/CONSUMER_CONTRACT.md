@@ -4,11 +4,10 @@ The registry and application validate each other against immutable release
 refs. The registry-side `consumer-contract` job checks this checkout with the
 application's real plugin contract suite.
 
-The current coordinated candidate pin is immutable application commit
-`05e92dc558259bf307b6cbee13a07bd70c65079e`, which prepares v1.5.5. After the
-application PR is merged and v1.5.5 is published, replace it with that release
-tag. The published v1.5.4 contract predates structured provider support and
-cannot validate the newer registry entries. Plugin API v2 engines are
+The current coordinated pin is immutable application release commit
+`063d83b523be377d4ef02dc8a61e2fdd15876ecc` (`v1.5.8`). The published v1.5.4
+contract predates structured provider support and cannot validate the newer
+registry entries. Plugin API v2 engines are
 hash-verified and loaded only after explicit user action; registry validation
 never imports or executes them.
 
@@ -20,7 +19,7 @@ directions, and both are guarded in CI:
 ## 1. Application side (pinned release contract)
 
 The application's `contract` CI job checks out this registry at an explicit
-immutable tag (`ref: v1.0.0` today) and runs its real
+immutable commit (`ref: a320cde6affe9072523a49352b2d688e050168b3` today) and runs its real
 `tests/test_plugin_contract.py` suite against it. The pin exists so a release
 is always built against exactly the registry contents it was tested with.
 
