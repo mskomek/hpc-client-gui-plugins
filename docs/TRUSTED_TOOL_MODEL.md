@@ -18,3 +18,7 @@ capabilities.
 The legacy `plugin_api: 2` field is retained only as a package compatibility
 marker while the reviewed ANSYS package migrates to this model. It must never
 be interpreted as generic permission to import downloaded Python.
+
+The reviewed tool runs inside the application process and is not OS-sandboxed.
+Allowlisting and integrity verification are trust controls, not memory
+isolation or a security sandbox.
