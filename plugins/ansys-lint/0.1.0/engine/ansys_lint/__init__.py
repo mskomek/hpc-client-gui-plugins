@@ -14,16 +14,9 @@ Client GUI plugin system (Plugin API v2, capability ``linter-tool``).
 This plugin is NOT affiliated with or endorsed by Ansys, Inc.
 """
 
-# ruff: noqa: E402  (the bytecode guard must precede all relative imports)
+# ruff: noqa: E402
 
 from __future__ import annotations
-
-import sys
-
-# The engine lives inside an immutable, hash-pinned plugin version
-# directory: never drop __pycache__ artifacts next to the sources, no
-# matter which entry point imported us (CLI, python -m, GUI host).
-sys.dont_write_bytecode = True
 
 from .model import (
     ENGINE_VERSION,
@@ -60,6 +53,7 @@ __all__ = [
     "lint_file",
     "lint_paths",
     "lint_text",
+    "SUPPORTED_SUFFIXES",
 ]
 
 
@@ -69,6 +63,10 @@ def __getattr__(name: str):
         from .api import lint_paths
 
         return lint_paths
+    if name == "SUPPORTED_SUFFIXES":
+        from .api import SUPPORTED_SUFFIXES
+
+        return SUPPORTED_SUFFIXES
     if name == "lint_text":
         from .api import lint_text
 

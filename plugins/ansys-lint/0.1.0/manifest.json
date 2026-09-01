@@ -29,8 +29,8 @@
     },
     {
       "path": "engine/ansys_lint/__init__.py",
-      "sha256": "254face7e828e1f79b7dc3f97f1a702fceba1fdaefc20378cb8ca170e6ab7e32",
-      "size": 3003,
+      "sha256": "50f418c22674cf30cf6c7de1494cb467f56468edec412c1668f7687606c2e68f",
+      "size": 2841,
       "role": "linter-engine"
     },
     {
