@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "plugin_api": 1,
+  "id": "org.hpcclient.pawsey.setonix",
+  "name": "Pawsey Setonix",
+  "version": "1.0.0",
+  "publisher": "HPC Client GUI community",
+  "license": "MIT",
+  "description": "Declarative community profile for Pawsey Setonix.",
+  "requires_app": ">=1.5.8",
+  "capabilities": [
+    "cluster-profile"
+  ],
+  "entrypoints": {
+    "cluster_profiles": [
+      "cluster-profile.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "cluster-profile.json",
+      "sha256": "50899e2bbb88d9ce8f4db9cdae15fb712e0ee103e4b7462a3067a6fb465b7999",
+      "size": 3169,
+      "role": "cluster-profile"
+    },
+    {
+      "path": "README.md",
+      "sha256": "f254b0a438a38b369dc35adc487bc1a6696a1d0ff4075954ca17d5c58444d719",
+      "size": 511,
+      "role": "documentation"
+    },
+    {
+      "path": "sources.md",
+      "sha256": "416ac489f51308d3a8cf78b1270b2603ed3ee8bb9636de405f3d7a1b12132243",
+      "size": 679,
+      "role": "documentation"
+    }
+  ]
+}

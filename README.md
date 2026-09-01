@@ -5,25 +5,25 @@
 This repository is the **official plugin registry** for
 [HPC Client GUI](https://github.com/mskomek/hpc-client-gui).
 
+Project links: [Wiki](https://github.com/mskomek/hpc-client-gui-plugins/wiki) ·
+[Roadmap](ROADMAP.md) · [Citation](CITATION.cff)
+
 ![HPC Client GUI Plugin Manager showing the TRUBA and ANSYS Fluent plugins](https://raw.githubusercontent.com/mskomek/hpc-client-gui/main/docs/assets/plugin-manager.png)
 
 ## What lives here
 
-- `registry.json` - the machine-readable index of published plugins.
-- `schema/` - JSON Schemas for every plugin payload type (Plugin API v1/v2).
-- `plugins/` - plugin payload directories (`manifest.json` + data files).
-- `docs/` - Plugin API v1/v2, registry protocol, security model, contributor guide.
-- `scripts/` - developer validation/hash-refresh tooling (never shipped to clusters).
+- `registry.json` — the machine-readable index of published plugins.
+- `schema/` — JSON Schemas for every plugin payload type (cluster profiles support v1/v2).
+- `plugins/` — plugin payload directories (`manifest.json` + data files).
+- `docs/` — Plugin API v1/v2, registry protocol, security model, contributor guide.
+- `scripts/` — developer validation/hash-refresh tooling (never shipped to clusters).
 
-Plugins are **declarative data only**: JSON metadata, cluster profiles, lint
-rules, templates, and Markdown documentation. No Python modules, binaries, or
-hooks are distributed through this registry, and installing a plugin never
-executes its content.
-
-The single Plugin API v2 exception is the `linter-tool` capability: one
-hash-verified pure-Python engine package (role `linter-engine`), loaded
-lazily and only on explicit user action. See
-[Plugin API v2](docs/PLUGIN_API_V2.md).
+Cluster provider plugins are **declarative data only**: JSON metadata, cluster
+profiles, lint rules, templates, and Markdown documentation. The separately
+reviewed ANSYS Lint package is an application-owned Trusted Tool; it is the
+only executable package and is loaded only after identity and hash checks.
+Unknown packages cannot obtain execution rights by declaring a capability.
+See [the trusted-tool model](docs/TRUSTED_TOOL_MODEL.md).
 
 Initial plugin categories:
 
@@ -31,8 +31,7 @@ Initial plugin categories:
 - `lint-rules` - HPC application linters such as ANSYS Fluent journal checks.
 - `job-template` - reusable job submission templates.
 - `application-tools` - application-specific helper definitions.
-- `linter-tool` - Plugin API v2 linter engines (currently: ANSYS Script &
-  Journal Linter).
+- `linter-tool` - the application-owned ANSYS Trusted Tool.
 
 Installation happens from inside the HPC Client GUI Plugin Manager; no
 server-side installation is needed on HPC clusters.
@@ -41,7 +40,7 @@ server-side installation is needed on HPC clusters.
 
 | Plugin                        | Capabilities                      | Latest version | Requires app |
 | ----------------------------- | --------------------------------- | -------------- | ------------ |
-| TRUBA                         | Cluster profile                   | 1.0.0          | >=1.4.0      |
+| TRUBA                         | Cluster profile                   | 1.3.0          | >=1.5.5      |
 | ANSYS Fluent Tools            | Journal lint + Slurm job template | 0.2.0          | >=1.4.0      |
 | ANSYS Script & Journal Linter | Linter tool (Plugin API v2)       | 0.1.0          | >=1.5.0      |
 
@@ -61,6 +60,16 @@ provided by those organizations.
 through the dedicated issue form:
 
 **[→ Request a plugin](https://github.com/mskomek/hpc-client-gui-plugins/issues/new?template=plugin-request.yml)**
+
+### Add a new HPC provider
+
+Start with the [cluster provider tutorial](docs/ADDING_CLUSTER_PROVIDER.md).
+Every cluster-profile package must include a structured `sources.md` with
+Access, Scheduler, Storage, Quota, Last verified, and Known limitations
+sections. Report changed hostnames, partitions, quota commands, retention
+policies, or authentication methods with official evidence.
+If you only want to request support and do not want to write the profile,
+use the [plugin request form](https://github.com/mskomek/hpc-client-gui-plugins/issues/new?template=plugin-request.yml).
 
 Good requests include: support for another HPC center, a new Slurm cluster
 profile, PBS/other scheduler profiles for future consideration, ANSYS Fluent
@@ -90,6 +99,9 @@ the cluster is needed.
   offers versions whose range admits the running release; when no version is
   requested explicitly, the highest compatible version wins regardless of
   listing order.
+- **Cluster profile v2.** Structured `storage` and `quota_sources` sections
+  use `schema_version: 2`; quota sources remain disabled unless the app has a
+  reviewed backend, user consent, and an active connection.
 - **Updates and rollback.** Installing a newer version activates it after full
   verification; the previous version directory stays on disk so users can roll
   back from the Installed tab. Reinstalling an identical verified version is
@@ -118,7 +130,7 @@ embedded public key are planned as future hardening beyond Plugin API v1.
 
 Cluster command templates and application lint rules must cite their source:
 TRUBA-specific commands reference the official TRUBA documentation (see each
-plugin's `docs/sources.md`), and application rules cite vendor documentation
+plugin's declared documentation sources (where present), and application rules cite vendor documentation
 or observed behavior. Do not ship unverifiable commands "on style" — change
 working commands only when tests or authoritative documentation justify it.
 
@@ -136,9 +148,13 @@ explicit user action. Review plugin content before installing it. See
 - **Plugin Manager user guide:** [PLUGINS_en.md](https://github.com/mskomek/hpc-client-gui/blob/main/src/hpc_gui/docs/PLUGINS_en.md)
   ([Türkçe](https://github.com/mskomek/hpc-client-gui/blob/main/src/hpc_gui/docs/PLUGINS_tr.md)) —
   installing, activating, rolling back, and removing plugins.
-- **Plugin development:** [docs/CONTRIBUTOR_GUIDE.md](docs/CONTRIBUTOR_GUIDE.md),
+- **Plugin development:** [cluster provider tutorial](docs/ADDING_CLUSTER_PROVIDER.md),
+  [docs/CONTRIBUTOR_GUIDE.md](docs/CONTRIBUTOR_GUIDE.md),
   [docs/PLUGIN_API_V1.md](docs/PLUGIN_API_V1.md), and
   [docs/REGISTRY_PROTOCOL.md](docs/REGISTRY_PROTOCOL.md).
+- **Release notes:** [docs/RELEASE_NOTES.md](docs/RELEASE_NOTES.md).
+- **Provider guide:** [docs/ADDING_CLUSTER_PROVIDER.md](docs/ADDING_CLUSTER_PROVIDER.md).
+- **TRUBA Wiki draft:** [docs/WIKI_TRUBA.md](docs/WIKI_TRUBA.md).
 - **Questions and discussion:** use
   [GitHub Discussions](https://github.com/mskomek/hpc-client-gui-plugins/discussions).
 - **Bug reports:** plugin content problems go through the

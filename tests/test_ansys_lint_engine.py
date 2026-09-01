@@ -509,3 +509,33 @@ def test_shared_rules_windows_env_var():
     findings = scan_path_literal("%APPDATA%\\Ansys\\x", target_os=TargetOS.LINUX, line=1, column=1)
     codes = {f.code for f in findings}
     assert "PORTABILITY_WINDOWS_ENV_VAR" in codes
+
+
+# ---------------------------------------------------------------------------
+# LintOptions input coercion (Qt combo round-trips deliver plain strings).
+# ---------------------------------------------------------------------------
+
+
+def test_lint_options_coerces_string_enum_members():
+    options = LintOptions(exec_mode="interactive", target_os="windows", strictness="strict")
+    assert options.exec_mode is ExecMode.INTERACTIVE
+    assert options.target_os is TargetOS.WINDOWS
+    assert options.strictness is Strictness.STRICT
+
+
+def test_lint_options_keeps_enum_instances_and_defaults():
+    options = LintOptions()
+    assert options.exec_mode is ExecMode.BATCH
+    assert options.target_os is TargetOS.LINUX
+    assert options.strictness is Strictness.LENIENT
+    same = LintOptions(exec_mode=ExecMode.HEADLESS)
+    assert same.exec_mode is ExecMode.HEADLESS
+
+
+def test_lint_options_rejects_invalid_strings():
+    with pytest.raises(ValueError):
+        LintOptions(exec_mode="not-a-mode")
+    with pytest.raises(ValueError):
+        LintOptions(target_os="android")
+    with pytest.raises(ValueError):
+        LintOptions(strictness="extreme")

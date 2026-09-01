@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "plugin_api": 1,
+  "id": "org.hpcclient.cineca.leonardo",
+  "name": "CINECA Leonardo",
+  "version": "1.0.0",
+  "publisher": "HPC Client GUI community",
+  "license": "MIT",
+  "description": "Declarative community profile for CINECA Leonardo.",
+  "requires_app": ">=1.5.8",
+  "capabilities": [
+    "cluster-profile"
+  ],
+  "entrypoints": {
+    "cluster_profiles": [
+      "cluster-profile.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "cluster-profile.json",
+      "sha256": "000a521e4d05b89bac49843335ea48bc46f27ca2749d838631723376bd7f1a06",
+      "size": 4387,
+      "role": "cluster-profile"
+    },
+    {
+      "path": "README.md",
+      "sha256": "49b549c48be0fa3c89e0d5f0e87cb8bef72862a09c844ba814d0a852ac465cdb",
+      "size": 557,
+      "role": "documentation"
+    },
+    {
+      "path": "sources.md",
+      "sha256": "bc290d9ad4a6e474adccda855870382769e40020d6f0bfc8ebfaa3cc3a23f26c",
+      "size": 359,
+      "role": "documentation"
+    }
+  ]
+}

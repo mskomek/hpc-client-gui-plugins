@@ -58,6 +58,9 @@ ALLOWED_PAYLOAD_EXTENSIONS = {".json", ".md", ".txt", ".tpl"}
 V2_EXTRA_PAYLOAD_EXTENSIONS = {".py"}
 LINTER_ENGINE_ROLE = "linter-engine"
 LINTER_DATA_ROLE = "linter-data"
+TRUSTED_TOOL_ID = "org.hpcclient.ansyslint"
+TRUSTED_TOOL_PUBLISHER = "HPC Client GUI"
+TRUSTED_TOOL_ENTRYPOINT = "engine/ansys_lint/__init__.py"
 
 SCHEMA_FOR_ROLE = {
     "cluster-profile": "cluster-profile.schema.json",
@@ -166,12 +169,90 @@ def validate_payload_role(role: str, path: Path, label: str, errors: list[str]) 
         errors.append(f"{label}: payload is not valid JSON ({exc})")
         return
     validate_against_schema(instance, SCHEMA_DIR / schema_name, f"{label} [{role}]", errors)
+    if role == "cluster-profile":
+        errors.extend(f"{label}: {problem}" for problem in validate_cluster_profile(instance))
+
+
+def validate_cluster_profile(profile: object) -> list[str]:
+    """Semantic checks Draft 7 cannot express for v2 provider payloads."""
+    if not isinstance(profile, dict) or profile.get("schema_version") != 2:
+        return []
+    errors: list[str] = []
+    safe_id = re.compile(r"^[a-z][a-z0-9_-]{0,63}$")
+    quota_placeholders = {"user", "subject", "path", "path_q"}
+    storage_placeholders = {"user", "user_first", "project", "account"}
+    for section, label in ((profile.get("storage"), "storage"), (profile.get("quota_sources"), "quota_sources")):
+        ids: set[str] = set()
+        for index, item in enumerate(section or []):
+            if not isinstance(item, dict):
+                continue
+            ident = item.get("id")
+            if not isinstance(ident, str) or not safe_id.fullmatch(ident):
+                errors.append(f"{label}[{index}].id must match {safe_id.pattern}")
+            elif ident in ids:
+                errors.append(f"duplicate {label} id '{ident}'")
+            ids.add(ident)
+            if label == "storage" and item.get("kind") not in {None, "home", "scratch", "project", "custom", "node-local"}:
+                errors.append(f"storage[{index}].kind is unsupported")
+            if label == "storage" and item.get("access_context") not in {None, "login-node", "shared", "compute-node", "unknown"}:
+                errors.append(f"storage[{index}].access_context is unsupported")
+            if label == "storage":
+                path_template = item.get("path_template")
+                if isinstance(path_template, str):
+                    for placeholder in re.findall(r"\{([A-Za-z_][A-Za-z0-9_]*)\}", path_template):
+                        if placeholder not in storage_placeholders:
+                            errors.append(f"storage[{index}].path_template uses unknown placeholder {{{placeholder}}}")
+                resolver = item.get("resolver")
+                if isinstance(resolver, dict):
+                    resolver_type = resolver.get("type")
+                    if resolver_type == "template" and not isinstance(resolver.get("template"), str):
+                        errors.append(f"storage[{index}].resolver.template is required for template resolver")
+                    if resolver_type == "remote-environment" and "variable" not in resolver:
+                        errors.append(f"storage[{index}].resolver.variable is required for remote-environment resolver")
+            if label == "quota_sources":
+                if item.get("scope") not in {None, "user", "group", "project", "unknown"}:
+                    errors.append(f"quota_sources[{index}].scope is unsupported")
+                command = item.get("command_template")
+                if isinstance(command, str) and any(ord(c) < 32 and c not in "\t" for c in command):
+                    errors.append(f"quota_sources[{index}].command_template contains control characters")
+                if isinstance(command, str) and ("\n" in command or "\r" in command):
+                    errors.append(f"quota_sources[{index}].command_template must be single-line")
+                for field in ("command_template", "subject_template"):
+                    value = item.get(field)
+                    if not isinstance(value, str):
+                        continue
+                    for placeholder in re.findall(r"\{([A-Za-z_][A-Za-z0-9_]*)\}", value):
+                        if placeholder not in quota_placeholders:
+                            errors.append(
+                                f"quota_sources[{index}].{field} uses unknown placeholder {{{placeholder}}}"
+                            )
+                    if "\n" in value or "\r" in value or any(ord(c) < 32 for c in value):
+                        errors.append(f"quota_sources[{index}].{field} must be single-line and control-free")
+    storage = profile.get("storage") or []
+    source_ids = {item.get("id") for item in (profile.get("quota_sources") or []) if isinstance(item, dict)}
+    for index, item in enumerate(storage):
+        if isinstance(item, dict) and item.get("quota_source_id") and item["quota_source_id"] not in source_ids:
+            errors.append(f"storage[{index}].quota_source_id references an unknown source")
+    paths = profile.get("paths") or {}
+    for alias, kind in (("home_dir", "home"), ("scratch_dir", "scratch")):
+        alias_value = paths.get(alias)
+        matches = [item.get("path_template") for item in storage if isinstance(item, dict) and item.get("kind") == kind]
+        if alias_value and matches and any(value and value != alias_value for value in matches):
+            errors.append(f"paths.{alias} conflicts with structured {kind} storage")
+    return errors
 
 
 def validate_entrypoint_files(manifest: dict, manifest_dir: Path, label: str, errors: list[str]) -> None:
     capabilities = set(manifest.get("capabilities", []))
     entrypoints = manifest.get("entrypoints", {})
     declared_files = {entry["path"]: entry for entry in manifest.get("files", [])}
+
+    if manifest.get("plugin_api") == 2 and (
+        manifest.get("id") != TRUSTED_TOOL_ID
+        or manifest.get("publisher") != TRUSTED_TOOL_PUBLISHER
+        or manifest.get("entrypoints", {}).get("linter_engine") != TRUSTED_TOOL_ENTRYPOINT
+    ):
+        errors.append(f"{label}: executable payload is not an approved trusted tool")
 
     # Every entrypoint key must be justified by a matching capability.
     allowed_keys = {

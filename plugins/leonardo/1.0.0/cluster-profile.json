@@ -1,0 +1,54 @@
+{
+  "schema_version": 2,
+  "profile_id": "leonardo",
+  "name": "CINECA Leonardo",
+  "scheduler": "slurm",
+  "description": "Declarative community profile for CINECA Leonardo.",
+  "paths": {"home_dir": "$HOME", "scratch_dir": "$SCRATCH"},
+  "commands": {
+    "squeue_command": "squeue -h -u {user} -o \"%i|%P|%j|%u|%T|%M|%D|%C|%R\"",
+    "sbatch_command": "cd -- {script_dir_q} && sbatch -- {script_name_q}",
+    "scancel_command": "scancel {job_id_q}",
+    "sacct_command": "sacct -u {user} --format=JobID,JobName,State,Elapsed,MaxRSS,AllocTRES",
+    "scontrol_command": "scontrol show job {job_id_q}",
+    "active_job_ids_command": "squeue -h -u {user} -o \"%A\"",
+    "job_state_command": "sacct -n -X -j {job_id_q} -o State -P"
+  },
+  "metadata": {
+    "maintainer": "HPC Client GUI community",
+    "documentation_url": "https://docs.hpc.cineca.it/hpc/leonardo.html",
+    "support_url": "https://github.com/mskomek/hpc-client-gui-plugins/issues",
+    "source_refs": [
+      "https://docs.hpc.cineca.it/hpc/leonardo.html",
+      "https://docs.hpc.cineca.it/general/access.html",
+      "https://docs.hpc.cineca.it/hpc/hpc_data_storage.html"
+    ],
+    "last_verified": "2026-08-31"
+  },
+  "site": {"public_name": "CINECA Leonardo", "region": "Italy", "access_note": "Institutional CINECA access and the external Smallstep/2FA certificate flow are required."},
+  "access": {
+    "hosts": [{"host": "login.leonardo.cineca.it", "port": 22, "role": "login"}],
+    "auth_methods": ["ssh-agent", "ssh-certificate"],
+    "access_note": "Run the documented Smallstep/2FA flow outside HPC Client GUI; this plugin never runs step commands.",
+    "documentation_url": "https://docs.hpc.cineca.it/general/access.html"
+  },
+  "requirements": {
+    "project": {"required": true, "label": "CINECA project", "help": "Enter the project identifier assigned by CINECA."},
+    "account": {"required": true, "label": "CINECA account", "help": "Use the project account required by the selected Slurm QoS."}
+  },
+  "scheduler_hints": {
+    "queue_notes": "Leonardo uses Booster and DCGP partitions; QoS limits are site-managed and must be checked before submission.",
+    "account_notes": "A project account is required for production queues.",
+    "partitions": ["lrd_all_serial", "boost_usr_prod", "boost_qos_dbg", "boost_qos_bprod", "boost_qos_lprod", "dcgp_usr_prod", "dcgp_qos_dbg", "dcgp_qos_bprod", "dcgp_qos_lprod"]
+  },
+  "software": {"module_paths": [], "setup_notes": "Use the CINECA modules documented for Leonardo."},
+  "storage": [
+    {"id": "home", "label": "Home", "kind": "home", "enabled": true, "resolver": {"type": "remote-environment", "variable": "HOME"}, "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "50 GB; Leonardo documentation currently says backup is not active."}},
+    {"id": "work", "label": "Work", "kind": "project", "enabled": true, "resolver": {"type": "remote-environment", "variable": "WORK"}, "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "Permanent shared project storage; default quota is 1 TB per account."}},
+    {"id": "fast", "label": "Fast", "kind": "custom", "enabled": true, "resolver": {"type": "remote-environment", "variable": "FAST"}, "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "Project storage; retained up to six months after project end."}},
+    {"id": "scratch", "label": "Scratch", "kind": "scratch", "enabled": true, "resolver": {"type": "remote-environment", "variable": "SCRATCH"}, "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "Files older than 40 days are deleted."}},
+    {"id": "public", "label": "Public", "kind": "custom", "enabled": true, "resolver": {"type": "remote-environment", "variable": "PUBLIC"}, "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "50 GB user-specific public area."}},
+    {"id": "dres", "label": "DRES", "kind": "custom", "enabled": true, "resolver": {"type": "remote-environment", "variable": "DRES"}, "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "Project repository storage with project-defined capacity."}}
+  ],
+  "quota_sources": [{"id": "leonardo-cinquota", "enabled": true, "backend_id": "cineca-cinquota", "command_template": "cinQuota", "scope": "project", "note": "Application-owned parser for documented cinQuota output."}]
+}

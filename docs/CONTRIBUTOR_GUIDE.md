@@ -7,7 +7,7 @@ This guide explains how to add or update a plugin in the official registry.
 - Pick a stable reverse-domain-like ID (`org.hpcclient.<name>`).
 - Use semantic versioning. Start new plugins at `0.1.0` unless the plugin is
   considered production-ready from day one.
-- Declare only capabilities from the v1 vocabulary:
+- Declare only capabilities from the Plugin API vocabulary:
   `cluster-profile`, `lint-rules`, `job-template`, `application-tools`.
 
 ## 2. Create the version directory
@@ -24,7 +24,9 @@ must be declared in `manifest.files`; undeclared extra files are rejected.
 
 ## 3. Write the payload
 
-- Cluster profiles: follow `schema/cluster-profile.schema.json`. Quote
+- Cluster profiles: follow `schema/cluster-profile.schema.json`. Use
+  `schema_version: 1` for legacy payloads or `schema_version: 2` for the
+  structured `storage`/`quota_sources` model. Quote
   interpolated values with the `{var_q}` placeholder style. Never include
   destructive commands. Never invent site facts you cannot verify.
 - Lint rules: follow `schema/lint-index.schema.json` +
@@ -47,6 +49,12 @@ must be declared in `manifest.files`; undeclared extra files are rejected.
   keep routing inside the index — the application never discovers `.tpl`
   files by scanning directories. See
   `plugins/fluent/0.2.0/templates/fluent_job.slurm.tpl` for a reference.
+
+For a minimal profile, generate a starting payload with:
+
+```bash
+python scripts/scaffold_cluster_profile.py --plugin-id org.hpcclient.example --profile-id my-site --name "My Site" --version 0.1.0 --requires-app ">=1.5.5" --template minimal --output-dir staging/my-site/0.1.0
+```
 
 ## 4. Register the plugin
 

@@ -170,8 +170,8 @@ def build_page(parent=None, initial_paths=None) -> QWidget:
     def _collect_options() -> LintOptions:
         return LintOptions(
             target_version=version_combo.currentText(),
-            exec_mode=mode_combo.currentData(),
-            target_os=os_combo.currentData(),
+            exec_mode=ExecMode(mode_combo.currentData()),
+            target_os=TargetOS(os_combo.currentData()),
             strictness=Strictness(strict_combo.currentText()),
             dialect_override=dialect_combo.currentData(),
             launch_command=launch_edit.text().strip(),

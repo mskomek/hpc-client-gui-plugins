@@ -1,0 +1,51 @@
+{
+  "schema_version": 2,
+  "profile_id": "stampede3",
+  "name": "TACC Stampede3",
+  "scheduler": "slurm",
+  "description": "Declarative community profile for TACC Stampede3.",
+  "paths": {"home_dir": "$HOME", "scratch_dir": "$SCRATCH"},
+  "commands": {
+    "squeue_command": "squeue -h -u {user} -o \"%i|%P|%j|%u|%T|%M|%D|%C|%R\"",
+    "sbatch_command": "cd -- {script_dir_q} && sbatch -- {script_name_q}",
+    "scancel_command": "scancel {job_id_q}",
+    "sacct_command": "sacct -u {user} --format=JobID,JobName,State,Elapsed,MaxRSS,AllocTRES",
+    "scontrol_command": "scontrol show job {job_id_q}",
+    "active_job_ids_command": "squeue -h -u {user} -o \"%A\"",
+    "job_state_command": "sacct -n -X -j {job_id_q} -o State -P"
+  },
+  "metadata": {
+    "maintainer": "HPC Client GUI community",
+    "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+    "support_url": "https://github.com/mskomek/hpc-client-gui-plugins/issues",
+    "source_refs": [
+      "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "https://docs.tacc.utexas.edu/hpc/3stampede/launching/",
+      "https://docs.tacc.utexas.edu/tutorials/managingio/"
+    ],
+    "last_verified": "2026-08-31"
+  },
+  "site": {"public_name": "TACC Stampede3", "region": "United States", "access_note": "A current TACC allocation and MFA pairing are required."},
+  "access": {
+    "hosts": [{"host": "stampede3.tacc.utexas.edu", "port": 22, "role": "login"}],
+    "auth_methods": ["password", "ssh-key", "ssh-agent", "keyboard-interactive"],
+    "access_note": "TACC MFA is presented through SSH keyboard-interactive authentication.",
+    "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/"
+  },
+  "requirements": {
+    "project": {"required": false, "label": "TACC project", "help": "Enter a project when the allocation requires one."},
+    "account": {"required": true, "label": "TACC allocation", "help": "Use the allocation account assigned in the TACC Portal."}
+  },
+  "scheduler_hints": {
+    "queue_notes": "Queues are subject to TACC policy; verify current limits before submitting.",
+    "account_notes": "Use the Slurm allocation with -A.",
+    "partitions": ["h100", "icx", "nvdimm", "pvc", "skx", "skx-dev", "spr"]
+  },
+  "software": {"module_paths": [], "setup_notes": "Use ibrun for MPI applications; run production work from $SCRATCH."},
+  "storage": [
+    {"id": "home", "label": "Home", "kind": "home", "enabled": true, "resolver": {"type": "remote-environment", "variable": "HOME"}, "access_context": "login-node", "policy": {"backup": true, "cleanup_note": "Documented 15 GB and 300,000-file quota."}},
+    {"id": "work", "label": "Work", "kind": "project", "enabled": true, "resolver": {"type": "remote-environment", "variable": "WORK"}, "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "Documented 1 TB and 3,000,000-file quota."}},
+    {"id": "scratch", "label": "Scratch", "kind": "scratch", "enabled": true, "resolver": {"type": "remote-environment", "variable": "SCRATCH"}, "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "No fixed quota; files not accessed for more than 10 days may be purged."}}
+  ],
+  "quota_sources": []
+}

@@ -8,6 +8,189 @@
   },
   "plugins": [
     {
+      "id": "org.hpcclient.cineca.leonardo",
+      "name": "CINECA Leonardo",
+      "version": "1.0.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "Declarative community profile for CINECA Leonardo.",
+      "publisher": "HPC Client GUI community",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/leonardo/1.0.0/manifest.json",
+      "manifest_sha256": "007166884f98f127c809b76aa6d2e6d17e0f08edfe0a244ce7533c6dae63edd7",
+      "official": false,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "cineca",
+        "leonardo",
+        "slurm",
+        "ssh-certificate",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.tacc.stampede3",
+      "name": "TACC Stampede3",
+      "version": "1.0.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "Declarative community profile for TACC Stampede3.",
+      "publisher": "HPC Client GUI community",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/stampede3/1.0.0/manifest.json",
+      "manifest_sha256": "c71d41bf06d92665be1356f67068108da7f23fc2f9fa4b6f9cae29772d8771b2",
+      "official": false,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "tacc",
+        "stampede3",
+        "slurm",
+        "mfa",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.pawsey.setonix",
+      "name": "Pawsey Setonix",
+      "version": "1.0.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "Declarative community profile for Pawsey Setonix.",
+      "publisher": "HPC Client GUI community",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/setonix/1.0.0/manifest.json",
+      "manifest_sha256": "271c8bbf38bfa0099802a3c96b56b1b861175ab5e5a8f5d3bae25c22fff1cf83",
+      "official": false,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "pawsey",
+        "setonix",
+        "slurm",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.lumi",
+      "name": "LUMI",
+      "version": "1.0.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "Declarative community profile for the LUMI supercomputer.",
+      "publisher": "HPC Client GUI community",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/lumi/1.0.0/manifest.json",
+      "manifest_sha256": "7a00f92b7e97fca5880b5f6ff86735d7c45059bbad9f710f58c00e702c1ff840",
+      "official": false,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "lumi",
+        "slurm",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.nersc.perlmutter",
+      "name": "NERSC Perlmutter",
+      "version": "1.0.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "Declarative community profile for NERSC Perlmutter.",
+      "publisher": "HPC Client GUI community",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/perlmutter/1.0.0/manifest.json",
+      "manifest_sha256": "fe58e780ff0cca9c16a7c7be640c9152a2132dfb6c2fbc5d4e0e3ebdcb80ad3c",
+      "official": false,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "nersc",
+        "perlmutter",
+        "slurm",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.truba",
+      "name": "TRUBA",
+      "version": "1.3.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "TRUBA/ARF defaults with conservative structured storage metadata.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.5.5",
+      "manifest_path": "plugins/truba/1.3.0/manifest.json",
+      "manifest_sha256": "b7940de3f8455d89dd995c060343dd6f8da2eafcf839623c0084026a63584ecf",
+      "official": true,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "truba",
+        "arf",
+        "slurm",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.truba",
+      "name": "TRUBA",
+      "version": "1.2.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "TRUBA/ARF cluster profile with conservative structured storage metadata.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.5.4",
+      "manifest_path": "plugins/truba/1.2.0/manifest.json",
+      "manifest_sha256": "f6afb55c6892cdf288b0091d3ae41070643835d9c8f9ef98e95f07db7f17b3a6",
+      "official": true,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "truba",
+        "slurm",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.truba",
+      "name": "TRUBA",
+      "version": "1.1.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "TRUBA cluster profile with structured storage metadata.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.5.4",
+      "manifest_path": "plugins/truba/1.1.0/manifest.json",
+      "manifest_sha256": "b34f8e328360bccdbeb07ed25a31211235a4cde738d5fa27b28a0cf87dee9b1c",
+      "official": true,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "truba",
+        "slurm",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
       "id": "org.hpcclient.truba",
       "name": "TRUBA",
       "version": "1.0.0",
@@ -85,7 +268,7 @@
       "publisher": "HPC Client GUI",
       "requires_app": ">=1.5.0",
       "manifest_path": "plugins/ansys-lint/0.1.0/manifest.json",
-      "manifest_sha256": "7fdccbf102920bf1e7b47f1784b9ebe3347d5f728a4fb83a4f6ff70747f5d7b9",
+      "manifest_sha256": "191f9e1ab195955f7d9eaf07deb0ee3d3d340fdfda3afd54ed700eb2005e6498",
       "official": true,
       "capabilities": [
         "linter-tool"

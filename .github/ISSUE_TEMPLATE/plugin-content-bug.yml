@@ -23,6 +23,11 @@ body:
       label: Plugin
       options:
         - org.hpcclient.truba
+        - org.hpcclient.nersc.perlmutter
+        - org.hpcclient.lumi
+        - org.hpcclient.pawsey.setonix
+        - org.hpcclient.tacc.stampede3
+        - org.hpcclient.cineca.leonardo
         - org.hpcclient.fluent
         - Other (describe below)
     validations:

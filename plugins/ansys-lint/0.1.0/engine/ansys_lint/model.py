@@ -80,15 +80,27 @@ class DetectionInfo:
 
 @dataclass(frozen=True)
 class LintOptions:
-    """User-selectable lint settings shared by the CLI and the GUI page."""
+    """User-selectable lint settings shared by the CLI and the GUI page.
+
+    String values are coerced to their enums so callers can never trip over
+    Qt round-trips (PySide6 turns str-Enum combo data back into plain str).
+    """
 
     target_version: str = DEFAULT_TARGET_VERSION
-    exec_mode: ExecMode = ExecMode.BATCH
-    target_os: TargetOS = TargetOS.LINUX
-    strictness: Strictness = Strictness.LENIENT
+    exec_mode: ExecMode | str = ExecMode.BATCH
+    target_os: TargetOS | str = TargetOS.LINUX
+    strictness: Strictness | str = Strictness.LENIENT
     dialect_override: str | None = None
     launch_command: str = ""
     force: bool = False
+
+    def __post_init__(self) -> None:
+        if isinstance(self.exec_mode, str):
+            object.__setattr__(self, "exec_mode", ExecMode(self.exec_mode))
+        if isinstance(self.target_os, str):
+            object.__setattr__(self, "target_os", TargetOS(self.target_os))
+        if isinstance(self.strictness, str):
+            object.__setattr__(self, "strictness", Strictness(self.strictness))
 
 
 @dataclass

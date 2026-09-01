@@ -1,0 +1,47 @@
+{
+  "schema_version": 2,
+  "profile_id": "perlmutter",
+  "name": "NERSC Perlmutter",
+  "scheduler": "slurm",
+  "description": "Declarative community profile for NERSC Perlmutter.",
+  "paths": {"home_dir": "$HOME", "scratch_dir": "/pscratch/sd/{user_first}/{user}"},
+  "commands": {
+    "squeue_command": "squeue -h -u {user} -o \"%i|%P|%j|%u|%T|%M|%D|%C|%R\"",
+    "sbatch_command": "cd -- {script_dir_q} && sbatch -- {script_name_q}",
+    "scancel_command": "scancel {job_id_q}",
+    "sacct_command": "sacct -u {user} --format=JobID,JobName,State,Elapsed,MaxRSS,AllocTRES",
+    "scontrol_command": "scontrol show job {job_id_q}",
+    "active_job_ids_command": "squeue -h -u {user} -o \"%A\"",
+    "job_state_command": "sacct -n -X -j {job_id_q} -o State -P"
+  },
+  "metadata": {
+    "maintainer": "HPC Client GUI community",
+    "documentation_url": "https://docs.nersc.gov/",
+    "support_url": "https://github.com/mskomek/hpc-client-gui-plugins/issues",
+    "source_refs": [
+      "https://docs.nersc.gov/connect/",
+      "https://docs.nersc.gov/filesystems/perlmutter-scratch/",
+      "https://docs.nersc.gov/filesystems/quotas/"
+    ],
+    "last_verified": "2026-08-31"
+  },
+  "site": {"public_name": "NERSC Perlmutter", "region": "United States", "access_note": "NERSC institutional account required."},
+  "access": {
+    "hosts": [{"host": "perlmutter.nersc.gov", "port": 22, "role": "login"}],
+    "auth_methods": ["ssh-key", "ssh-agent", "keyboard-interactive"],
+    "access_note": "sshproxy can create a temporary key; run it manually before connecting.",
+    "documentation_url": "https://docs.nersc.gov/connect/"
+  },
+  "requirements": {
+    "project": {"required": false, "label": "NERSC project", "help": "Enter a project/allocation identifier when using project storage."},
+    "account": {"required": true, "label": "Slurm account", "help": "Use the allocation account assigned in NERSC/Iris."}
+  },
+  "scheduler_hints": {"queue_notes": "Perlmutter provides CPU and GPU partitions; verify current policy before submission.", "account_notes": "Slurm account/allocation is required for jobs.", "partitions": ["cpu", "gpu"]},
+  "software": {"module_paths": [], "setup_notes": "Use the modules documented by NERSC for the selected Perlmutter environment."},
+  "storage": [
+    {"id": "home", "label": "Home", "kind": "home", "enabled": true, "resolver": {"type": "remote-environment", "variable": "HOME"}, "access_context": "login-node", "policy": {"backup": null}},
+    {"id": "scratch", "label": "Scratch", "kind": "scratch", "enabled": true, "path_template": "/pscratch/sd/{user_first}/{user}", "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "Files not accessed within 8 weeks may be purged."}},
+    {"id": "project", "label": "Project", "kind": "project", "enabled": true, "path_template": "/global/cfs/cdirs/{project}", "access_context": "login-node", "policy": {"backup": null}}
+  ],
+  "quota_sources": [{"id": "perlmutter-quota", "enabled": true, "backend_id": "nersc-showquota-json", "command_template": "showquota --json", "scope": "user", "note": "Application-owned parser for documented showquota JSON output."}]
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "plugin_api": 1,
+  "id": "org.hpcclient.lumi",
+  "name": "LUMI",
+  "version": "1.0.0",
+  "publisher": "HPC Client GUI community",
+  "license": "MIT",
+  "description": "Declarative community profile for the LUMI supercomputer.",
+  "requires_app": ">=1.5.8",
+  "capabilities": [
+    "cluster-profile"
+  ],
+  "entrypoints": {
+    "cluster_profiles": [
+      "cluster-profile.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "cluster-profile.json",
+      "sha256": "63d69b1fa89d8ec04e40977eb75d74a21b5c050015d81abea95c6bf21c4fe782",
+      "size": 3276,
+      "role": "cluster-profile"
+    },
+    {
+      "path": "README.md",
+      "sha256": "e8a72f315c76bdc044f9de08f18b75c6eabfb168e3310113c9b614927fc0f6e2",
+      "size": 617,
+      "role": "documentation"
+    },
+    {
+      "path": "sources.md",
+      "sha256": "d9fbe5010479b9aaa3a274195672099ab18bb6509a8dc21cfbbe7dae1b763215",
+      "size": 417,
+      "role": "documentation"
+    }
+  ]
+}

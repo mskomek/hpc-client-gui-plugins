@@ -23,12 +23,11 @@ application executes as plugin code.
 6. **Failed network/plugin operations must not crash the app** and network
    work stays off the GUI thread.
 
-## What Plugin API v2 adds (linter tools)
+## Trusted Tool exception
 
-v2 keeps every guarantee above and adds exactly one capability,
-`linter-tool`: a hash-verified pure-Python engine shipped inside the plugin
-payload (role `linter-engine`, `.py` only, `plugin_api: 2` only). The
-additional rules:
+Cluster providers remain data-only. ANSYS Lint is the only current executable
+Trusted Tool, and its identity is approved by the application rather than by
+the manifest alone. The additional rules are:
 
 - **Nothing executes at install time** - unchanged. The engine module loads
   lazily, only when the user explicitly opens the tool, wrapped in defensive
@@ -38,13 +37,12 @@ additional rules:
 - Engine files are restricted to the official registry's review workflow:
   changes to published versions require a new version directory whose diff
   is visible in a pull request.
-- v2 plugins must require an application version that actually implements
-  v2 (`>= 1.5.0`), enforced on both registry and client sides.
+- the reviewed package requires an application version that implements the
+  trusted-tool contract (`>= 1.5.0`), enforced on both registry and client sides.
 
-The trust level of a v2 linter engine equals the trust level of this
-repository itself: running it executes code reviewed here. That is why the
-capability exists at all (a parser-based linter cannot be expressed as
-regex data) and why it is limited to official, hash-pinned packages.
+The trust level of ANSYS Lint equals the trust level of this repository itself:
+running it executes code reviewed here. Arbitrary downloaded Python remains
+disabled.
 
 ## Explicit non-guarantees
 

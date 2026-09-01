@@ -1,0 +1,30 @@
+{
+  "schema_version": 2,
+  "profile_id": "lumi",
+  "name": "LUMI",
+  "scheduler": "slurm",
+  "description": "Declarative community profile for the LUMI supercomputer.",
+  "paths": {"home_dir": "/users/{user}", "scratch_dir": "/scratch/{project}"},
+  "commands": {
+    "squeue_command": "squeue -h -u {user} -o \"%i|%P|%j|%u|%T|%M|%D|%C|%R\"",
+    "sbatch_command": "cd -- {script_dir_q} && sbatch -- {script_name_q}",
+    "scancel_command": "scancel {job_id_q}",
+    "sacct_command": "sacct -u {user} --format=JobID,JobName,State,Elapsed,MaxRSS,AllocTRES",
+    "scontrol_command": "scontrol show job {job_id_q}",
+    "active_job_ids_command": "squeue -h -u {user} -o \"%A\"",
+    "job_state_command": "sacct -n -X -j {job_id_q} -o State -P"
+  },
+  "metadata": {"maintainer": "HPC Client GUI community", "documentation_url": "https://docs.lumi-supercomputer.eu/", "support_url": "https://github.com/mskomek/hpc-client-gui-plugins/issues", "source_refs": ["https://docs.lumi-supercomputer.eu/firststeps/loggingin/", "https://docs.lumi-supercomputer.eu/storage/", "https://docs.lumi-supercomputer.eu/runjobs/lumi_env/dailymanagement/"], "last_verified": "2026-08-31"},
+  "site": {"public_name": "LUMI", "region": "Europe", "access_note": "Active project account required."},
+  "access": {"hosts": [{"host": "lumi.csc.fi", "port": 22, "role": "login"}], "auth_methods": ["ssh-key", "ssh-certificate"], "access_note": "LUMI documents SSH keys for regular projects and certificates for EuroHPC Federation Platform projects; passwords are not accepted.", "documentation_url": "https://docs.lumi-supercomputer.eu/firststeps/SSH-keys/"},
+  "requirements": {"project": {"required": true, "label": "LUMI project", "help": "Enter the project identifier assigned to your LUMI account."}, "account": {"required": true, "label": "Slurm account", "help": "Use the allocation account assigned to the project."}},
+  "scheduler_hints": {"queue_notes": "Use the currently documented partition for the workload; limits change and should be checked before submission.", "account_notes": "A project/allocation account is required for jobs.", "partitions": ["standard-g", "standard", "bench", "debug", "small-g", "small", "largemem", "lumid", "dev-g"]},
+  "software": {"module_paths": [], "setup_notes": "LUMI software is provided through environment modules."},
+  "storage": [
+    {"id": "home", "label": "Home", "kind": "home", "enabled": true, "path_template": "/users/{user}", "access_context": "login-node", "policy": {"backup": null}},
+    {"id": "project", "label": "Project", "kind": "project", "enabled": true, "path_template": "/project/{project}", "access_context": "login-node", "policy": {"backup": null}},
+    {"id": "scratch", "label": "Scratch", "kind": "scratch", "enabled": true, "path_template": "/scratch/{project}", "access_context": "login-node", "policy": {"backup": null}},
+    {"id": "flash", "label": "Flash", "kind": "custom", "enabled": true, "path_template": "/flash/{project}", "access_context": "login-node", "policy": {"backup": null}}
+  ],
+  "quota_sources": [{"id": "lumi-quota-source", "enabled": true, "backend_id": "lumi-quota", "command_template": "lumi-quota -v", "scope": "project", "note": "Application-owned parser for the documented lumi-quota output."}]
+}
