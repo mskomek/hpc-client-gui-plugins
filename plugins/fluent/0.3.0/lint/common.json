@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "tool": "fluent-journal",
+  "rules": [
+    {
+      "id": "FLUENT001",
+      "severity": "warning",
+      "category": "compatibility",
+      "message": "Journal does not declare a Fluent TUI version.",
+      "explanation": "Recorded Fluent journals normally start with /file/set-tui-version so TUI commands keep their recorded meaning across releases.",
+      "suggested_fix": "/file/set-tui-version \"25.2\"",
+      "documentation_url": "https://fluent.docs.pyansys.com/version/dev/user_guide/legacy/tui.html",
+      "match": {"kind": "required-keyword", "value": "/file/set-tui-version"}
+    },
+    {
+      "id": "FLUENT011",
+      "severity": "info",
+      "category": "portability",
+      "message": "Absolute path may reduce journal portability.",
+      "explanation": "HPC journals often intentionally use absolute scratch paths; review whether this path is intentional before sharing the journal.",
+      "match": {
+        "kind": "regex-line",
+        "value": "(?:^|[\\s\"'])/(?:home|scratch|arf|work|data)/\\S+"
+      }
+    }
+  ]
+}

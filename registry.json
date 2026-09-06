@@ -19,8 +19,15 @@
       "manifest_path": "plugins/truba/1.3.0/manifest.json",
       "manifest_sha256": "b7940de3f8455d89dd995c060343dd6f8da2eafcf839623c0084026a63584ecf",
       "official": true,
-      "capabilities": ["cluster-profile"],
-      "keywords": ["truba", "arf", "slurm", "cluster-profile"],
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "truba",
+        "arf",
+        "slurm",
+        "cluster-profile"
+      ],
       "license": "MIT"
     },
     {
@@ -35,8 +42,14 @@
       "manifest_path": "plugins/truba/1.2.0/manifest.json",
       "manifest_sha256": "f6afb55c6892cdf288b0091d3ae41070643835d9c8f9ef98e95f07db7f17b3a6",
       "official": true,
-      "capabilities": ["cluster-profile"],
-      "keywords": ["truba", "slurm", "cluster-profile"],
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "truba",
+        "slurm",
+        "cluster-profile"
+      ],
       "license": "MIT"
     },
     {
@@ -116,6 +129,30 @@
       "requires_app": ">=1.4.0",
       "manifest_path": "plugins/fluent/0.2.0/manifest.json",
       "manifest_sha256": "6a08e87635c1e30a7837b5e18e2341aca93f73b95d1ef7e19113512ebd1f58d1",
+      "official": true,
+      "capabilities": [
+        "lint-rules",
+        "job-template"
+      ],
+      "keywords": [
+        "fluent",
+        "journal",
+        "lint",
+        "template"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.fluent",
+      "name": "ANSYS Fluent Tools",
+      "version": "0.3.0",
+      "plugin_api": 1,
+      "type": "lint-rules",
+      "description": "Journal lint rules, Fluent Slurm job templates, and Plugins-menu integration for ANSYS Fluent.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/fluent/0.3.0/manifest.json",
+      "manifest_sha256": "97b20c4746b5c691b9107d5bc9c23fda1f7952b0a97c8316623c793f324848fb",
       "official": true,
       "capabilities": [
         "lint-rules",

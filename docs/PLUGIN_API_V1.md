@@ -52,6 +52,33 @@ Roles are limited to: `cluster-profile`, `lint-index`, `lint-rules`,
 GUI: an optional operator `>=`, `<=`, `==`, or `~=` followed by a semantic
 version, e.g. `>=1.4.0`. Unsupported operators fail validation.
 
+## UI contributions (optional, declarative)
+
+`ui_contributions.plugins_menu` is an optional declarative opt-in that lets a plugin expose up to 20 items under the host's *Plugins* menu without executing plugin code:
+
+```json
+{
+  "ui_contributions": {
+    "plugins_menu": {
+      "label": "ANSYS Fluent Tools",
+      "labels": {"tr": "ANSYS Fluent Araçları"},
+      "items": [
+        {"kind": "action", "id": "lint-current", "label": "Lint Current Journal...", "labels": {"tr": "..."}, "action": "editor.lint_current", "when": {"editor_active": true, "capability_available": "lint-rules"}, "unavailable": "disable"},
+        {"kind": "submenu", "id": "journal-tools", "label": "Journal Tools", "items": [{"kind": "action", "id": "new-job", "label": "New Fluent Job...", "action": "editor.new_from_plugin_templates"}]},
+        {"kind": "separator", "id": "sep"}
+      ]
+    }
+  }
+}
+```
+
+- Allowed `kind`: `action` | `submenu` | `separator` (submenu may only contain `action`/`separator`, max nesting `Plugins -> pluginRoot -> subgroup -> action`)
+- `action` must be a host-owned allowlist ID (`editor.lint_current`, `editor.new_from_plugin_templates`, `plugin.open_trusted_tool`)
+- `when` vocabulary: `connected`, `disconnected`, `editor_active`, `file_selected`, `plugin_enabled` (bool) and `capability_available` (known capability) - all AND, `unavailable` `disable` (default) or `hide`; unknown conditions fail safely
+- `labels` optional localized strings, fallback to `label`; max 64 chars, bounded item counts, stable deterministic ordering
+
+If `ui_contributions.plugins_menu` is absent the plugin is not visible in *Plugins* (opt-in) but remains manageable in Plugin Manager.
+
 ## Cluster profiles are privileged declarative data
 
 Cluster-profile payloads contain remote command templates that the desktop

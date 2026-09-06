@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "tool": "fluent-journal",
+  "name": "ANSYS Fluent Journal",
+  "description": "Conservative, static best-effort checks for Fluent journal files.",
+  "file_patterns": [
+    "*.jou",
+    "*.fluent"
+  ],
+  "rules": [],
+  "rule_files": [
+    {
+      "path": "lint/common.json",
+      "sha256": "658286a690fcfa0935bf997b3b6438373f9de3c73df9487b675e41199b90021b"
+    },
+    {
+      "path": "lint/versions/25.2.json",
+      "sha256": "1b868f8cdbffa5940d25bddfa638173abbd2312424ba8eb1451391e5c410de38"
+    }
+  ]
+}

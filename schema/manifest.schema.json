@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "HPC Client GUI declarative plugin manifest",
+  "title": "HPC Client GUI plugin manifest (Plugin API v1 or v2)",
   "type": "object",
   "required": [
     "schema_version",
@@ -21,7 +21,12 @@
     "schema_version": {
       "const": 1
     },
-    "plugin_api": { "const": 1 },
+    "plugin_api": {
+      "enum": [
+        1,
+        2
+      ]
+    },
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9]*(?:\\.[a-z0-9]+)+$",
@@ -83,6 +88,11 @@
             "minLength": 1
           },
           "description": "Template index files delivering job templates."
+        },
+        "linter_engine": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path to the linter engine package __init__.py (Plugin API v2, role linter-engine)."
         }
       }
     },
@@ -92,6 +102,9 @@
       "items": {
         "$ref": "#/definitions/fileEntry"
       }
+    },
+    "ui_contributions": {
+      "$ref": "#/definitions/uiContributions"
     }
   },
   "definitions": {
@@ -134,7 +147,9 @@
         "lint-rules",
         "template-index",
         "template-content",
-        "documentation"
+        "documentation",
+        "linter-engine",
+        "linter-data"
       ]
     },
     "capability": {
@@ -142,7 +157,8 @@
         "cluster-profile",
         "lint-rules",
         "job-template",
-        "application-tools"
+        "application-tools",
+        "linter-tool"
       ]
     },
     "versionRange": {
@@ -171,6 +187,233 @@
         },
         "role": {
           "$ref": "#/definitions/fileRole"
+        }
+      }
+    },
+    "hostActionId": {
+      "type": "string",
+      "enum": [
+        "editor.lint_current",
+        "editor.new_from_plugin_templates",
+        "plugin.open_trusted_tool"
+      ]
+    },
+    "menuConditionValue": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "cluster-profile",
+            "lint-rules",
+            "job-template",
+            "application-tools",
+            "linter-tool"
+          ]
+        }
+      ]
+    },
+    "menuWhen": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "connected": {
+          "type": "boolean"
+        },
+        "disconnected": {
+          "type": "boolean"
+        },
+        "editor_active": {
+          "type": "boolean"
+        },
+        "file_selected": {
+          "type": "boolean"
+        },
+        "plugin_enabled": {
+          "type": "boolean"
+        },
+        "capability_available": {
+          "type": "string",
+          "enum": [
+            "cluster-profile",
+            "lint-rules",
+            "job-template",
+            "application-tools",
+            "linter-tool"
+          ]
+        }
+      }
+    },
+    "menuLabels": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z]{2}([_-][a-zA-Z0-9]+)?$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64
+      }
+    },
+    "pluginMenuAction": {
+      "type": "object",
+      "required": [
+        "kind",
+        "id",
+        "label",
+        "action"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "action"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$",
+          "maxLength": 64
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "labels": {
+          "$ref": "#/definitions/menuLabels"
+        },
+        "action": {
+          "$ref": "#/definitions/hostActionId"
+        },
+        "when": {
+          "$ref": "#/definitions/menuWhen"
+        },
+        "unavailable": {
+          "type": "string",
+          "enum": [
+            "disable",
+            "hide"
+          ]
+        }
+      }
+    },
+    "pluginMenuSeparator": {
+      "type": "object",
+      "required": [
+        "kind",
+        "id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "separator"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$",
+          "maxLength": 64
+        }
+      }
+    },
+    "pluginMenuSubmenu": {
+      "type": "object",
+      "required": [
+        "kind",
+        "id",
+        "label",
+        "items"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "submenu"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$",
+          "maxLength": 64
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "labels": {
+          "$ref": "#/definitions/menuLabels"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/pluginMenuAction"
+              },
+              {
+                "$ref": "#/definitions/pluginMenuSeparator"
+              }
+            ]
+          }
+        },
+        "when": {
+          "$ref": "#/definitions/menuWhen"
+        },
+        "unavailable": {
+          "type": "string",
+          "enum": [
+            "disable",
+            "hide"
+          ]
+        }
+      }
+    },
+    "pluginsMenu": {
+      "type": "object",
+      "required": [
+        "label",
+        "items"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "labels": {
+          "$ref": "#/definitions/menuLabels"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/pluginMenuAction"
+              },
+              {
+                "$ref": "#/definitions/pluginMenuSeparator"
+              },
+              {
+                "$ref": "#/definitions/pluginMenuSubmenu"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "uiContributions": {
+      "type": "object",
+      "required": [
+        "plugins_menu"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "plugins_menu": {
+          "$ref": "#/definitions/pluginsMenu"
         }
       }
     }
