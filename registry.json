@@ -283,6 +283,30 @@
         "hpc"
       ],
       "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.fluent",
+      "name": "ANSYS Fluent Tools",
+      "version": "0.3.0",
+      "plugin_api": 1,
+      "type": "lint-rules",
+      "description": "Journal lint rules, Fluent Slurm job templates, and Plugins-menu integration for ANSYS Fluent.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/fluent/0.3.0/manifest.json",
+      "manifest_sha256": "97b20c4746b5c691b9107d5bc9c23fda1f7952b0a97c8316623c793f324848fb",
+      "official": true,
+      "capabilities": [
+        "lint-rules",
+        "job-template"
+      ],
+      "keywords": [
+        "fluent",
+        "journal",
+        "lint",
+        "template"
+      ],
+      "license": "MIT"
     }
   ]
 }

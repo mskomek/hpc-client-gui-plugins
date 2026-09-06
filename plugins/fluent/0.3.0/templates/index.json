@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "name": "Fluent job templates",
+  "templates": [
+    {
+      "id": "fluent-slurm-basic",
+      "name": "Fluent Slurm Batch",
+      "description": "Basic headless Fluent solver job for Slurm clusters.",
+      "scheduler": "slurm",
+      "application": "ansys-fluent",
+      "file_name": "fluent_job.slurm",
+      "content_path": "templates/fluent_job.slurm.tpl",
+      "variables": [
+        {
+          "name": "partition",
+          "type": "string",
+          "required": true,
+          "description": "Target Slurm partition (verify the correct name for your cluster)."
+        },
+        {
+          "name": "cpus",
+          "type": "integer",
+          "required": true,
+          "default": 1,
+          "minimum": 1,
+          "maximum": 4096,
+          "description": "Solver processes; matches --cpus-per-task."
+        },
+        {
+          "name": "time_limit",
+          "type": "string",
+          "required": true,
+          "default": "01:00:00",
+          "description": "Slurm time limit, for example 04:00:00."
+        },
+        {
+          "name": "fluent_version",
+          "type": "choice",
+          "required": false,
+          "choices": [
+            "v252"
+          ],
+          "default": "v252",
+          "description": "Cluster module version suffix; verify available modules."
+        },
+        {
+          "name": "journal_file",
+          "type": "path",
+          "required": true,
+          "description": "Path to the Fluent journal to execute."
+        },
+        {
+          "name": "journal_base",
+          "type": "string",
+          "required": true,
+          "default": "fluent_run",
+          "description": "Base name for output/log files."
+        }
+      ],
+      "sha256": "7b607b4a59c8184cf26da9f803d90cf5da2f0833c9fb019efcd4d79979552bec"
+    }
+  ]
+}
