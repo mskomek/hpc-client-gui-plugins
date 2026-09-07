@@ -126,6 +126,29 @@
     {
       "id": "org.hpcclient.truba",
       "name": "TRUBA",
+      "version": "1.4.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "TRUBA/ARF defaults with dynamic output channel definitions.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/truba/1.4.0/manifest.json",
+      "manifest_sha256": "43dbd3d777676e69ea9db71638e5f8f2c4d7016836f7d0a07912b32bea5feb5b",
+      "official": true,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "truba",
+        "arf",
+        "slurm",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.truba",
+      "name": "TRUBA",
       "version": "1.3.0",
       "plugin_api": 1,
       "type": "cluster-profile",

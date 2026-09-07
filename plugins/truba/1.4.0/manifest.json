@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "plugin_api": 1,
+  "id": "org.hpcclient.truba",
+  "name": "TRUBA",
+  "version": "1.4.0",
+  "publisher": "HPC Client GUI",
+  "license": "MIT",
+  "description": "TRUBA cluster profile with dynamic output channel definitions.",
+  "requires_app": ">=1.5.8",
+  "capabilities": [
+    "cluster-profile"
+  ],
+  "entrypoints": {
+    "cluster_profiles": [
+      "cluster-profile.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "ce64e2f3c2e505a45c2f6b263bdceb8737ee90df243a2e04dc02cc83dde16c0c",
+      "size": 1247,
+      "role": "documentation"
+    },
+    {
+      "path": "cluster-profile.json",
+      "sha256": "15d6a241401d13178934f845127d67c2561652e32ec1ab4f23029365280d47e1",
+      "size": 3245,
+      "role": "cluster-profile"
+    }
+  ]
+}
