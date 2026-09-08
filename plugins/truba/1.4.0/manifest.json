@@ -28,6 +28,12 @@
       "sha256": "15d6a241401d13178934f845127d67c2561652e32ec1ab4f23029365280d47e1",
       "size": 3245,
       "role": "cluster-profile"
+    },
+    {
+      "path": "sources.md",
+      "sha256": "019aab3498728e65077d51c53784be80f446dac9938ccabad539706d31930483",
+      "size": 547,
+      "role": "documentation"
     }
   ]
 }

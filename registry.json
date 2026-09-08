@@ -133,7 +133,7 @@
       "publisher": "HPC Client GUI",
       "requires_app": ">=1.5.8",
       "manifest_path": "plugins/truba/1.4.0/manifest.json",
-      "manifest_sha256": "43dbd3d777676e69ea9db71638e5f8f2c4d7016836f7d0a07912b32bea5feb5b",
+      "manifest_sha256": "f1050175c56f7f39fe172a6f152a0a25aaa88e5dfdabd965d4aa72b0c40f6a44",
       "official": true,
       "capabilities": [
         "cluster-profile"
