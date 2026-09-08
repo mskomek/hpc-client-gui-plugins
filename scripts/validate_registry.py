@@ -157,8 +157,8 @@ def validate_payload_role(role: str, path: Path, label: str, errors: list[str]) 
 
 
 def validate_cluster_profile(profile: object) -> list[str]:
-    """Semantic checks Draft 7 cannot express for v2 provider payloads."""
-    if not isinstance(profile, dict) or profile.get("schema_version") != 2:
+    """Semantic checks Draft 7 cannot express for v2/v3 provider payloads."""
+    if not isinstance(profile, dict) or profile.get("schema_version") not in {2, 3}:
         return []
     errors: list[str] = []
     safe_id = re.compile(r"^[a-z][a-z0-9_-]{0,63}$")
@@ -208,6 +208,60 @@ def validate_cluster_profile(profile: object) -> list[str]:
         matches = [item.get("path_template") for item in storage if isinstance(item, dict) and item.get("kind") == kind]
         if alias_value and matches and any(value and value != alias_value for value in matches):
             errors.append(f"paths.{alias} conflicts with structured {kind} storage")
+    if profile.get("schema_version") == 3:
+        safe_id = re.compile(r"^[a-z][a-z0-9_-]{0,63}$")
+
+        def labels_ok(value, location):
+            if not isinstance(value, dict) or set(value) - {"en", "tr"} or not isinstance(value.get("en"), str) or not value["en"].strip() or len(value["en"]) > 128:
+                errors.append(f"{location}.labels is invalid")
+            for lang in ("en", "tr"):
+                if lang in (value if isinstance(value, dict) else {}) and (not isinstance(value[lang], str) or not value[lang].strip() or len(value[lang]) > 128):
+                    errors.append(f"{location}.labels.{lang} is invalid")
+
+        job_outputs = profile.get("job_outputs")
+        if job_outputs is not None:
+            streams = job_outputs.get("streams") if isinstance(job_outputs, dict) else None
+            seen: set[str] = set()
+            for index, stream in enumerate(streams or []):
+                location = f"job_outputs.streams[{index}]"
+                if not isinstance(stream, dict):
+                    continue
+                if not safe_id.fullmatch(str(stream.get("id", ""))):
+                    errors.append(f"{location}.id is invalid")
+                if stream.get("id") in seen:
+                    errors.append(f"duplicate job output id '{stream.get('id')}'")
+                seen.add(str(stream.get("id")))
+                if stream.get("role") not in {"stdout", "stderr", "custom"}:
+                    errors.append(f"{location}.role is invalid")
+                if stream.get("resolver") not in {"slurm.stdout", "slurm.stderr", "workdir.relative"}:
+                    errors.append(f"{location}.resolver is invalid")
+                labels_ok(stream.get("labels"), location)
+                if not isinstance(stream.get("order"), int) or isinstance(stream.get("order"), bool) or not 0 <= stream["order"] <= 100000:
+                    errors.append(f"{location}.order is invalid")
+                relative = stream.get("relative_path")
+                if stream.get("resolver") == "workdir.relative":
+                    if not isinstance(relative, str) or not relative or relative.startswith("/") or "\\" in relative or any(part in {"", ".", ".."} for part in relative.split("/")):
+                        errors.append(f"{location}.relative_path is unsafe")
+                elif "relative_path" in stream:
+                    errors.append(f"{location}.relative_path is not allowed")
+
+        file_filters = profile.get("file_filters")
+        seen_filters: set[str] = set()
+        for index, item in enumerate(file_filters or []):
+            location = f"file_filters[{index}]"
+            if not isinstance(item, dict):
+                continue
+            ident = str(item.get("id", ""))
+            if not safe_id.fullmatch(ident) or ident in {"all", "folders", "iso", "archives", "slurm", "shell", "other"}:
+                errors.append(f"{location}.id is invalid or reserved")
+            if ident in seen_filters:
+                errors.append(f"duplicate file filter id '{ident}'")
+            seen_filters.add(ident)
+            labels_ok(item.get("labels"), location)
+            if not isinstance(item.get("order"), int) or isinstance(item.get("order"), bool) or not 0 <= item["order"] <= 100000:
+                errors.append(f"{location}.order is invalid")
+            if not any(isinstance(item.get(key), list) and item[key] for key in ("globs", "suffixes")):
+                errors.append(f"{location} needs a glob or suffix")
     return errors
 
 

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "plugin_api": 1,
+  "id": "org.hpcclient.truba",
+  "name": "TRUBA",
+  "version": "1.4.0",
+  "publisher": "HPC Client GUI",
+  "license": "MIT",
+  "description": "TRUBA/ARF cluster profile with declarative dynamic Slurm output channels.",
+  "requires_app": ">=1.5.8",
+  "capabilities": [
+    "cluster-profile"
+  ],
+  "entrypoints": {
+    "cluster_profiles": [
+      "cluster-profile.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "cluster-profile.json",
+      "sha256": "69dd177b91e48a1259e55c35cb084a1d6d00aa1b91ba8a77495178725488cee6",
+      "size": 3114,
+      "role": "cluster-profile"
+    },
+    {
+      "path": "README.md",
+      "sha256": "b5482e1f6d7162b7cbd6f093fb8c1894fbd490312d56cb3ac89ca2e1a1758bfd",
+      "size": 634,
+      "role": "documentation"
+    },
+    {
+      "path": "sources.md",
+      "sha256": "36fabdda42180695276aef46b7ed1dd117c08d4ec4d811876dead068f2606ca1",
+      "size": 369,
+      "role": "documentation"
+    }
+  ]
+}
