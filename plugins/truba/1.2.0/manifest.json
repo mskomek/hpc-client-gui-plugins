@@ -7,7 +7,7 @@
   "publisher": "HPC Client GUI",
   "license": "MIT",
   "description": "TRUBA/ARF cluster profile with conservative structured storage metadata.",
-  "requires_app": ">=1.5.4",
+  "requires_app": ">=1.5.5",
   "capabilities": [
     "cluster-profile"
   ],

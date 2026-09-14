@@ -37,8 +37,8 @@ server-side installation is needed on HPC clusters.
 
 | Plugin                        | Capabilities                      | Latest version | Requires app |
 | ----------------------------- | --------------------------------- | -------------- | ------------ |
-| TRUBA                         | Cluster profile                   | 1.3.0          | >=1.5.5      |
-| ANSYS Fluent Tools            | Journal lint + Slurm job template | 0.2.0          | >=1.4.0      |
+| TRUBA                         | Cluster profile                   | 1.5.0          | >=1.5.9      |
+| ANSYS Fluent Tools            | Journal lint + Slurm job template | 0.3.0          | >=1.5.8      |
 
 HPC Client GUI is an independent community project. It is **not** an official
 TÜBİTAK ULAKBİM/TRUBA or ANSYS, Inc. product, and these plugins are not

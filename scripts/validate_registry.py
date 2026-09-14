@@ -16,8 +16,11 @@ Checks, in order:
 7. payloads are declarative data with no executable-looking files;
 8. capability entrypoints are consistent with declared capabilities and
    their payloads validate against their role schemas;
-9. version directories contain no undeclared extra files (immutable,
-   fully-enumerated directories).
+9. a cluster-profile payload may not declare a ``requires_app`` floor older
+   than the first application release that implements its schema version
+   (see ``scripts/schema_compatibility.py``);
+10. version directories contain no undeclared extra files (immutable,
+    fully-enumerated directories).
 
 Plugins are declarative-only: no Python modules, no executable
 hooks, no binaries, no installation-time command execution, exact-file
@@ -41,6 +44,8 @@ try:
 except ImportError:  # pragma: no cover
     print("Missing dependencies. Run: pip install jsonschema packaging", file=sys.stderr)
     raise SystemExit(2)
+
+from schema_compatibility import schema_floor_error  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_DIR = REPO_ROOT / "schema"
@@ -142,7 +147,13 @@ def check_semver(value: str, label: str, errors: list[str]) -> None:
         errors.append(f"{label}: version '{value}' is not a valid semantic version")
 
 
-def validate_payload_role(role: str, path: Path, label: str, errors: list[str]) -> None:
+def validate_payload_role(
+    role: str,
+    path: Path,
+    label: str,
+    errors: list[str],
+    requires_app: str = "",
+) -> None:
     schema_name = SCHEMA_FOR_ROLE.get(role)
     if schema_name is None:
         return
@@ -154,6 +165,12 @@ def validate_payload_role(role: str, path: Path, label: str, errors: list[str]) 
     validate_against_schema(instance, SCHEMA_DIR / schema_name, f"{label} [{role}]", errors)
     if role == "cluster-profile":
         errors.extend(f"{label}: {problem}" for problem in validate_cluster_profile(instance))
+        if isinstance(instance, dict) and requires_app:
+            floor_error = schema_floor_error(
+                instance.get("schema_version"), requires_app
+            )
+            if floor_error:
+                errors.append(f"{label}: {floor_error}")
 
 
 def validate_cluster_profile(profile: object) -> list[str]:
@@ -315,7 +332,13 @@ def validate_entrypoint_files(manifest: dict, manifest_dir: Path, label: str, er
                     continue
                 payload_path = manifest_dir / entry_rel
                 if payload_path.is_file():
-                    validate_payload_role(file_entry["role"], payload_path, entry_label, errors)
+                    validate_payload_role(
+                        file_entry["role"],
+                        payload_path,
+                        entry_label,
+                        errors,
+                        requires_app=str(manifest.get("requires_app") or ""),
+                    )
 
 
 def collect_executable_payload_errors(

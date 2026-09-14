@@ -102,10 +102,32 @@ def test_plugin_contains_no_credentials_or_hosts():
     assert "not** an official TÜBİTAK ULAKBİM/TRUBA client" in readme
 
 
-def test_truba_v2_profile_is_published_for_app_1_5_4():
+def test_truba_v2_profile_is_published_for_app_1_5_5():
+    # Schema-2 support first shipped in v1.5.5 (v1.5.4 accepted schema 1 only),
+    # so this is the honest minimum application version.
     entry = truba_registry_entry("1.1.0")
-    assert entry["requires_app"] == ">=1.5.4"
+    assert entry["requires_app"] == ">=1.5.5"
     profile = load("plugins/truba/1.1.0/cluster-profile.json")
     assert profile["schema_version"] == 2
     assert {item["id"] for item in profile["storage"]} == {"home", "scratch"}
     assert profile["quota_sources"][0]["enabled"] is False
+
+
+def test_truba_schema3_profile_requires_schema3_capable_app():
+    # v1.5.8 accepts schemas 1-2 only; the first schema-3 capable release is
+    # 1.5.9. The compatibility claim must not predate it.
+    entry = truba_registry_entry("1.4.0")
+    assert entry["requires_app"] == ">=1.5.9"
+    manifest = load(entry["manifest_path"])
+    assert manifest["requires_app"] == entry["requires_app"]
+    profile = load("plugins/truba/1.4.0/cluster-profile.json")
+    assert profile["schema_version"] == 3
+
+
+def test_truba_schema4_profile_requires_schema4_capable_app():
+    entry = truba_registry_entry("1.5.0")
+    assert entry["requires_app"] == ">=1.5.9"
+    manifest = load(entry["manifest_path"])
+    assert manifest["requires_app"] == entry["requires_app"]
+    profile = load("plugins/truba/1.5.0/cluster-profile.json")
+    assert profile["schema_version"] == 4

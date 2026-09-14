@@ -7,7 +7,7 @@
   "publisher": "HPC Client GUI",
   "license": "MIT",
   "description": "TRUBA/ARF cluster profile with declarative dynamic Slurm output channels.",
-  "requires_app": ">=1.5.8",
+  "requires_app": ">=1.5.9",
   "capabilities": [
     "cluster-profile"
   ],

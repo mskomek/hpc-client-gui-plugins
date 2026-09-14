@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "plugin_api": 1,
+  "id": "org.hpcclient.truba",
+  "name": "TRUBA",
+  "version": "1.5.0",
+  "publisher": "HPC Client GUI",
+  "license": "MIT",
+  "description": "TRUBA/ARF cluster profile with declarative parser/adapter contracts (schema v4).",
+  "requires_app": ">=1.5.9",
+  "capabilities": [
+    "cluster-profile"
+  ],
+  "entrypoints": {
+    "cluster_profiles": [
+      "cluster-profile.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "cluster-profile.json",
+      "sha256": "80d366559c7279c2a78f7da12ac12e5822d2feeb172d2d64c6513133bc5d4883",
+      "size": 3510,
+      "role": "cluster-profile"
+    }
+  ]
+}
