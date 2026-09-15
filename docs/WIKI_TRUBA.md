@@ -8,11 +8,19 @@ Slurm cluster profile.
 - **1.0.0** — legacy profile fields and Slurm command templates; compatible
   with HPC Client GUI `>=1.4.0`.
 - **1.1.0** — cluster-profile schema v2 with structured Home and Scratch
-  metadata; requires HPC Client GUI `>=1.5.4`.
+  metadata; requires HPC Client GUI `>=1.5.5` (schema v2 first shipped in
+  1.5.5; 1.5.4 accepted schema 1 only).
 - **1.2.0** — conservative structured storage and disabled quota metadata;
-  requires HPC Client GUI `>=1.5.4`.
+  requires HPC Client GUI `>=1.5.5`.
 - **1.3.0** — refreshed ARF references and full storage template;
   requires HPC Client GUI `>=1.5.5`.
+- **1.4.0** — cluster-profile schema v3 with declarative `job_outputs` and
+  `file_filters`; requires HPC Client GUI `>=1.5.9` (the first release that
+  validates schema 3). Published v1.5.8 supports schemas 1–2 only, so it is
+  offered TRUBA 1.3.0 instead.
+- **1.5.0** — cluster-profile schema v4 with declarative `job_details`,
+  `accounting`, and `cluster_status` adapter/parser contracts; requires
+  HPC Client GUI `>=1.5.9`.
 
 ## Storage
 

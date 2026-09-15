@@ -1,17 +1,8 @@
-# TRUBA 1.4.0 — Source References
+# Sources for TRUBA 1.4.0
 
-## Official TRUBA Documentation
+- <https://docs.truba.gov.tr/1-kaynaklar/arf/arf_depolama_kaynaklari.html>
+- <https://docs.truba.gov.tr/1-kaynaklar/arf/arf_baglanti.html>
+- <https://docs.truba.gov.tr/2-temel_bilgiler/ssh_baglanti/index.html>
 
-- ARF Storage Resources: https://docs.truba.gov.tr/1-kaynaklar/arf/arf_depolama_kaynaklari.html
-- ARF Connection Guide: https://docs.truba.gov.tr/1-kaynaklar/arf/arf_baglanti.html
-- SSH Connection: https://docs.truba.gov.tr/2-temel_bilgiler/ssh_baglanti/index.html
-
-## Changes in 1.4.0
-
-- Added dynamic output channel definitions (`job_outputs` section)
-- Schema version upgraded to v3
-- Provider-specific file filters reserved for future use
-
-## Verification Date
-
-2025-01-15
+The provider package contains declarative metadata only. Output paths are
+resolved by the application from runtime Slurm metadata.

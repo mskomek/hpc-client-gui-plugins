@@ -19,8 +19,17 @@ Checks, in order:
    'linter-engine' role and is hash-pinned like any other payload;
 8. capability entrypoints are consistent with declared capabilities and
    their payloads validate against their role schemas;
-9. version directories contain no undeclared extra files (immutable,
-   fully-enumerated directories).
+9. a cluster-profile payload may not declare a ``requires_app`` floor older
+   than the first application release that implements its schema version
+   (see ``scripts/schema_compatibility.py``);
+10. version directories contain no undeclared extra files (immutable,
+    fully-enumerated directories);
+11. an optional registry-level ``compatibility_override`` only ever narrows
+    compatibility, and the schema floor check (9) is evaluated against the
+    resulting effective range (see ``scripts/schema_compatibility.py``);
+12. already published packages still match ``published-plugin-lock.json``:
+    manifest and declared payload bytes are immutable once published
+    (see ``scripts/published_lock.py``).
 
 Plugin API v1 stays declarative-only: no Python modules, no executable
 hooks, no binaries, no installation-time command execution, exact-file
@@ -46,6 +55,13 @@ try:
 except ImportError:  # pragma: no cover
     print("Missing dependencies. Run: pip install jsonschema packaging", file=sys.stderr)
     raise SystemExit(2)
+
+from published_lock import immutability_errors  # noqa: E402
+from schema_compatibility import (  # noqa: E402
+    effective_requires_app,
+    override_error,
+    schema_floor_error,
+)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_DIR = REPO_ROOT / "schema"
@@ -159,7 +175,13 @@ def check_semver(value: str, label: str, errors: list[str]) -> None:
         errors.append(f"{label}: version '{value}' is not a valid semantic version")
 
 
-def validate_payload_role(role: str, path: Path, label: str, errors: list[str]) -> None:
+def validate_payload_role(
+    role: str,
+    path: Path,
+    label: str,
+    errors: list[str],
+    requires_app: str = "",
+) -> None:
     schema_name = SCHEMA_FOR_ROLE.get(role)
     if schema_name is None:
         return
@@ -171,11 +193,17 @@ def validate_payload_role(role: str, path: Path, label: str, errors: list[str]) 
     validate_against_schema(instance, SCHEMA_DIR / schema_name, f"{label} [{role}]", errors)
     if role == "cluster-profile":
         errors.extend(f"{label}: {problem}" for problem in validate_cluster_profile(instance))
+        if isinstance(instance, dict) and requires_app:
+            floor_error = schema_floor_error(
+                instance.get("schema_version"), requires_app
+            )
+            if floor_error:
+                errors.append(f"{label}: {floor_error}")
 
 
 def validate_cluster_profile(profile: object) -> list[str]:
-    """Semantic checks Draft 7 cannot express for v2 provider payloads."""
-    if not isinstance(profile, dict) or profile.get("schema_version") != 2:
+    """Semantic checks Draft 7 cannot express for v2/v3 provider payloads."""
+    if not isinstance(profile, dict) or profile.get("schema_version") not in {2, 3}:
         return []
     errors: list[str] = []
     safe_id = re.compile(r"^[a-z][a-z0-9_-]{0,63}$")
@@ -239,10 +267,70 @@ def validate_cluster_profile(profile: object) -> list[str]:
         matches = [item.get("path_template") for item in storage if isinstance(item, dict) and item.get("kind") == kind]
         if alias_value and matches and any(value and value != alias_value for value in matches):
             errors.append(f"paths.{alias} conflicts with structured {kind} storage")
+    if profile.get("schema_version") == 3:
+        safe_id = re.compile(r"^[a-z][a-z0-9_-]{0,63}$")
+
+        def labels_ok(value, location):
+            if not isinstance(value, dict) or set(value) - {"en", "tr"} or not isinstance(value.get("en"), str) or not value["en"].strip() or len(value["en"]) > 128:
+                errors.append(f"{location}.labels is invalid")
+            for lang in ("en", "tr"):
+                if lang in (value if isinstance(value, dict) else {}) and (not isinstance(value[lang], str) or not value[lang].strip() or len(value[lang]) > 128):
+                    errors.append(f"{location}.labels.{lang} is invalid")
+
+        job_outputs = profile.get("job_outputs")
+        if job_outputs is not None:
+            streams = job_outputs.get("streams") if isinstance(job_outputs, dict) else None
+            seen: set[str] = set()
+            for index, stream in enumerate(streams or []):
+                location = f"job_outputs.streams[{index}]"
+                if not isinstance(stream, dict):
+                    continue
+                if not safe_id.fullmatch(str(stream.get("id", ""))):
+                    errors.append(f"{location}.id is invalid")
+                if stream.get("id") in seen:
+                    errors.append(f"duplicate job output id '{stream.get('id')}'")
+                seen.add(str(stream.get("id")))
+                if stream.get("role") not in {"stdout", "stderr", "custom"}:
+                    errors.append(f"{location}.role is invalid")
+                if stream.get("resolver") not in {"slurm.stdout", "slurm.stderr", "workdir.relative"}:
+                    errors.append(f"{location}.resolver is invalid")
+                labels_ok(stream.get("labels"), location)
+                if not isinstance(stream.get("order"), int) or isinstance(stream.get("order"), bool) or not 0 <= stream["order"] <= 100000:
+                    errors.append(f"{location}.order is invalid")
+                relative = stream.get("relative_path")
+                if stream.get("resolver") == "workdir.relative":
+                    if not isinstance(relative, str) or not relative or relative.startswith("/") or "\\" in relative or any(part in {"", ".", ".."} for part in relative.split("/")):
+                        errors.append(f"{location}.relative_path is unsafe")
+                elif "relative_path" in stream:
+                    errors.append(f"{location}.relative_path is not allowed")
+
+        file_filters = profile.get("file_filters")
+        seen_filters: set[str] = set()
+        for index, item in enumerate(file_filters or []):
+            location = f"file_filters[{index}]"
+            if not isinstance(item, dict):
+                continue
+            ident = str(item.get("id", ""))
+            if not safe_id.fullmatch(ident) or ident in {"all", "folders", "iso", "archives", "slurm", "shell", "other"}:
+                errors.append(f"{location}.id is invalid or reserved")
+            if ident in seen_filters:
+                errors.append(f"duplicate file filter id '{ident}'")
+            seen_filters.add(ident)
+            labels_ok(item.get("labels"), location)
+            if not isinstance(item.get("order"), int) or isinstance(item.get("order"), bool) or not 0 <= item["order"] <= 100000:
+                errors.append(f"{location}.order is invalid")
+            if not any(isinstance(item.get(key), list) and item[key] for key in ("globs", "suffixes")):
+                errors.append(f"{location} needs a glob or suffix")
     return errors
 
 
-def validate_entrypoint_files(manifest: dict, manifest_dir: Path, label: str, errors: list[str]) -> None:
+def validate_entrypoint_files(
+    manifest: dict,
+    manifest_dir: Path,
+    label: str,
+    errors: list[str],
+    requires_app: str = "",
+) -> None:
     capabilities = set(manifest.get("capabilities", []))
     entrypoints = manifest.get("entrypoints", {})
     declared_files = {entry["path"]: entry for entry in manifest.get("files", [])}
@@ -299,7 +387,13 @@ def validate_entrypoint_files(manifest: dict, manifest_dir: Path, label: str, er
                     continue
                 payload_path = manifest_dir / entry_rel
                 if payload_path.is_file():
-                    validate_payload_role(file_entry["role"], payload_path, entry_label, errors)
+                    validate_payload_role(
+                        file_entry["role"],
+                        payload_path,
+                        entry_label,
+                        errors,
+                        requires_app=requires_app or str(manifest.get("requires_app") or ""),
+                    )
 
 
 def collect_executable_payload_errors(
@@ -346,6 +440,11 @@ def validate_plugin_entry(entry: dict, seen_ids: dict, errors: list[str], warnin
 
     check_semver(version, label, errors)
     check_requires_app(entry["requires_app"], label, errors)
+    problem = override_error(entry)
+    if problem:
+        errors.append(f"{label}: {problem}")
+    else:
+        check_requires_app(effective_requires_app(entry), label, errors)
 
     manifest_rel = entry["manifest_path"]
     errors_before = len(errors)
@@ -463,7 +562,9 @@ def validate_plugin_entry(entry: dict, seen_ids: dict, errors: list[str], warnin
     collect_executable_payload_errors(
         manifest.get("files", []), label, errors, int(manifest.get("plugin_api", 1))
     )
-    validate_entrypoint_files(manifest, manifest_dir, label, errors)
+    validate_entrypoint_files(
+        manifest, manifest_dir, label, errors, effective_requires_app(entry)
+    )
 
 
 def validate_repository(root: Path | None = None) -> tuple[list[str], list[str]]:
@@ -491,6 +592,8 @@ def validate_repository(root: Path | None = None) -> tuple[list[str], list[str]]
     seen_ids: dict[str, set] = {}
     for entry in registry.get("plugins", []):
         validate_plugin_entry(entry, seen_ids, errors, warnings)
+
+    errors.extend(immutability_errors(REPO_ROOT, registry))
 
     if root is not None:
         REPO_ROOT = original_root

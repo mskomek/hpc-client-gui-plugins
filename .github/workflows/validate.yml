@@ -63,16 +63,28 @@ jobs:
   # Advancing APPLICATION_REF: when a new application release becomes the
   # oldest supported consumer (its contract expectations change), update the
   # ref below in a dedicated PR and record it in docs/CONSUMER_CONTRACT.md.
-  # The ref is always an immutable application tag, never a branch.
+  # The ref is always an immutable application tag or commit SHA, never a
+  # branch.
+  #
+  # Status: BLOCKING. The pin is an immutable schema-3/4 capable application
+  # commit, so capability-aware contract expectations hold and the job must
+  # pass before a registry change may merge. Replace the commit SHA with the
+  # corresponding immutable release tag once such a release is published.
+  # The `validate` job remains the second blocking capability gate: its
+  # validate_registry schema floor check fails closed when a payload schema
+  # is newer than its declared minimum application version.
   consumer-contract:
-    name: Consumer contract (app v1.5.8 release)
+    name: Consumer contract (schema-capable application pin)
     runs-on: ubuntu-latest
     env:
       # Keep this comment block beside the ref. See docs/CONSUMER_CONTRACT.md
       # for the advancement procedure.
-      # Immutable application release pin. Advance intentionally with the
-      # oldest supported consumer release.
-      APPLICATION_REF: 063d83b523be377d4ef02dc8a61e2fdd15876ecc
+      # Immutable application commit pin (never a branch). This commit is the
+      # first application state that validates cluster-profile schemas 3 and
+      # 4; the published v1.5.8 release (063d83b5) supports schemas 1-2 only
+      # and therefore cannot validate the current registry. Replace with the
+      # immutable release tag when a schema-3/4 capable release is published.
+      APPLICATION_REF: 55eb70920f5cac27722ce76a435f0a318716c5c2
       HPC_GUI_CONTRACT_REPO: ${{ github.workspace }}/hpc-client-gui-plugins
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2

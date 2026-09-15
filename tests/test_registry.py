@@ -443,6 +443,71 @@ def _rewrite_manifest(tmp_path, entry, mutate) -> None:
     manifest_path.write_bytes(json.dumps(manifest, indent=2).encode())
 
 
+def _rewrite_payload(tmp_path, entry, rel_path: str, mutate) -> None:
+    """Rewrite a payload and keep manifest + registry hashes consistent."""
+    manifest_path = tmp_path / entry["manifest_path"]
+    manifest = json.loads(manifest_path.read_text())
+    payload_path = manifest_path.parent / rel_path
+    payload = json.loads(payload_path.read_text())
+    mutate(payload)
+    payload_bytes = json.dumps(payload, indent=2).encode()
+    payload_path.write_bytes(payload_bytes)
+    for file_entry in manifest["files"]:
+        if file_entry["path"] == rel_path:
+            file_entry["sha256"] = sha256_bytes(payload_bytes)
+            file_entry["size"] = len(payload_bytes)
+            break
+    manifest_bytes = json.dumps(manifest, indent=2).encode()
+    manifest_path.write_bytes(manifest_bytes)
+    entry["manifest_sha256"] = sha256_bytes(manifest_bytes)
+
+
+def test_future_schema_version_rejected(tmp_path):
+    """Unknown future payload schemas stay fail-closed, never auto-accepted."""
+    entry = add_plugin(tmp_path)
+    _rewrite_payload(
+        tmp_path,
+        entry,
+        "cluster-profile.json",
+        lambda profile: profile.update({"schema_version": 999}),
+    )
+    expect_failure(tmp_path, [entry], "is not valid under any of the given schemas")
+
+
+def test_schema_floor_violation_rejected(tmp_path):
+    """A schema-3 payload may not declare an application floor predating the
+    first schema-3 capable release (1.5.9)."""
+    entry = add_plugin(
+        tmp_path,
+        manifest_overrides={"requires_app": ">=1.5.8"},
+        registry_entry_overrides={"requires_app": ">=1.5.8"},
+    )
+    _rewrite_payload(
+        tmp_path,
+        entry,
+        "cluster-profile.json",
+        lambda profile: profile.update({"schema_version": 3}),
+    )
+    expect_failure(tmp_path, [entry], "first requires app 1.5.9")
+
+
+def test_schema_floor_satisfied_is_accepted(tmp_path):
+    entry = add_plugin(
+        tmp_path,
+        manifest_overrides={"requires_app": ">=1.5.9"},
+        registry_entry_overrides={"requires_app": ">=1.5.9"},
+    )
+    _rewrite_payload(
+        tmp_path,
+        entry,
+        "cluster-profile.json",
+        lambda profile: profile.update({"schema_version": 3}),
+    )
+    build_registry(tmp_path, [entry])
+    errors, _ = run_validator(tmp_path)
+    assert errors == []
+
+
 def test_manifest_name_mismatch_rejected(tmp_path):
     entry = add_plugin(tmp_path)
     _rewrite_manifest(

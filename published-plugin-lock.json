@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "note": "Published plugin packages are immutable. Every entry below is frozen: its manifest and declared payload bytes may never change again. Correct a compatibility mistake with registry compatibility_override; ship new content as a new plugin version. See docs/PUBLISHED_PLUGIN_IMMUTABILITY.md.",
+  "baseline_recorded": "2026-09-15",
+  "published": {
+    "org.hpcclient.fluent@0.1.0": {
+      "manifest_sha256": "fe7368a4eadc516c0b79a91c06411776cd4c2bce5d6f9915f5a399bd9469f513",
+      "files": {
+        "README.md": "91fec256ba3b4157cd6c55c987f3478c1033d17abc93720157151ff7ea66d0db",
+        "docs/sources.md": "a104297b078ec487d0c561683bf601e9e50b86b66ea2a2279da0a840cf83a636",
+        "lint-index.json": "a890f7e6e80b26e374cf500f17f776685596b4510962b8c73ea9ff571002f9a0",
+        "lint/common.json": "658286a690fcfa0935bf997b3b6438373f9de3c73df9487b675e41199b90021b",
+        "lint/versions/25.2.json": "1b868f8cdbffa5940d25bddfa638173abbd2312424ba8eb1451391e5c410de38"
+      }
+    },
+    "org.hpcclient.fluent@0.2.0": {
+      "manifest_sha256": "6a08e87635c1e30a7837b5e18e2341aca93f73b95d1ef7e19113512ebd1f58d1",
+      "files": {
+        "README.md": "7c08b924fde8888c7c5dde0c5f12b3912caa521bf2599d0247f3bb331261ee9a",
+        "docs/sources.md": "a104297b078ec487d0c561683bf601e9e50b86b66ea2a2279da0a840cf83a636",
+        "lint-index.json": "a890f7e6e80b26e374cf500f17f776685596b4510962b8c73ea9ff571002f9a0",
+        "lint/common.json": "658286a690fcfa0935bf997b3b6438373f9de3c73df9487b675e41199b90021b",
+        "lint/versions/25.2.json": "1b868f8cdbffa5940d25bddfa638173abbd2312424ba8eb1451391e5c410de38",
+        "templates/fluent_job.slurm.tpl": "7b607b4a59c8184cf26da9f803d90cf5da2f0833c9fb019efcd4d79979552bec",
+        "templates/index.json": "919809fb03a55e1d3e4c0873d2fa1111ce2cac523efeccae0f194d79e39cd747"
+      }
+    },
+    "org.hpcclient.fluent@0.3.0": {
+      "manifest_sha256": "97b20c4746b5c691b9107d5bc9c23fda1f7952b0a97c8316623c793f324848fb",
+      "files": {
+        "README.md": "7c08b924fde8888c7c5dde0c5f12b3912caa521bf2599d0247f3bb331261ee9a",
+        "docs/sources.md": "a104297b078ec487d0c561683bf601e9e50b86b66ea2a2279da0a840cf83a636",
+        "lint-index.json": "a890f7e6e80b26e374cf500f17f776685596b4510962b8c73ea9ff571002f9a0",
+        "lint/common.json": "658286a690fcfa0935bf997b3b6438373f9de3c73df9487b675e41199b90021b",
+        "lint/versions/25.2.json": "1b868f8cdbffa5940d25bddfa638173abbd2312424ba8eb1451391e5c410de38",
+        "templates/fluent_job.slurm.tpl": "7b607b4a59c8184cf26da9f803d90cf5da2f0833c9fb019efcd4d79979552bec",
+        "templates/index.json": "919809fb03a55e1d3e4c0873d2fa1111ce2cac523efeccae0f194d79e39cd747"
+      }
+    },
+    "org.hpcclient.truba@1.0.0": {
+      "manifest_sha256": "f5f2cb9f3990a07209038658c03d908e91ec050bfcda479b40f8574a071b7390",
+      "files": {
+        "README.md": "ddbcc0bc27b452c385740e186dc5654fe68deb9e8e9709527e05551d9d4cfc13",
+        "cluster-profile.json": "5e0c55a4415f4573c350dd9b9cc3eaf8b7c4123829fd89b2c4b3ee57924cc957"
+      }
+    },
+    "org.hpcclient.truba@1.1.0": {
+      "manifest_sha256": "649f16e62606289ecec4a16681689f30ce9ccc638e874b8e43a2bce152f134ab",
+      "files": {
+        "README.md": "467aac5beca5ecf6610b3dab6f5c595fc4b41cbb5fc718daf53978b170a143db",
+        "cluster-profile.json": "3e145bf40f45118e4aafccdd308de8fcbb21114c756ed6a2c37cd8349e1c00bb"
+      },
+      "frozen_reason": "ONE-TIME FROZEN EXCEPTION (2026-09-14, commit 602e904): the published manifest's requires_app was corrected in place from '>=1.5.4' to '>=1.5.5' before this ledger existed. Original bytes are recoverable from git history, but restoring them would re-advertise the package to released 1.5.4 clients that cannot validate its schema-2 payload, and those clients do not understand compatibility_override. The corrected bytes are therefore frozen as the baseline."
+    },
+    "org.hpcclient.truba@1.2.0": {
+      "manifest_sha256": "00e05b4d986549e26eae2069b5162aeb6a0d28a4138ac84c066577953492a534",
+      "files": {
+        "README.md": "d8bce7e78f13c448e2577116a3e35bcdb2e71957f395b74068c7127b5f6493fc",
+        "cluster-profile.json": "e031bec8b10add34b4b221a4e938f971eb12c1974eab6ff273af926e3c8e61a7"
+      },
+      "frozen_reason": "ONE-TIME FROZEN EXCEPTION (2026-09-14, commit 602e904): requires_app corrected in place from '>=1.5.4' to '>=1.5.5'. Same rationale as org.hpcclient.truba@1.1.0."
+    },
+    "org.hpcclient.truba@1.3.0": {
+      "manifest_sha256": "b7940de3f8455d89dd995c060343dd6f8da2eafcf839623c0084026a63584ecf",
+      "files": {
+        "README.md": "30332b0bed73ecee3b434f1d6e895c4537d5406ca0b2bcd8d01b8a1bc3b93f7c",
+        "cluster-profile.json": "fa2648d69cf98d63f9071b94c9ec554712f8af74f85102799aef41b136f37710"
+      }
+    },
+    "org.hpcclient.truba@1.4.0": {
+      "manifest_sha256": "213653be21316b652f5a9eabe6f1864a96ff44b209c1d7b18dc3b97dde2c71db",
+      "files": {
+        "README.md": "b5482e1f6d7162b7cbd6f093fb8c1894fbd490312d56cb3ac89ca2e1a1758bfd",
+        "cluster-profile.json": "69dd177b91e48a1259e55c35cb084a1d6d00aa1b91ba8a77495178725488cee6",
+        "sources.md": "36fabdda42180695276aef46b7ed1dd117c08d4ec4d811876dead068f2606ca1"
+      },
+      "frozen_reason": "ONE-TIME FROZEN EXCEPTION (2026-09-14, commit 602e904): requires_app corrected in place from '>=1.5.8' to '>=1.5.9' after publication, because released 1.5.8 validates cluster-profile schemas 1-2 only and cannot install this schema-3 payload. Released 1.5.8 clients read requires_app directly and do not understand compatibility_override, so the corrected bytes are frozen as the baseline rather than restored."
+    },
+    "org.hpcclient.truba@1.5.0": {
+      "manifest_sha256": "d044e4479b4186b8951e724807fb66ae72caf4a81155138df59f6484459a0c5a",
+      "files": {
+        "README.md": "fa7214bcce43d87fcce9523b51bce6af4b03c2887541d7be43a04f935b2fd81b",
+        "cluster-profile.json": "80d366559c7279c2a78f7da12ac12e5822d2feeb172d2d64c6513133bc5d4883",
+        "sources.md": "6e632164b8dc349f884c8e7175449add07614d96d400f3e0312c855508332804"
+      },
+      "frozen_reason": "ONE-TIME FROZEN EXCEPTION (2026-09-15): published on main 2026-09-14 with manifest and cluster-profile.json only. README.md and sources.md were added and declared during this reconciliation, before the ledger baseline was taken. The version requires app >=1.5.9, which has never been released, so no consumer can have installed the earlier bytes."
+    }
+  }
+}

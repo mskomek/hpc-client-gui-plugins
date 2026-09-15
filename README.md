@@ -40,8 +40,8 @@ server-side installation is needed on HPC clusters.
 
 | Plugin                        | Capabilities                      | Latest version | Requires app |
 | ----------------------------- | --------------------------------- | -------------- | ------------ |
-| TRUBA                         | Cluster profile                   | 1.3.0          | >=1.5.5      |
-| ANSYS Fluent Tools            | Journal lint + Slurm job template | 0.2.0          | >=1.4.0      |
+| TRUBA                         | Cluster profile                   | 1.5.0          | >=1.5.9      |
+| ANSYS Fluent Tools            | Journal lint + Slurm job template | 0.3.0          | >=1.5.8      |
 | ANSYS Script & Journal Linter | Linter tool (Plugin API v2)       | 0.1.0          | >=1.5.0      |
 
 The ANSYS Script & Journal Linter is an unofficial offline linter for Ansys
@@ -152,6 +152,8 @@ explicit user action. Review plugin content before installing it. See
   [docs/CONTRIBUTOR_GUIDE.md](docs/CONTRIBUTOR_GUIDE.md),
   [docs/PLUGIN_API_V1.md](docs/PLUGIN_API_V1.md), and
   [docs/REGISTRY_PROTOCOL.md](docs/REGISTRY_PROTOCOL.md).
+- **Published plugin immutability:** [docs/PUBLISHED_PLUGIN_IMMUTABILITY.md](docs/PUBLISHED_PLUGIN_IMMUTABILITY.md)
+  — published packages are frozen; compatibility is corrected in the registry.
 - **Release notes:** [docs/RELEASE_NOTES.md](docs/RELEASE_NOTES.md).
 - **Provider guide:** [docs/ADDING_CLUSTER_PROVIDER.md](docs/ADDING_CLUSTER_PROVIDER.md).
 - **TRUBA Wiki draft:** [docs/WIKI_TRUBA.md](docs/WIKI_TRUBA.md).

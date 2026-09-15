@@ -1,11 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "HPC Client GUI cluster profile payload (Plugin API v1/v2/v3)",
+  "title": "HPC Client GUI cluster profile payload (Plugin API v1/v2/v3/v4)",
   "type": "object",
   "oneOf": [
     {"$ref": "#/definitions/v1"},
     {"$ref": "#/definitions/v2"},
-    {"$ref": "#/definitions/v3"}
+    {"$ref": "#/definitions/v3"},
+    {"$ref": "#/definitions/v4"}
   ],
   "definitions": {
     "v1": {
@@ -67,7 +68,32 @@
         "storage": {"type": "array", "items": {"$ref": "#/definitions/storage"}},
         "quota_sources": {"type": "array", "items": {"$ref": "#/definitions/quota_source"}},
         "job_outputs": {"$ref": "#/definitions/job_outputs"},
-        "file_filters": {"type": "array", "items": {"$ref": "#/definitions/file_filter"}}
+        "file_filters": {"type": "array", "maxItems": 50, "uniqueItems": true, "items": {"$ref": "#/definitions/file_filter"}}
+      }
+    },
+    "v4": {
+      "type": "object",
+      "required": ["schema_version", "profile_id", "name", "scheduler"],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {"const": 4},
+        "profile_id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*$", "maxLength": 64},
+        "name": {"type": "string", "minLength": 1, "maxLength": 80},
+        "description": {"type": ["string", "null"]},
+        "scheduler": {"enum": ["slurm"]},
+        "paths": {"$ref": "#/definitions/paths"},
+        "commands": {"$ref": "#/definitions/commands"},
+        "metadata": {"$ref": "#/definitions/v2_metadata"},
+        "site": {"$ref": "#/definitions/site"},
+        "scheduler_hints": {"$ref": "#/definitions/scheduler_hints"},
+        "software": {"$ref": "#/definitions/software"},
+        "storage": {"type": "array", "items": {"$ref": "#/definitions/storage"}},
+        "quota_sources": {"type": "array", "items": {"$ref": "#/definitions/quota_source"}},
+        "job_outputs": {"$ref": "#/definitions/job_outputs"},
+        "file_filters": {"type": "array", "maxItems": 50, "uniqueItems": true, "items": {"$ref": "#/definitions/file_filter"}},
+        "job_details": {"$ref": "#/definitions/provider_section"},
+        "accounting": {"$ref": "#/definitions/provider_section"},
+        "cluster_status": {"$ref": "#/definitions/provider_section"}
       }
     },
     "paths": {
@@ -79,6 +105,7 @@
       "properties": {
         "squeue_command": {"type": ["string", "null"]}, "sbatch_command": {"type": ["string", "null"]},
         "scancel_command": {"type": ["string", "null"]}, "sacct_command": {"type": ["string", "null"]},
+        "sacct_job_command": {"type": ["string", "null"]},
         "scontrol_command": {"type": ["string", "null"]}, "status_command": {"type": ["string", "null"]},
         "active_job_ids_command": {"type": ["string", "null"]}, "job_state_command": {"type": ["string", "null"]}
       }
@@ -146,24 +173,62 @@
       "timeout_seconds": {"type": "integer", "minimum": 0}, "source_refs": {"type": "array", "items": {"type": "string"}},
       "note": {"type": ["string", "null"]}
     }},
-    "job_outputs": {"type": "object", "additionalProperties": false, "properties": {
-      "strategy": {"type": "string", "enum": ["explicit", "legacy"]},
-      "streams": {"type": "array", "items": {"$ref": "#/definitions/output_stream"}}
-    }},
-    "output_stream": {"type": "object", "required": ["id", "role", "resolver"], "additionalProperties": false, "properties": {
-      "id": {"type": "string", "minLength": 1, "maxLength": 64},
-      "role": {"type": "string", "enum": ["stdout", "stderr", "custom"]},
-      "labels": {"type": "object", "properties": {"en": {"type": "string"}, "tr": {"type": "string"}}},
-      "resolver": {"type": "string", "enum": ["slurm.stdout", "slurm.stderr", "workdir.relative"]},
-      "relative_path": {"type": "string"},
-      "order": {"type": "integer", "minimum": 0}
-    }},
-    "file_filter": {"type": "object", "required": ["id", "labels"], "additionalProperties": false, "properties": {
-      "id": {"type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-z][a-z0-9_-]*$"},
-      "labels": {"type": "object", "properties": {"en": {"type": "string"}, "tr": {"type": "string"}}},
-      "globs": {"type": "array", "items": {"type": "string"}},
-      "suffixes": {"type": "array", "items": {"type": "string"}},
-      "order": {"type": "integer", "minimum": 0}
-    }}
+    "labels": {
+      "type": "object",
+      "required": ["en"],
+      "additionalProperties": false,
+      "properties": {
+        "en": {"type": "string", "minLength": 1, "maxLength": 128},
+        "tr": {"type": "string", "minLength": 1, "maxLength": 128}
+      }
+    },
+    "job_outputs": {
+      "type": "object",
+      "required": ["streams"],
+      "additionalProperties": false,
+      "properties": {
+        "strategy": {"type": "string", "enum": ["explicit", "legacy"]},
+        "streams": {"type": "array", "maxItems": 50, "uniqueItems": true, "items": {"$ref": "#/definitions/output_stream"}}
+      }
+    },
+    "output_stream": {
+      "type": "object",
+      "required": ["id", "role", "labels", "resolver", "order"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{0,63}$"},
+        "role": {"type": "string", "enum": ["stdout", "stderr", "custom"]},
+        "labels": {"$ref": "#/definitions/labels"},
+        "resolver": {"type": "string", "enum": ["slurm.stdout", "slurm.stderr", "workdir.relative"]},
+        "relative_path": {"type": "string", "minLength": 1, "maxLength": 512, "pattern": "^(?!/)(?!.*\\\\)(?!.*(^|/)\\.\\.?(/|$)).+$"},
+        "order": {"type": "integer", "minimum": 0, "maximum": 100000}
+      },
+      "allOf": [
+        {"if": {"properties": {"resolver": {"const": "workdir.relative"}}}, "then": {"required": ["relative_path"]}},
+        {"if": {"properties": {"resolver": {"enum": ["slurm.stdout", "slurm.stderr"]}}}, "then": {"not": {"required": ["relative_path"]}}}
+      ]
+    },
+    "file_filter": {
+      "type": "object",
+      "required": ["id", "labels", "order"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^(?!all$|folders$|iso$|archives$|slurm$|shell$|other$)[a-z][a-z0-9_-]{0,63}$"},
+        "labels": {"$ref": "#/definitions/labels"},
+        "globs": {"type": "array", "maxItems": 32, "items": {"type": "string", "minLength": 1, "maxLength": 128}},
+        "suffixes": {"type": "array", "maxItems": 32, "items": {"type": "string", "minLength": 1, "maxLength": 128}},
+        "order": {"type": "integer", "minimum": 0, "maximum": 100000}
+      },
+      "anyOf": [{"required": ["globs"], "properties": {"globs": {"minItems": 1}}}, {"required": ["suffixes"], "properties": {"suffixes": {"minItems": 1}}}]
+    },
+    "provider_section": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "adapter": {"type": "string", "enum": ["slurm.scontrol.job", "slurm.sacct.job", "truba.lssrv"]},
+        "parser": {"type": "string", "enum": ["slurm.scontrol.v1", "slurm.sacct.pipe.v1", "truba.lssrv.v1", "generic.delimited_table.v1"]},
+        "parser_config": {"type": "object"}
+      }
+    }
   }
 }
