@@ -7,10 +7,11 @@ application's real plugin contract suite.
 ## Current pin and capability generations
 
 The current coordinated pin is the immutable application commit
-`55eb70920f5cac27722ce76a435f0a318716c5c2`. That commit validates
-cluster-profile schemas 1-4 and carries the capability-aware contract suite,
-so it can honestly evaluate every entry this registry publishes, including
-TRUBA 1.4.0 and 1.5.0.
+`68a492a5dcdec842ed9dcbbd24b2fa22b0c45357`. That commit validates
+cluster-profile schemas 1-4, carries the capability-aware contract suite, and
+resolves through `compatibility_override`, so it can honestly evaluate every
+entry this registry publishes, including TRUBA 1.4.0 and 1.5.0 and any
+registry-level compatibility correction.
 
 The published `v1.5.8` release (`063d83b523be377d4ef02dc8a61e2fdd15876ecc`)
 supports cluster-profile schemas 1-2 only. Pinning the contract to that

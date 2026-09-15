@@ -222,18 +222,193 @@ def test_rehashing_cannot_bless_a_mutation(repo: Path):
     assert "Create a new plugin version" in failures[0]
 
 
-def test_every_registry_entry_published_on_main_is_frozen():
-    """The ledger must not silently lose a package it already froze."""
-    lock = published_lock.load_lock(REPO_ROOT)
-    for key in (
-        "org.hpcclient.truba@1.3.0",
-        "org.hpcclient.truba@1.4.0",
-        "org.hpcclient.truba@1.5.0",
-        "org.hpcclient.fluent@0.3.0",
-    ):
-        assert key in lock["published"], f"{key} lost its immutability record"
-
-
 def test_recording_an_already_published_version_is_refused(repo: Path, capsys):
     assert published_lock.record(f"{FROZEN_ID}@{FROZEN_VERSION}", root=repo) == 1
     assert "already published and frozen" in capsys.readouterr().err
+
+
+# ---------------------------------------------------------------------------
+# Publication completeness
+#
+# A ledger of digests protects only what it lists, so the obvious escape is to
+# stop listing something. These tests cover the other direction: publication
+# history may never shrink, whichever record is deleted.
+# ---------------------------------------------------------------------------
+
+
+def _completeness_failures(errors: list[str]) -> list[str]:
+    return [error for error in errors if "Publication is permanent" in error]
+
+
+def _index(repo: Path) -> list[str]:
+    return _load(repo / published_lock.LOCK_NAME)["publication_index"]
+
+
+def test_authoritative_published_set_is_derived_not_hardcoded():
+    """`main`'s own registry defines what is published - nothing else.
+
+    The real repository is used here because the check reads `main` through
+    git; a copied tree has no git directory. No version list is written into
+    this test: whatever `main` publishes must be in the index.
+    """
+    authoritative = published_lock.main_published_keys(REPO_ROOT)
+    assert authoritative, "could not read the published set from main"
+    index = published_lock.publication_index(published_lock.load_lock(REPO_ROOT))
+    assert authoritative <= index, sorted(authoritative - index)
+
+    registry = _load(REPO_ROOT / "registry.json")
+    assert published_lock.completeness_errors(
+        REPO_ROOT, registry, published_lock.load_lock(REPO_ROOT)
+    ) == []
+
+
+# B. published version missing from the ledger digests -> FAIL
+def test_deleting_a_lock_record_is_not_an_escape_hatch(repo: Path):
+    lock_path = repo / published_lock.LOCK_NAME
+    lock = _load(lock_path)
+    key = f"{FROZEN_ID}@{FROZEN_VERSION}"
+    assert key in lock["publication_index"]
+    del lock["published"][key]
+    _dump(lock_path, lock)
+
+    failures = _completeness_failures(_validate(repo))
+    assert failures
+    assert key in failures[0]
+
+
+def test_deleting_the_record_then_mutating_and_rehashing_still_fails(repo: Path):
+    """The full escape attempt: unfreeze, edit, regenerate every hash."""
+    lock_path = repo / published_lock.LOCK_NAME
+    lock = _load(lock_path)
+    key = f"{FROZEN_ID}@{FROZEN_VERSION}"
+    del lock["published"][key]
+    _dump(lock_path, lock)
+
+    profile_path = repo / FROZEN_DIR / "cluster-profile.json"
+    profile = _load(profile_path)
+    profile["name"] = "TRUBA (unfrozen and edited)"
+    _dump(profile_path, profile)
+    _rehash(repo, FROZEN_DIR, FROZEN_ID, FROZEN_VERSION)
+
+    assert _completeness_failures(_validate(repo))
+
+
+# C. frozen published version removed from the registry -> FAIL
+def test_removing_a_published_registry_row_fails(repo: Path):
+    registry_path = repo / "registry.json"
+    registry = _load(registry_path)
+    registry["plugins"] = [
+        entry
+        for entry in registry["plugins"]
+        if not (entry["id"] == FROZEN_ID and entry["version"] == FROZEN_VERSION)
+    ]
+    _dump(registry_path, registry)
+
+    failures = _completeness_failures(_validate(repo))
+    assert failures
+    assert "registry.json" in failures[0]
+
+
+# D. frozen published version directory removed -> FAIL
+def test_removing_a_published_package_directory_fails(repo: Path):
+    shutil.rmtree(repo / FROZEN_DIR)
+
+    failures = _completeness_failures(_validate(repo))
+    assert failures
+    assert "package tree" in failures[0]
+
+
+def test_removing_only_the_published_manifest_fails(repo: Path):
+    (repo / FROZEN_DIR / "manifest.json").unlink()
+    assert _completeness_failures(_validate(repo))
+
+
+def test_removing_a_declared_payload_of_a_published_package_fails(repo: Path):
+    (repo / FROZEN_DIR / "README.md").unlink()
+    errors = _validate(repo)
+    assert [error for error in errors if "was removed" in error], errors
+
+
+def _add_version(repo: Path, new_version: str) -> dict:
+    """Copy the frozen package to a new version and register it."""
+    shutil.copytree(repo / FROZEN_DIR, repo / "plugins/truba" / new_version)
+    manifest_path = repo / "plugins/truba" / new_version / "manifest.json"
+    manifest = _load(manifest_path)
+    manifest["version"] = new_version
+    _dump(manifest_path, manifest)
+
+    registry_path = repo / "registry.json"
+    registry = _load(registry_path)
+    published = _entry(registry, FROZEN_ID, FROZEN_VERSION)
+    new_entry = dict(published)
+    new_entry["version"] = new_version
+    new_entry["manifest_path"] = f"plugins/truba/{new_version}/manifest.json"
+    new_entry["manifest_sha256"] = _sha256(manifest_path)
+    registry["plugins"].insert(registry["plugins"].index(published), new_entry)
+    _dump(registry_path, registry)
+    return new_entry
+
+
+# E. a brand-new, never-published develop version -> PASS
+def test_new_unpublished_version_is_not_forced_into_the_ledger(repo: Path):
+    _add_version(repo, "1.6.0")
+    assert f"{FROZEN_ID}@1.6.0" not in _index(repo)
+    assert _validate(repo) == []
+
+
+# F. a version that entered the published state but was never frozen -> FAIL
+def test_published_version_without_a_freeze_fails(repo: Path):
+    _add_version(repo, "1.6.0")
+    lock_path = repo / published_lock.LOCK_NAME
+    lock = _load(lock_path)
+    lock["publication_index"] = sorted(set(lock["publication_index"]) | {f"{FROZEN_ID}@1.6.0"})
+    _dump(lock_path, lock)
+
+    failures = _completeness_failures(_validate(repo))
+    assert failures
+    assert "1.6.0" in failures[0]
+
+
+# G. a new version published and frozen correctly -> PASS
+def test_publishing_and_freezing_a_new_version_passes(repo: Path, capsys):
+    _add_version(repo, "1.6.0")
+    assert published_lock.record(f"{FROZEN_ID}@1.6.0", root=repo) == 0
+    capsys.readouterr()
+
+    assert f"{FROZEN_ID}@1.6.0" in _index(repo)
+    assert _validate(repo) == []
+
+
+def test_freezing_refuses_a_version_that_is_not_in_the_registry(repo: Path, capsys):
+    assert published_lock.record(f"{FROZEN_ID}@9.9.9", root=repo) == 1
+    assert "not in registry.json" in capsys.readouterr().err
+
+
+def test_freezing_refuses_a_package_whose_hashes_do_not_match(repo: Path, capsys):
+    _add_version(repo, "1.6.0")
+    profile = repo / "plugins/truba/1.6.0/cluster-profile.json"
+    profile.write_text(
+        profile.read_text(encoding="utf-8").replace("TRUBA", "TRUBA edited", 1),
+        encoding="utf-8",
+        newline="\n",
+    )
+    assert published_lock.record(f"{FROZEN_ID}@1.6.0", root=repo) == 1
+    assert "does not match its declared sha256" in capsys.readouterr().err
+
+
+def test_documented_one_time_exceptions_are_preserved():
+    """The recorded historical exceptions keep their accepted baseline."""
+    lock = published_lock.load_lock(REPO_ROOT)
+    frozen_reasons = {
+        key: record.get("frozen_reason")
+        for key, record in lock["published"].items()
+        if record.get("frozen_reason")
+    }
+    assert set(frozen_reasons) == {
+        "org.hpcclient.truba@1.1.0",
+        "org.hpcclient.truba@1.2.0",
+        "org.hpcclient.truba@1.4.0",
+        "org.hpcclient.truba@1.5.0",
+    }
+    for reason in frozen_reasons.values():
+        assert "ONE-TIME FROZEN EXCEPTION" in reason

@@ -1,7 +1,18 @@
 {
-  "schema_version": 1,
-  "note": "Published plugin packages are immutable. Every entry below is frozen: its manifest and declared payload bytes may never change again. Correct a compatibility mistake with registry compatibility_override; ship new content as a new plugin version. See docs/PUBLISHED_PLUGIN_IMMUTABILITY.md.",
+  "schema_version": 2,
+  "note": "Published plugin packages are immutable and publication is permanent. publication_index is the append-only roster of every version ever published; nothing is ever removed from it. published holds the frozen digests. Correct a compatibility mistake with registry compatibility_override; ship new content as a new plugin version. See docs/PUBLISHED_PLUGIN_IMMUTABILITY.md.",
   "baseline_recorded": "2026-09-15",
+  "publication_index": [
+    "org.hpcclient.fluent@0.1.0",
+    "org.hpcclient.fluent@0.2.0",
+    "org.hpcclient.fluent@0.3.0",
+    "org.hpcclient.truba@1.0.0",
+    "org.hpcclient.truba@1.1.0",
+    "org.hpcclient.truba@1.2.0",
+    "org.hpcclient.truba@1.3.0",
+    "org.hpcclient.truba@1.4.0",
+    "org.hpcclient.truba@1.5.0"
+  ],
   "published": {
     "org.hpcclient.fluent@0.1.0": {
       "manifest_sha256": "fe7368a4eadc516c0b79a91c06411776cd4c2bce5d6f9915f5a399bd9469f513",
