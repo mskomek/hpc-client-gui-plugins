@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "plugin_api": 1,
+  "id": "org.hpcclient.jsc.juwels",
+  "name": "JSC JUWELS",
+  "version": "1.0.0",
+  "publisher": "HPC Client GUI community",
+  "license": "MIT",
+  "description": "Data-only community profile for the JUWELS Cluster and Booster modules at Forschungszentrum Jülich.",
+  "requires_app": ">=1.5.8",
+  "capabilities": [
+    "cluster-profile"
+  ],
+  "entrypoints": {
+    "cluster_profiles": [
+      "cluster-profile.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "cluster-profile.json",
+      "sha256": "544c33fd34c4cb012e228b72b1e701ac6e6d087ef6a2833857c5b7ec2b7a4a40",
+      "size": 5217,
+      "role": "cluster-profile"
+    },
+    {
+      "path": "README.md",
+      "sha256": "aaf40f31303067eb8f386abd321f6e883a625091583177b0c8113028636b76bf",
+      "size": 1286,
+      "role": "documentation"
+    },
+    {
+      "path": "sources.md",
+      "sha256": "e7686cb159bddc3240408988a5f0a1edec9b562cd12b2efa75d00728980a809d",
+      "size": 1730,
+      "role": "documentation"
+    }
+  ]
+}

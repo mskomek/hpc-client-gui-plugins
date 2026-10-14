@@ -356,6 +356,78 @@
         "template"
       ],
       "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.tacc.frontera",
+      "name": "TACC Frontera",
+      "version": "1.0.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "Data-only community profile for the retiring TACC Frontera system.",
+      "publisher": "HPC Client GUI community",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/frontera/1.0.0/manifest.json",
+      "manifest_sha256": "1c9692d53af265c5b29f06d5830a38e1374f957dd38b1d06ac6895529b95677f",
+      "official": false,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "tacc",
+        "frontera",
+        "slurm",
+        "mfa",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.ncsa.delta",
+      "name": "NCSA Delta",
+      "version": "1.0.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "Data-only community profile for NCSA Delta.",
+      "publisher": "HPC Client GUI community",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/delta/1.0.0/manifest.json",
+      "manifest_sha256": "91df47c5db537ef9ef72a9965d22154e83dc692017cbd89dfbfac9390c7f5b58",
+      "official": false,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "ncsa",
+        "delta",
+        "slurm",
+        "mfa",
+        "cluster-profile"
+      ],
+      "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.jsc.juwels",
+      "name": "JSC JUWELS",
+      "version": "1.0.0",
+      "plugin_api": 1,
+      "type": "cluster-profile",
+      "description": "Data-only community profile for the JUWELS Cluster and Booster modules at Forschungszentrum Jülich.",
+      "publisher": "HPC Client GUI community",
+      "requires_app": ">=1.5.8",
+      "manifest_path": "plugins/juwels/1.0.0/manifest.json",
+      "manifest_sha256": "31ce0abcd4160f6b9c78b56853698aba81080ee39fea632ab03f61e5106033db",
+      "official": false,
+      "capabilities": [
+        "cluster-profile"
+      ],
+      "keywords": [
+        "jsc",
+        "juwels",
+        "slurm",
+        "booster",
+        "cluster-profile"
+      ],
+      "license": "MIT"
     }
   ]
 }

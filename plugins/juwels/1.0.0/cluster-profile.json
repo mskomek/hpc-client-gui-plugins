@@ -1,0 +1,130 @@
+{
+  "schema_version": 2,
+  "profile_id": "juwels",
+  "name": "JSC JUWELS",
+  "scheduler": "slurm",
+  "description": "Data-only community profile for the JUWELS Cluster and Booster modules at Forschungszentrum Jülich.",
+  "paths": {
+    "home_dir": "$HOME",
+    "scratch_dir": "$SCRATCH"
+  },
+  "metadata": {
+    "maintainer": "HPC Client GUI community",
+    "documentation_url": "https://apps.fz-juelich.de/jsc/hps/juwels/",
+    "support_url": "https://apps.fz-juelich.de/jsc/hps/juwels/access.html",
+    "source_refs": [
+      "https://apps.fz-juelich.de/jsc/hps/juwels/access.html",
+      "https://apps.fz-juelich.de/jsc/hps/juwels/batchsystem.html",
+      "https://apps.fz-juelich.de/jsc/hps/juwels/environment.html",
+      "https://apps.fz-juelich.de/jsc/hps/juwels/faq.html",
+      "https://apps.fz-juelich.de/jsc/hps/juwels/gpu-computing.html",
+      "https://apps.fz-juelich.de/jsc/hps/juwels/configuration.html",
+      "https://www.fz-juelich.de/en/jsc/services/user-support/how-to-get-access-to-systems/judoor"
+    ],
+    "last_verified": "2026-10-14"
+  },
+  "site": {
+    "public_name": "JSC JUWELS",
+    "region": "Germany",
+    "access_note": "JUWELS access requires assignment to a JSC resource project. Cluster and Booster use separate login endpoints; submit from the login endpoint matching the target module. Account and project values are user-specific and are not bundled.",
+    "documentation_url": "https://apps.fz-juelich.de/jsc/hps/juwels/"
+  },
+  "access": {
+    "hosts": [
+      {
+        "host": "juwels-cluster.fz-juelich.de",
+        "port": 22,
+        "role": "login"
+      },
+      {
+        "host": "juwels-booster.fz-juelich.de",
+        "port": 22,
+        "role": "login"
+      }
+    ],
+    "auth_methods": [
+      "ssh-key",
+      "keyboard-interactive"
+    ],
+    "access_note": "Upload the public key to the matching JUWELS system through JuDoor. A passphrase-protected private key stays on the client. If JSC TOTP MFA is enabled, SSH requests the one-time code after key verification. No credential, username, host fingerprint, or project ID is stored in this package.",
+    "documentation_url": "https://apps.fz-juelich.de/jsc/hps/juwels/access.html"
+  },
+  "requirements": {
+    "project": {
+      "required": true,
+      "label": "JSC compute project",
+      "help": "Use only a compute project assigned to this JSC account; exact project membership and identifiers are user-specific."
+    },
+    "account": {
+      "required": true,
+      "label": "JSC budget account",
+      "help": "Use the budget account assigned to the active project. Never reuse or guess another user’s allocation."
+    }
+  },
+  "scheduler_hints": {
+    "queue_notes": "Current JSC documentation lists batch, mem192, devel, gpus, booster, develbooster, large, and largebooster. Cluster/Booster partitions require their corresponding login endpoint. The large partitions run only in selected timeslots and must be coordinated with JSC support. Partition names, limits, availability, and project eligibility can change; check the live JSC guide before submission.",
+    "account_notes": "Set the account/budget assigned to the user’s active JSC compute project. This profile contains no account values.",
+    "partitions": [
+      "batch",
+      "mem192",
+      "devel",
+      "gpus",
+      "booster",
+      "develbooster",
+      "large",
+      "largebooster"
+    ]
+  },
+  "software": {
+    "module_paths": [],
+    "setup_notes": "JUWELS uses Slurm with ParaStation resource management. Use srun for job steps. Activate the intended JSC project with jutil env activate when project-specific environment variables are needed. Consult the current JSC software guide; no module set is pinned."
+  },
+  "storage": [
+    {
+      "id": "home",
+      "label": "Home",
+      "kind": "home",
+      "enabled": true,
+      "resolver": {
+        "type": "remote-environment",
+        "variable": "HOME"
+      },
+      "access_context": "login-node",
+      "policy": {
+        "backup": true,
+        "cleanup_note": "For small user-specific files; JSC documentation describes HOME as backed up. Exact path is resolved from the account environment."
+      }
+    },
+    {
+      "id": "project",
+      "label": "Project",
+      "kind": "project",
+      "enabled": true,
+      "resolver": {
+        "type": "remote-environment",
+        "variable": "PROJECT"
+      },
+      "access_context": "login-node",
+      "policy": {
+        "backup": true,
+        "cleanup_note": "Project-scoped storage; activate the intended compute project with jutil env activate so PROJECT points to the selected project. Project lifetime and access are allocation-specific."
+      }
+    },
+    {
+      "id": "scratch",
+      "label": "Scratch",
+      "kind": "scratch",
+      "enabled": true,
+      "resolver": {
+        "type": "remote-environment",
+        "variable": "SCRATCH"
+      },
+      "access_context": "login-node",
+      "policy": {
+        "backup": false,
+        "cleanup_note": "Temporary high-I/O storage, not backed up. JSC documents automatic removal of normal files after 90 days and empty directories after 3 days; verify current policy before relying on stored data."
+      }
+    }
+  ],
+  "quota_sources": []
+}

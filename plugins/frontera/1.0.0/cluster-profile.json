@@ -1,0 +1,20 @@
+{
+  "schema_version": 2,
+  "profile_id": "frontera",
+  "name": "TACC Frontera",
+  "scheduler": "slurm",
+  "description": "Data-only community profile for TACC Frontera. The Slurm queues close permanently on 2026-10-15.",
+  "paths": {"home_dir": "$HOME", "scratch_dir": "$SCRATCH"},
+  "metadata": {"maintainer": "HPC Client GUI community", "documentation_url": "https://docs.tacc.utexas.edu/hpc/frontera/", "support_url": "https://github.com/mskomek/hpc-client-gui-plugins/issues", "source_refs": ["https://docs.tacc.utexas.edu/hpc/frontera/", "https://docs.tacc.utexas.edu/basics/mfa/"], "last_verified": "2026-10-14"},
+  "site": {"public_name": "TACC Frontera", "region": "United States", "access_note": "A Frontera allocation and TACC MFA are required. TACC states that queues close permanently on 2026-10-15; after closure, filesystems remain accessible for data transfer.", "documentation_url": "https://docs.tacc.utexas.edu/hpc/frontera/"},
+  "access": {"hosts": [{"host": "frontera.tacc.utexas.edu", "port": 22, "role": "login"}], "auth_methods": ["password", "keyboard-interactive"], "access_note": "Use the TACC username, password, and configured TACC MFA token. No credential is stored by this package.", "documentation_url": "https://docs.tacc.utexas.edu/hpc/frontera/"},
+  "requirements": {"project": {"required": false, "label": "TACC project", "help": "Use a project value only when required by the assigned allocation."}, "account": {"required": true, "label": "TACC allocation", "help": "Use an allocation assigned to this TACC account. Never substitute a guessed or personal value."}},
+  "scheduler_hints": {"queue_notes": "TACC states that Frontera queues close permanently on 2026-10-15. Do not submit jobs after closure. Before that date, verify live queue availability with TACC guidance; this profile intentionally lists no fixed partitions.", "account_notes": "Use the TACC allocation assigned to the user. No allocation identifier is bundled.", "partitions": []},
+  "software": {"module_paths": [], "setup_notes": "The TACC guide recommends login nodes for file management, compilation, and data movement; computation belongs in batch or interactive jobs while queues are available."},
+  "storage": [
+    {"id": "home", "label": "Home", "kind": "home", "enabled": true, "resolver": {"type": "remote-environment", "variable": "HOME"}, "access_context": "login-node", "policy": {"backup": true, "cleanup_note": "TACC documents regular backups and no purge for HOME."}},
+    {"id": "work", "label": "Work", "kind": "project", "enabled": true, "resolver": {"type": "remote-environment", "variable": "WORK"}, "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "TACC documents a shared 1 TB and 3,000,000-file allowance across TACC systems; WORK is not backed up or purged."}},
+    {"id": "scratch", "label": "Scratch", "kind": "scratch", "enabled": true, "resolver": {"type": "remote-environment", "variable": "SCRATCH"}, "access_context": "login-node", "policy": {"backup": false, "cleanup_note": "Files not accessed for more than 10 days are subject to purge. TACC assigns users to scratch2 or scratch3; scratch1 has been decommissioned."}}
+  ],
+  "quota_sources": []
+}

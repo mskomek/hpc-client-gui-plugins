@@ -1,0 +1,29 @@
+{
+  "schema_version": 2,
+  "profile_id": "delta",
+  "name": "NCSA Delta",
+  "scheduler": "slurm",
+  "description": "Data-only community profile for the NCSA Delta system; distinct from DeltaAI.",
+  "paths": {"home_dir": "$HOME", "scratch_dir": "$SCRATCH"},
+  "commands": {
+    "squeue_command": "squeue -h -u {user} -o \"%i|%P|%j|%u|%T|%M|%D|%C|%R\"",
+    "sbatch_command": "cd -- {script_dir_q} && sbatch -- {script_name_q}",
+    "scancel_command": "scancel {job_id_q}",
+    "sacct_command": "sacct -u {user} --format=JobID,JobName,State,Elapsed,MaxRSS,AllocTRES",
+    "scontrol_command": "scontrol show job {job_id_q}",
+    "active_job_ids_command": "squeue -h -u {user} -o \"%A\"",
+    "job_state_command": "sacct -n -X -j {job_id_q} -o State -P"
+  },
+  "metadata": {"maintainer": "HPC Client GUI community", "documentation_url": "https://docs.ncsa.illinois.edu/systems/delta/en/latest/", "support_url": "https://github.com/mskomek/hpc-client-gui-plugins/issues", "source_refs": ["https://docs.ncsa.illinois.edu/systems/delta/en/latest/user_guide/login.html", "https://docs.ncsa.illinois.edu/systems/delta/en/latest/user_guide/running_jobs.html", "https://docs.ncsa.illinois.edu/systems/delta/en/latest/user_guide/software.html", "https://docs.ncsa.illinois.edu/systems/delta/en/latest/index.html"], "last_verified": "2026-10-14"},
+  "site": {"public_name": "NCSA Delta", "region": "United States", "access_note": "A Delta allocation and NCSA identity with Duo MFA are required. This profile describes NCSA Delta, not DeltaAI.", "documentation_url": "https://docs.ncsa.illinois.edu/systems/delta/en/latest/"},
+  "access": {"hosts": [{"host": "login.delta.ncsa.illinois.edu", "port": 22, "role": "login"}], "auth_methods": ["password", "keyboard-interactive"], "access_note": "Use the NCSA username, password, and Duo MFA. No credential is stored by this package.", "documentation_url": "https://docs.ncsa.illinois.edu/systems/delta/en/latest/user_guide/login.html"},
+  "requirements": {"project": {"required": false, "label": "NCSA project", "help": "Use only a project assigned to the user's active Delta allocation."}, "account": {"required": true, "label": "Delta account", "help": "Use the NCSA/ACCESS account assigned to the user; account values are not bundled."}},
+  "scheduler_hints": {"queue_notes": "NCSA documents the listed CPU and GPU partitions. Limits and availability can change; check the current Delta guide before submission. Interactive partitions are intended for short debugging and prototyping.", "account_notes": "Use the account assigned to the active Delta allocation. Do not reuse an account value from another site or user.", "partitions": ["cpu", "cpu-interactive", "cpu-preempt", "gpuA100x4", "gpuA100x4-interactive", "gpuA100x4-preempt", "gpuA100x8", "gpuA100x8-interactive", "gpuH200x8", "gpuH200x8-interactive", "gpuA40x4", "gpuA40x4-interactive", "gpuA40x4-preempt", "gpuMI100x8", "gpuMI100x8-interactive"]},
+  "software": {"module_paths": [], "setup_notes": "NCSA's Delta job guidance uses Slurm. Current job-script examples say `module reset` populates WORK and SCRATCH. Verify those allocation-specific paths in the active Delta environment before using them."},
+  "storage": [
+    {"id": "home", "label": "Home", "kind": "home", "enabled": true, "resolver": {"type": "remote-environment", "variable": "HOME"}, "access_context": "login-node", "policy": {"backup": null, "cleanup_note": "The current guide identifies the HOME filesystem as /u. No per-user quota is pinned in this package."}},
+    {"id": "work", "label": "Work", "kind": "project", "enabled": true, "resolver": {"type": "remote-environment", "variable": "WORK"}, "access_context": "login-node", "policy": {"backup": null, "cleanup_note": "NCSA job examples populate WORK after `module reset`; the resolved allocation path is not guessed."}},
+    {"id": "scratch", "label": "Scratch", "kind": "scratch", "enabled": true, "resolver": {"type": "remote-environment", "variable": "SCRATCH"}, "access_context": "login-node", "policy": {"backup": null, "cleanup_note": "NCSA job examples populate SCRATCH after `module reset`; verify the resolved path and current policy in the active Delta environment."}}
+  ],
+  "quota_sources": []
+}
