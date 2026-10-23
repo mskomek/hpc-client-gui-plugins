@@ -148,6 +148,7 @@
         "template-index",
         "template-content",
         "documentation",
+        "journal-data",
         "linter-engine",
         "linter-data"
       ]
@@ -195,7 +196,11 @@
       "enum": [
         "editor.lint_current",
         "editor.new_from_plugin_templates",
-        "plugin.open_trusted_tool"
+        "plugin.open_trusted_tool",
+        "journal_studio.open",
+        "journal_studio.new",
+        "journal_studio.open_journal",
+        "journal_studio.settings"
       ]
     },
     "menuConditionValue": {

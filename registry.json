@@ -428,6 +428,29 @@
         "cluster-profile"
       ],
       "license": "MIT"
+    },
+    {
+      "id": "org.hpcclient.ansysjournalstudio",
+      "name": "ANSYS Journal Studio",
+      "version": "0.1.0",
+      "plugin_api": 1,
+      "type": "application-tools",
+      "description": "Host-rendered Fluent 2025 R2 journal editor with source-preserving TUI and Scheme views.",
+      "publisher": "HPC Client GUI",
+      "requires_app": ">=1.5.9",
+      "manifest_path": "plugins/ansys-journal-studio/0.1.0/manifest.json",
+      "manifest_sha256": "200edc60bf710918b86526875254f69c9179c2f6f5733ce0ae26864d5c1f9f0a",
+      "official": false,
+      "capabilities": [
+        "application-tools"
+      ],
+      "keywords": [
+        "ANSYS",
+        "Fluent",
+        "journal",
+        "TUI",
+        "Scheme"
+      ]
     }
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "product_id": "fluent",
+  "version_id": "25.2",
+  "release_label": "2025 R2",
+  "editor_support": "supported",
+  "modes": ["solution", "meshing"],
+  "languages": ["tui", "scheme"],
+  "runtime_validation": "not-run",
+  "official_manuals": "LINK_ONLY",
+  "catalog_scope": "command paths only; parameter order and mode availability are not established"
+}

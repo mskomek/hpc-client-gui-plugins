@@ -56,6 +56,7 @@ except ImportError:  # pragma: no cover
     print("Missing dependencies. Run: pip install jsonschema packaging", file=sys.stderr)
     raise SystemExit(2)
 
+from host_rendered_tools import provides_host_rendered_tool  # noqa: E402
 from published_lock import immutability_errors  # noqa: E402
 from schema_compatibility import (  # noqa: E402
     effective_requires_app,
@@ -360,6 +361,8 @@ def validate_entrypoint_files(
             continue
         present_keys = [key for key in acceptable_keys if entrypoints.get(key)]
         if not present_keys:
+            if capability == "application-tools" and provides_host_rendered_tool(manifest):
+                continue
             errors.append(
                 f"{label}: capability '{capability}' is declared but none of the "
                 f"entrypoints {list(acceptable_keys)} provide it"

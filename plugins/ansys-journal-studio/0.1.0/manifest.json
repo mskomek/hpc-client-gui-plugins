@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "plugin_api": 1,
+  "id": "org.hpcclient.ansysjournalstudio",
+  "name": "ANSYS Journal Studio",
+  "version": "0.1.0",
+  "publisher": "HPC Client GUI",
+  "license": "MIT",
+  "description": "Host-rendered Fluent 2025 R2 journal editor with source-preserving TUI and Scheme views.",
+  "requires_app": ">=1.5.9",
+  "capabilities": [
+    "application-tools"
+  ],
+  "entrypoints": {},
+  "files": [
+    {
+      "path": "data/command_registry.json",
+      "sha256": "12721072690cf5d5539d3dfbde9b018c686220978fbc006964b143460c3e6566",
+      "size": 2255806,
+      "role": "journal-data"
+    },
+    {
+      "path": "data/product.json",
+      "sha256": "8c9669c311ec6379c38d4ab72d52e366d430f7cfb99d384e7df6d07c2fa965a5",
+      "size": 798,
+      "role": "journal-data"
+    },
+    {
+      "path": "data/version.json",
+      "sha256": "77ef7dc7bdcd9422239606270731246561c22c0df3467e4585e8d866fac17020",
+      "size": 379,
+      "role": "journal-data"
+    },
+    {
+      "path": "README.md",
+      "sha256": "3f026624a162fc05fe5b2cab2dbe415471d0587c52af46e87d1c1afed9786d28",
+      "size": 228,
+      "role": "documentation"
+    },
+    {
+      "path": "templates/fluent-2025r2-meshing-tui.jou.tpl",
+      "sha256": "317f28185dbf3fca0b5c5e615757c796b5722aebefd5bb1b8be8a7e5f023978c",
+      "size": 106,
+      "role": "template-content"
+    },
+    {
+      "path": "templates/fluent-2025r2-scheme.jou.tpl",
+      "sha256": "52f63aebb5b6251f5bf650d07c88c4808b56a4880a22c48d640d342cbc9452e6",
+      "size": 102,
+      "role": "template-content"
+    },
+    {
+      "path": "templates/fluent-2025r2-solution-tui.jou.tpl",
+      "sha256": "4435adab4f77b0fd4d8e0a708420521e9cd79e70d27c4bdda9c1e35a2a2ac04e",
+      "size": 107,
+      "role": "template-content"
+    }
+  ],
+  "ui_contributions": {
+    "plugins_menu": {
+      "label": "ANSYS Journal Studio",
+      "labels": {
+        "tr": "ANSYS Journal Studio"
+      },
+      "items": [
+        {
+          "kind": "action",
+          "id": "open-studio",
+          "label": "Open Studio",
+          "labels": {
+            "tr": "Studio'yu Aç"
+          },
+          "action": "journal_studio.open"
+        },
+        {
+          "kind": "action",
+          "id": "new-journal",
+          "label": "New Journal",
+          "labels": {
+            "tr": "Yeni Journal"
+          },
+          "action": "journal_studio.new"
+        },
+        {
+          "kind": "action",
+          "id": "open-journal",
+          "label": "Open Journal",
+          "labels": {
+            "tr": "Journal Aç"
+          },
+          "action": "journal_studio.open_journal"
+        },
+        {
+          "kind": "action",
+          "id": "settings",
+          "label": "Settings",
+          "labels": {
+            "tr": "Ayarlar"
+          },
+          "action": "journal_studio.settings"
+        }
+      ]
+    }
+  }
+}

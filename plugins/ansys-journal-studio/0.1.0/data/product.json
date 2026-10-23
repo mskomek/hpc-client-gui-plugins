@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "product_id": "fluent",
+  "name": "ANSYS Fluent",
+  "supported": true,
+  "adapter": "fluent-tui-scheme",
+  "supported_releases": ["25.2"],
+  "languages": ["tui", "scheme"],
+  "future_products": [
+    {"product_id": "mechanical-apdl", "name": "Mechanical APDL", "supported": false},
+    {"product_id": "mechanical-scripting", "name": "Mechanical Scripting", "supported": false},
+    {"product_id": "workbench", "name": "Workbench", "supported": false},
+    {"product_id": "cfx", "name": "CFX", "supported": false},
+    {"product_id": "cfd-post", "name": "CFD-Post", "supported": false},
+    {"product_id": "system-coupling", "name": "System Coupling", "supported": false},
+    {"product_id": "electronics-desktop", "name": "Electronics Desktop", "supported": false}
+  ]
+}
