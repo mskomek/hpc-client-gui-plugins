@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "plugin_api": 2,
+  "id": "org.hpcclient.openfoamcasestudio",
+  "name": "OpenFOAM Visual Case Studio",
+  "version": "0.2.1",
+  "publisher": "HPC Client GUI",
+  "license": "MIT",
+  "description": "OpenFOAM.com / ESI v2312 case editor with safe local/SFTP saves, validation, Allrun generation, and a Slurm wrapper template.",
+  "requires_app": ">=1.5.9",
+  "capabilities": [
+    "application-tools",
+    "job-template"
+  ],
+  "entrypoints": {
+    "application_tool": "engine/openfoam_studio/__init__.py",
+    "job_templates": [
+      "templates/index.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "8cfbce60efaf33a3326c58085a15c1411ae1b8f48ef5d09d75a2a83513c0a1b0",
+      "size": 727,
+      "role": "documentation"
+    },
+    {
+      "path": "engine/openfoam_studio/__init__.py",
+      "sha256": "ed42d416edc0b6a243b4bc41feaed82a0499957157ccfee1c0f9cc0f5764d5fa",
+      "size": 699,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/command_catalog.py",
+      "sha256": "2bb6d93fbf64246352aca5dd80437e2ac3a3b1231f8cad4dc72414ed13b4df44",
+      "size": 1628,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/data/command_catalog.json",
+      "sha256": "95aff7b92d5f2203523977ce50ed256ebd75f2eeffa26503452cabb1353808f1",
+      "size": 1730,
+      "role": "documentation"
+    },
+    {
+      "path": "engine/openfoam_studio/inspector_fields.py",
+      "sha256": "6bbda9d3e434ac2b62f74fb3e9be4122607504b0b92ba8689633c0688d4832ca",
+      "size": 8068,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/local_case.py",
+      "sha256": "f23144081f701503e8ec95eb4e1c8f399d6343fc2e4a11b6fa9e313fad5c9b4d",
+      "size": 3623,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/models.py",
+      "sha256": "620b3d79ff107d11b025439e73cb8e827eb1d78b41aba467a5f5220921c0673b",
+      "size": 3793,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/recovery_store.py",
+      "sha256": "4a479db57c340013114a9d0a720b1b99cfcb19f1c49ac8cb3b0ac9e16cc5f3f2",
+      "size": 6248,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/remote_case.py",
+      "sha256": "9b50b6bb4e1ead6044a4567d989dc77c8012637d1a634600f56dfb5360a38ed3",
+      "size": 11916,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/run_script.py",
+      "sha256": "ea3531671c4e71dcb1e057cb9accd4741b8401760bebdb41c35c539830ab0222",
+      "size": 3484,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/run_script_store.py",
+      "sha256": "31e0d8b6d174c93789f3f9e7cb07bb26f322535f809a5562565d4aa4e0c94fbd",
+      "size": 2848,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/safe_save.py",
+      "sha256": "1d95af5fd7c6504c564c09ff347c56ac60e27eed1dd0d0db90ee95d660054b2b",
+      "size": 4786,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/workflow.py",
+      "sha256": "0f83a8fcf903ff1f58b844a29259890a44bdc8008a15be6cfed220c7454d8f91",
+      "size": 2714,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/workspace.py",
+      "sha256": "a8702e91cbefe225bd19689db1455713bc6063669f0ff0a7942ce1560c09d0db",
+      "size": 5345,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/wx_case_manager_actions.py",
+      "sha256": "5d57eff182ec22f624b61e03887be6cd67b3cfaf02a88800a04bb3840d90af46",
+      "size": 6648,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/wx_inspector.py",
+      "sha256": "a245858d0d842ba0dbf66b0eb349c8d24e337b4a8fece85b613ba608b0e8388c",
+      "size": 6671,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/wx_page.py",
+      "sha256": "01d7c9193a07bfdf401a47f0498b0aadbb4df373cd60b0eabb64734aab100de9",
+      "size": 18758,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/wx_save_actions.py",
+      "sha256": "08b39f0bfb1f46120980ab03b3efda4409d060f36602f4a647e47d325b7fb964",
+      "size": 6601,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/wx_view.py",
+      "sha256": "ec91f3af079c2624b6ef912d2c99a648105f1a6deb5d0d1aa7375062e781a1be",
+      "size": 7031,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/wx_workflow.py",
+      "sha256": "d72cea8c9db3060d82adb5c3d6071a22f5376b06737e5f902cde1bf744c9e858",
+      "size": 6353,
+      "role": "application-engine"
+    },
+    {
+      "path": "templates/index.json",
+      "sha256": "8c91047f48731ba9f1d10edc0a9c3a0369267bc3abb84f222d311da07d2f13c4",
+      "size": 1693,
+      "role": "template-index"
+    },
+    {
+      "path": "templates/openfoam_v2312_truba.slurm.tpl",
+      "sha256": "6c2cf0b30ae05691f36cf8e803be9efb931e435ed4b2038a566fd7181239e818",
+      "size": 1148,
+      "role": "template-content"
+    }
+  ],
+  "ui_contributions": {
+    "plugins_menu": {
+      "label": "OpenFOAM Case Studio",
+      "labels": {
+        "tr": "OpenFOAM Case Studio"
+      },
+      "items": [
+        {
+          "kind": "action",
+          "id": "open-case-studio",
+          "label": "Open Case Studio...",
+          "labels": {
+            "tr": "Case Studio'yu Aç..."
+          },
+          "action": "plugin.open_trusted_tool",
+          "when": {
+            "capability_available": "application-tools"
+          },
+          "unavailable": "hide"
+        },
+        {
+          "kind": "action",
+          "id": "new-openfoam-job",
+          "label": "New OpenFOAM Slurm Job...",
+          "labels": {
+            "tr": "Yeni OpenFOAM Slurm İşi..."
+          },
+          "action": "editor.new_from_plugin_templates",
+          "when": {
+            "capability_available": "job-template"
+          },
+          "unavailable": "disable"
+        }
+      ]
+    }
+  }
+}

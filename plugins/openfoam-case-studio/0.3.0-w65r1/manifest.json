@@ -1,0 +1,485 @@
+{
+  "schema_version": 1,
+  "plugin_api": 2,
+  "id": "org.hpcclient.openfoamcasestudio",
+  "name": "OpenFOAM Visual Case Studio",
+  "version": "0.3.0-w65r1",
+  "publisher": "HPC Client GUI",
+  "license": "MIT",
+  "description": "OpenFOAM.com / ESI v2312 case editor with safe local/SFTP saves, validation, Allrun generation, and a Slurm wrapper template. W65 round-5 review candidate; install and host integration unverified.",
+  "requires_app": ">=1.5.9",
+  "capabilities": [
+    "application-tools",
+    "job-template"
+  ],
+  "entrypoints": {
+    "application_tool": "engine/openfoam_studio/__init__.py",
+    "job_templates": [
+      "templates/index.json"
+    ]
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "d8f24b005206744edb62952ecc9befc012e864957b4358510306f931da3b4d75",
+      "size": 895,
+      "role": "documentation"
+    },
+    {
+      "path": "engine/openfoam_studio/__init__.py",
+      "sha256": "ed42d416edc0b6a243b4bc41feaed82a0499957157ccfee1c0f9cc0f5764d5fa",
+      "size": 699,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/wx_panels.py",
+      "sha256": "b8cb52c9e09c0c69f37d2b8efe4643d4361d0db2910f58afe426faa1b1dfc888",
+      "size": 7924,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/wx_flow.py",
+      "sha256": "a2b8587e21c006a8a16bbecb14c26c6f4ed562c1d3157c4d04ebdf488db43c41",
+      "size": 4456,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/workflow.py",
+      "sha256": "ce205ef49366d664fbc08082563c18da870020b5fa5d7752283743fc11bf86e6",
+      "size": 8202,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/workflow_compiler.py",
+      "sha256": "cee8b96decc56ea72eb3d4798659e70c38b970a2fe32ec68b4fa022fcd106d7d",
+      "size": 19005,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/surface_actions.py",
+      "sha256": "6c85118bf31196142bdb188ff1012f9aacd5adee1bade3dac50159b7aa217d90",
+      "size": 2794,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/openfoam_studio/command_catalog.py",
+      "sha256": "2bb6d93fbf64246352aca5dd80437e2ac3a3b1231f8cad4dc72414ed13b4df44",
+      "size": 1628,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/solver.py",
+      "sha256": "b0a05bfccfb20972867b2bdb6c0c975eb632ffcad6f2bc6c2a24e220c33651d6",
+      "size": 3036,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/snappy.py",
+      "sha256": "57742d81ad54ffb8f6d82d3340d142f92814c4e95e84d04b899bcd04e38d87a0",
+      "size": 1766,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/selection.py",
+      "sha256": "a146f7f40d6713f98ada6b1a1be1a6b0e4407a7c127e15c425e48a5e700e6ac3",
+      "size": 1140,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/security.py",
+      "sha256": "274114dbe853bf41f5449ff0f89b11d552d214d19bd2cf34546533442917cd31",
+      "size": 1253,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/post.py",
+      "sha256": "71588b216859d7e8c848ef2d4061142fbfc3560fa826cf503baa16b941866a84",
+      "size": 2439,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/plot_export.py",
+      "sha256": "e630426d3e17b2aa55519b939ac1945ded868554388c71ee1b9201cdcf4046e9",
+      "size": 4654,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/physics.py",
+      "sha256": "4a96205e47ea690ce5ea77df79e2172f3bfb78b3561ad0dbd31beca92ba5d70c",
+      "size": 1803,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/solver_effects.py",
+      "sha256": "fe55b62f5589e5b60aafca2b66d023a4062e7b416848bdda750b9d9d417a8cdc",
+      "size": 5194,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/patch_plan.py",
+      "sha256": "c22285ebbbd15564eda4fd8db6873b003c82417fc3d86effcc835653bd781e2f",
+      "size": 6520,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/openfoam_studio/inspector_fields.py",
+      "sha256": "6bbda9d3e434ac2b62f74fb3e9be4122607504b0b92ba8689633c0688d4832ca",
+      "size": 8068,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/models.py",
+      "sha256": "620b3d79ff107d11b025439e73cb8e827eb1d78b41aba467a5f5220921c0673b",
+      "size": 3793,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/data/command_catalog.json",
+      "sha256": "95aff7b92d5f2203523977ce50ed256ebd75f2eeffa26503452cabb1353808f1",
+      "size": 1730,
+      "role": "documentation"
+    },
+    {
+      "path": "engine/openfoam_studio/wx_workflow.py",
+      "sha256": "d72cea8c9db3060d82adb5c3d6071a22f5376b06737e5f902cde1bf744c9e858",
+      "size": 6353,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/wx_view.py",
+      "sha256": "ec91f3af079c2624b6ef912d2c99a648105f1a6deb5d0d1aa7375062e781a1be",
+      "size": 7031,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/wx_save_actions.py",
+      "sha256": "08b39f0bfb1f46120980ab03b3efda4409d060f36602f4a647e47d325b7fb964",
+      "size": 6601,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/wx_page.py",
+      "sha256": "01d7c9193a07bfdf401a47f0498b0aadbb4df373cd60b0eabb64734aab100de9",
+      "size": 18758,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/wx_inspector.py",
+      "sha256": "a245858d0d842ba0dbf66b0eb349c8d24e337b4a8fece85b613ba608b0e8388c",
+      "size": 6671,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/local_case.py",
+      "sha256": "f23144081f701503e8ec95eb4e1c8f399d6343fc2e4a11b6fa9e313fad5c9b4d",
+      "size": 3623,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/wx_case_manager_actions.py",
+      "sha256": "5d57eff182ec22f624b61e03887be6cd67b3cfaf02a88800a04bb3840d90af46",
+      "size": 6648,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/workflow.py",
+      "sha256": "0f83a8fcf903ff1f58b844a29259890a44bdc8008a15be6cfed220c7454d8f91",
+      "size": 2714,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/safe_save.py",
+      "sha256": "1d95af5fd7c6504c564c09ff347c56ac60e27eed1dd0d0db90ee95d660054b2b",
+      "size": 4786,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/run_script.py",
+      "sha256": "ea3531671c4e71dcb1e057cb9accd4741b8401760bebdb41c35c539830ab0222",
+      "size": 3484,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/run_script_store.py",
+      "sha256": "31e0d8b6d174c93789f3f9e7cb07bb26f322535f809a5562565d4aa4e0c94fbd",
+      "size": 2848,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/remote_case.py",
+      "sha256": "9b50b6bb4e1ead6044a4567d989dc77c8012637d1a634600f56dfb5360a38ed3",
+      "size": 11916,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/recovery_store.py",
+      "sha256": "4a479db57c340013114a9d0a720b1b99cfcb19f1c49ac8cb3b0ac9e16cc5f3f2",
+      "size": 6248,
+      "role": "application-engine"
+    },
+    {
+      "path": "engine/openfoam_studio/workspace.py",
+      "sha256": "a8702e91cbefe225bd19689db1455713bc6063669f0ff0a7942ce1560c09d0db",
+      "size": 5345,
+      "role": "application-engine"
+    },
+    {
+      "path": "templates/index.json",
+      "sha256": "8c91047f48731ba9f1d10edc0a9c3a0369267bc3abb84f222d311da07d2f13c4",
+      "size": 1693,
+      "role": "template-index"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/numerics.py",
+      "sha256": "ad54bbce4d1687c90ba3168b5b2b43ec215297b03eea938e5e972ca0ead025d7",
+      "size": 3415,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/mesh_regions.py",
+      "sha256": "2368eb9ecf8bc4aae19d42c5583b99b9d2627af1423f44e836a1e4c61c0adf6e",
+      "size": 3680,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_lint/cli.py",
+      "sha256": "08ab5850096c440cf4c12f47988923d9b528108c77c7b4d2f15584a95c49ba43",
+      "size": 3037,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_lint/api.py",
+      "sha256": "8bb5bdd1debb8756883adb1d20c8d5bde549b75f38f4f7eaff639578dfe16b06",
+      "size": 3312,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_lint/__init__.py",
+      "sha256": "67a31fd00c36417bac085b9cbc845876cd7df997485a948d494c7f0ea994f5ff",
+      "size": 422,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/__init__.py",
+      "sha256": "9f51652d58b756685d87f683c28202a6ee585924c143d015c635daff1ea17262",
+      "size": 280,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/openfoam_core/safe_patch.py",
+      "sha256": "75950e96d036b30929ec4c4ae2ef6cf88dbe7702d70ad36706f3486fba1e90ba",
+      "size": 991,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/openfoam_core/physics.py",
+      "sha256": "b0f97358b4906a27a6da833749bfb99da279c64c228c375786d15d047ed03c11",
+      "size": 1633,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_lint/policy.py",
+      "sha256": "fd13ae115f7df067851355858ae8c191fe74fd8d76d31bdd620f62215a53acf6",
+      "size": 3191,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/openfoam_core/parser.py",
+      "sha256": "ec01a2b2d29632793e93578b2c8df055591831be1bb01df3eb034497e6b6e013",
+      "size": 4529,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/openfoam_core/case_scan.py",
+      "sha256": "d5a775dd4b346f8ff4ce4d9f0abfeb0ffba82d7d818baa7c97cfe6bbaaa7349b",
+      "size": 1956,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/openfoam_core/boundary.py",
+      "sha256": "701210cfeb20dfd9b0dd9a165ead1f25644e4ed63a07736ea3fc68c5f4632f9d",
+      "size": 1429,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/openfoam_core/__init__.py",
+      "sha256": "01d219c6f614e156bab64c6092884f914da4184d95d1096e9ef57983436572e2",
+      "size": 1014,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/__init__.py",
+      "sha256": "9ef6b211ad40772681613d21f2f82dc8089b9187f2bbeb1a06565ce703cf8877",
+      "size": 23,
+      "role": "candidate-source"
+    },
+    {
+      "path": "W65_SOURCE_BINDINGS.json",
+      "sha256": "c72945c55ef5270d7f6e472030771f8f0bb51b65a70f35ec2a598eb92dc7857b",
+      "size": 13050,
+      "role": "source-binding"
+    },
+    {
+      "path": "W65_CANDIDATE.md",
+      "sha256": "e30733335cc9b490c6ca341d217126c48cf9d35554816d1b6ff313584bc148c4",
+      "size": 929,
+      "role": "documentation"
+    },
+    {
+      "path": "engine/hpc_gui/openfoam_core/lexer.py",
+      "sha256": "1edca6b22c6d2c159357021be4106b6f3db001ca16f0d7ce6aa5d2c778256766",
+      "size": 3660,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/monitor.py",
+      "sha256": "c15c1e57818fb641315fe74a9788db25f55d682a9462f091fb3010695c7f0726",
+      "size": 2753,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_lint/rules_cross.py",
+      "sha256": "60695f4b057060543bf84b02c4595da6a89dfea423b4ded2e1295fac3d6c756c",
+      "size": 3170,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/__init__.py",
+      "sha256": "b2c11fe446d365e249cef6ec423d1eb5e0bd4a39f035c4c88ed64a91cf2630b6",
+      "size": 593,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/mesh_quality.py",
+      "sha256": "cbd789171399b53bbbe4543aa6894e9d67ba59489682916e7b1519919af9064c",
+      "size": 1673,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/job_links.py",
+      "sha256": "75c57dd6b98e65ea02ff754c26b6c12d285f896fc7715fb5b1a76d0a6d325d31",
+      "size": 3748,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/hpc.py",
+      "sha256": "d3bd20e83d51c00794978c7a8d3dbc1050d6440635a46ebd941131b73267b007",
+      "size": 2134,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/host_adapter.py",
+      "sha256": "495a613303a1e4f084097c1edbf2319391c4f0999e41a041ab20cb5190cefe85",
+      "size": 1185,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/geometry_import.py",
+      "sha256": "ede97759bf8bce91e0dcd31e7f81f206272f2b192ffa0d9671159420dcf83513",
+      "size": 2381,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/command_schemas.py",
+      "sha256": "216751fa083e1050da5d1d6dba876378a69a435cb99932b2c593eadd563fc00a",
+      "size": 6739,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_lint/rules_physics.py",
+      "sha256": "42b403e64448a27a32184812d89a539b49483da9b6ba29d7e9a8ab77429cb251",
+      "size": 1998,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/cht.py",
+      "sha256": "c0cab4cd20404192151659b0dbd4678ab134d177d73eeb30c082aca8070da569",
+      "size": 3073,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/cad_gate.py",
+      "sha256": "b190e46c0622c3e6c5a356258c88846e9f50845868001ae5d3e36fd9c6b9b49d",
+      "size": 1510,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/boundary.py",
+      "sha256": "9c2d9aef757ea1d5009e06b8869cbd1e6313e231067fd02d5055ff49871675e4",
+      "size": 1503,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/blockmesh.py",
+      "sha256": "80a5a490bd42fbcc93ce4301a9541198a13150f7fbe38283d5c6de7e172fe9da",
+      "size": 1402,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/availability.py",
+      "sha256": "dc73a4d152aaf9df9ba480d09f1f3a431198d353cd8b2d59cc551e671b851017",
+      "size": 1331,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/advanced_physics.py",
+      "sha256": "56fa0b560ecf8b769f9aa5fa5d9c06c992c8b9fcb3fea56f40ab4d24d4f193ee",
+      "size": 2623,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/advanced_boundaries.py",
+      "sha256": "f6afdbe4fef862b73d59aba1cd9924dcba76c0745cfbc829e8d2c5cb85dda237",
+      "size": 2563,
+      "role": "candidate-source"
+    },
+    {
+      "path": "engine/hpc_gui/plugins/openfoam_studio/catalog_inventory.py",
+      "sha256": "c559fe251705f56107c1d38ce8f615bc73fd29a2eac7be3eef5bccbe4de36899",
+      "size": 5099,
+      "role": "candidate-source"
+    },
+    {
+      "path": "templates/openfoam_v2312_truba.slurm.tpl",
+      "sha256": "6c2cf0b30ae05691f36cf8e803be9efb931e435ed4b2038a566fd7181239e818",
+      "size": 1148,
+      "role": "template-content"
+    }
+  ],
+  "ui_contributions": {
+    "plugins_menu": {
+      "label": "OpenFOAM Case Studio",
+      "labels": {
+        "tr": "OpenFOAM Case Studio"
+      },
+      "items": [
+        {
+          "kind": "action",
+          "id": "open-case-studio",
+          "label": "Open Case Studio...",
+          "labels": {
+            "tr": "Case Studio'yu Aç..."
+          },
+          "action": "plugin.open_trusted_tool",
+          "when": {
+            "capability_available": "application-tools"
+          },
+          "unavailable": "hide"
+        },
+        {
+          "kind": "action",
+          "id": "new-openfoam-job",
+          "label": "New OpenFOAM Slurm Job...",
+          "labels": {
+            "tr": "Yeni OpenFOAM Slurm İşi..."
+          },
+          "action": "editor.new_from_plugin_templates",
+          "when": {
+            "capability_available": "job-template"
+          },
+          "unavailable": "disable"
+        }
+      ]
+    }
+  }
+}

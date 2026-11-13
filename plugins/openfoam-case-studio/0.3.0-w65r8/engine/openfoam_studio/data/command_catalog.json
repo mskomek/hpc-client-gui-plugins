@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "product": "OpenFOAM.com / ESI",
+  "version": "v2312",
+  "commands": [
+    {"name":"blockMesh","category":"Mesh","verification_status":"runtime-inventory","source":"Kole OpenFOAM v2312 binary inventory, 2026-10-22","parameters":[],"execution":"draft-only"},
+    {"name":"checkMesh","category":"Mesh","verification_status":"runtime-inventory","source":"Kole OpenFOAM v2312 binary inventory, 2026-10-22","parameters":[],"execution":"draft-only"},
+    {"name":"decomposePar","category":"Parallel","verification_status":"runtime-inventory","source":"Kole OpenFOAM v2312 binary inventory, 2026-10-22","parameters":[],"execution":"draft-only"},
+    {"name":"splitMeshRegions","category":"Mesh","verification_status":"runtime-inventory","source":"Kole OpenFOAM v2312 binary inventory, 2026-10-22","parameters":[],"execution":"draft-only"},
+    {"name":"icoFoam","category":"Solver","verification_status":"runtime-inventory","source":"Kole OpenFOAM v2312 binary inventory, 2026-10-25","parameters":[],"execution":"draft-only"},
+    {"name":"chtMultiRegionSimpleFoam","category":"Solver","verification_status":"runtime-executed","source":"Kole /home/kole/OpenFOAM_tests/dp100_coarse_robust_20261022/case/logs/robust_solver_8rank.log (8 ranks, End marker, 2026-10-22)","parameters":[],"execution":"draft-only"},
+    {"name":"reconstructPar","category":"Parallel","verification_status":"runtime-inventory","source":"Kole OpenFOAM v2312 binary inventory, 2026-10-22","parameters":[],"execution":"draft-only"},
+    {"name":"postProcess","category":"Postprocessing","verification_status":"runtime-inventory","source":"Kole OpenFOAM v2312 binary inventory, 2026-10-22","parameters":[],"execution":"draft-only"}
+  ]
+}

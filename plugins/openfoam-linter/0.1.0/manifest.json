@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "plugin_api": 2,
+  "id": "org.hpcclient.openfoamlint",
+  "name": "OpenFOAM Linter",
+  "version": "0.1.0",
+  "publisher": "HPC Client GUI",
+  "license": "MIT",
+  "description": "OpenFOAM.com / ESI v2312 read-only static linter for dictionaries and bounded case context.",
+  "requires_app": ">=1.5.9",
+  "capabilities": [
+    "linter-tool"
+  ],
+  "entrypoints": {
+    "linter_engine": "engine/openfoam_lint/__init__.py"
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "f27c0ccac74f5d208dc60b3af9f7380e6aeb5089e4e38a11ec39635cf4496d42",
+      "size": 289,
+      "role": "documentation"
+    },
+    {
+      "path": "engine/openfoam_lint/__init__.py",
+      "sha256": "87312e0b831c8ef44f7ec08c2576c80ed08657a1d973ca591fa485e630b15cc1",
+      "size": 1455,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/openfoam_lint/api.py",
+      "sha256": "1a76f409d302a973d3ad9cb0085ab15b0c8cb9db95aeb283f56a45556407027c",
+      "size": 12111,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/openfoam_lint/cli.py",
+      "sha256": "1620da37be79b7e8b2846a3b8fc25f5058aa5e60c18cef6a996b89d7252e5a99",
+      "size": 1390,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/openfoam_lint/includes.py",
+      "sha256": "59982fa6edb01984b4d437e35765883c7b9ac26f21bd3f622120c0090b29852b",
+      "size": 6609,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/openfoam_lint/qt_page.py",
+      "sha256": "9d11bf0e0b433ff7865c52586eb53655d4fe11ec8f8828a188c662fa6c0c7ac3",
+      "size": 2531,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/openfoam_lint/remote_case.py",
+      "sha256": "d5d82cf4212f8e27bc40fa85616721cec613e475f27508ce645b45a68377dbb2",
+      "size": 3666,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/openfoam_lint/rules.py",
+      "sha256": "274f3dea728210a0e836eabaaf64234ef69c3ed2eaf95de9f1ed36459ae2370c",
+      "size": 2309,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/openfoam_lint/rules_boundary.py",
+      "sha256": "51caad903d6bac75c6b7945c17c3f82774491301365ad2ce7d44394018578618",
+      "size": 2592,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/openfoam_lint/rules_case.py",
+      "sha256": "5736e0a51e4ef21bcd85290ba1b86020e30f8223d7404a379850b325182d0dfb",
+      "size": 12590,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/openfoam_lint/rules_dictionary.py",
+      "sha256": "c106b5467e1e4d0a8cfc47e6101353e29b4778c79b872973e2eb4a71ed07802f",
+      "size": 4644,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/openfoam_lint/rules_mesh.py",
+      "sha256": "dafd6d48bc9ac3ea713a530696246af7e1a6bd99746568849924e25de21216be",
+      "size": 3804,
+      "role": "linter-engine"
+    },
+    {
+      "path": "engine/openfoam_lint/wx_page.py",
+      "sha256": "837dd5e435302724eb1480114325debf4e197a85ce99b88b14720a4ebe1b8a22",
+      "size": 9624,
+      "role": "linter-engine"
+    }
+  ],
+  "ui_contributions": {
+    "plugins_menu": {
+      "label": "OpenFOAM Linter",
+      "labels": {
+        "tr": "OpenFOAM Linter"
+      },
+      "items": [
+        {
+          "kind": "action",
+          "id": "open-linter",
+          "label": "Open Linter...",
+          "labels": {
+            "tr": "Linter'ı Aç..."
+          },
+          "action": "plugin.open_trusted_tool",
+          "when": {
+            "capability_available": "linter-tool"
+          },
+          "unavailable": "hide"
+        }
+      ]
+    }
+  }
+}
